@@ -10,8 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.sms.login.model.User;
 import br.com.sms.login.util.Utils;
@@ -30,6 +32,7 @@ public class SMS implements Serializable {
     private String body;
     private String status;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("createAt")
     private LocalDateTime localDateTime;
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -38,12 +41,16 @@ public class SMS implements Serializable {
     public SMS() {
     }
 
-    public SMS(String numberPhone, String body, String status, LocalDateTime localDateTime, User user) {
+    public SMS(String numberPhone, String body, String status, User user) {
 	setNumberPhone(numberPhone);
 	setBody(body);
 	this.status = status;
-	this.localDateTime = localDateTime;
 	this.user = user;
+    }
+
+    @PrePersist
+    public void prePersist() {
+	this.localDateTime = LocalDateTime.now();
     }
 
     public String getNumberPhone() {

@@ -1,7 +1,5 @@
 package br.com.sms.service.impl;
 
-import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpMethod;
@@ -14,6 +12,7 @@ import br.com.sms.login.exception.EmailNotFoundException;
 import br.com.sms.login.exception.InsufficientCreditsException;
 import br.com.sms.login.model.User;
 import br.com.sms.login.repository.user.UserRepository;
+import br.com.sms.service.SmsCommand;
 import br.com.sms.service.SmsService;
 
 @Service
@@ -47,10 +46,10 @@ public class SmsServiceImpl implements SmsService {
 		String.class);
 
 	applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getBody(),
-		response.getStatusCode().name(), LocalDateTime.now(), smsDTO.getUserId()));
+		response.getStatusCode().name(), smsDTO.getUserId()));
 
-//	applicationEventPublisher.publishEvent(
-//		new SmsCommand("+5516999999", "corpo da mensagem aqui", "OK", LocalDateTime.now(), smsDTO.getUserId()));
+//	applicationEventPublisher
+//		.publishEvent(new SmsCommand("+5516999999", "corpo da mensagem aqui", "OK", smsDTO.getUserId()));
 
     }
 
