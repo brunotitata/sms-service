@@ -2,6 +2,8 @@ package br.com.sms.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,19 +37,19 @@ public class SmsServiceImpl implements SmsService {
 	User user = userRepository.findById(smsDTO.getUserId())
 		.orElseThrow(() -> new EmailNotFoundException("User not found: " + smsDTO.getUserId()));
 
-	if (user.existCredit())
+	if (user.checkForCredits())
 	    throw new InsufficientCreditsException(
 		    "Não há mais credito para enviar SMS. Por favor, entrar em contato com o administrador.");
 
-//	ResponseEntity<String> response = restTemplate.exchange("https://api.smsdev.com.br/send?key=" + keyApi
-//		+ "&type=9&number=" + smsDTO.getNumber() + "&msg=" + smsDTO.getBody(), HttpMethod.GET, null,
-//		String.class);
+	ResponseEntity<String> response = restTemplate.exchange("https://api.smsdev.com.br/send?key=" + keyApi
+		+ "&type=9&number=" + smsDTO.getNumber() + "&msg=" + smsDTO.getBody(), HttpMethod.GET, null,
+		String.class);
 
-//	applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getBody(),
-//		response.getStatusCode().name(), smsDTO.getUserId()));
+	applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getBody(),
+		response.getStatusCode().name(), smsDTO.getUserId()));
 
-	applicationEventPublisher
-		.publishEvent(new SmsCommand("+5516999999", "corpo da mensagem aqui", "OK", smsDTO.getUserId()));
+//	applicationEventPublisher
+//		.publishEvent(new SmsCommand("+5516999999", "corpo da mensagem aqui", "OK", smsDTO.getUserId()));
 
     }
 

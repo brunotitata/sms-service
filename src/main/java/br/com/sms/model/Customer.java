@@ -95,19 +95,19 @@ public class Customer implements Serializable {
 	return id;
     }
 
-    public User getUser() {
-	return user;
-    }
-
-    public void setUser(User user) {
-	Utils.argumentNotNull(user, ERROR_INVALID_USER);
-	this.user = user;
-    }
-
     @Override
     public String toString() {
 	return "Customer [id=" + id + ", name=" + name + ", lastName=" + lastName + ", address=" + address
-		+ ", cellPhone=" + cellPhone + ", telephone=" + telephone + ", user=" + user + "]";
+		+ ", cellPhone=" + cellPhone + ", telephone=" + telephone + "]";
+    }
+
+//    public User getUser() {
+//	return user;
+//    }
+//
+    public void setUser(User user) {
+	Utils.argumentNotNull(user, ERROR_INVALID_USER);
+	this.user = user;
     }
 
 }

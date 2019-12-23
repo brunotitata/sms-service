@@ -29,10 +29,13 @@ public class JwtProvider {
 
     public String generateJwtToken(Authentication authentication) {
 
-	UserDTO userPrincipal = (UserDTO) authentication.getPrincipal();
+	UserDTO userDTO = (UserDTO) authentication.getPrincipal();
 
-	return Jwts.builder().setSubject((userPrincipal.getEmail())).setIssuedAt(new Date())
-		.claim("username", userPrincipal.getName())
+	return Jwts.builder().setSubject((userDTO.getEmail())).setIssuedAt(new Date())
+		.claim("uuid", userDTO.getId())
+		.claim("username", userDTO.getName())
+		.claim("lastName", userDTO.getLastName())
+		.claim("credit", userDTO.getCredit())
 		.setExpiration(new Date((new Date()).getTime() + jwtExpiration))
 		.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }

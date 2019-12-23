@@ -3,6 +3,7 @@ package br.com.sms.service.impl;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sms.DTO.CustomerDTO;
@@ -36,8 +37,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Page<Customer> findAllCustomerByUser(UUID userId) {
-	return customerRepository.findAllCustomerByUserId(userId);
+    public Page<Customer> findAllCustomerByUser(UUID userId, Pageable pageable) {
+	return customerRepository.findAllCustomerByUserId(userId, pageable);
+    }
+
+    @Override
+    public Customer findById(UUID id) {
+	return customerRepository.findById(id);
     }
 
 }

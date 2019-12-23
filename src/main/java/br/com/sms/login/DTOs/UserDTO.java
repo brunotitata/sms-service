@@ -22,25 +22,27 @@ public class UserDTO implements UserDetails {
     private String email;
     @JsonIgnore
     private String password;
+    private Integer credit;
 
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDTO(UUID id, String name, String lastName, String email, String password,
-	    Collection<? extends GrantedAuthority> authorities) {
+	    Collection<? extends GrantedAuthority> authorities, Integer credit) {
 	this.id = id;
 	this.name = name;
 	this.lastName = lastName;
 	this.email = email;
 	this.password = password;
 	this.authorities = authorities;
+	this.credit = credit;
     }
 
     public static UserDTO build(User user) {
 	List<GrantedAuthority> authorities = user.getRoles().stream()
 		.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
-	return new UserDTO(UUID.randomUUID(), user.getName(), user.getLastName(), user.getEmail(), user.getPassword(),
-		authorities);
+	return new UserDTO(user.getId(), user.getName(), user.getLastName(), user.getEmail(), user.getPassword(),
+		authorities, user.getCredit());
     }
 
     public UUID getId() {
@@ -49,6 +51,10 @@ public class UserDTO implements UserDetails {
 
     public String getName() {
 	return name;
+    }
+
+    public String getLastName() {
+	return lastName;
     }
 
     public String getEmail() {
@@ -68,6 +74,10 @@ public class UserDTO implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 	return authorities;
+    }
+
+    public Integer getCredit() {
+	return credit;
     }
 
     @Override

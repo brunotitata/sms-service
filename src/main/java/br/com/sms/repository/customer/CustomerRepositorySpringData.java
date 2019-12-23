@@ -1,5 +1,6 @@
 package br.com.sms.repository.customer;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -11,5 +12,7 @@ import br.com.sms.model.Customer;
 public interface CustomerRepositorySpringData extends JpaRepository<Customer, UUID> {
 
     Page<Customer> findAllCustomerByUserId(UUID id, Pageable pageable);
+
+    Optional<Customer> findById(UUID uuid);
 
 }

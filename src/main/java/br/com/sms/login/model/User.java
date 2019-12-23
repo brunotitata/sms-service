@@ -158,7 +158,7 @@ public class User implements Serializable {
 	this.sms = sms;
     }
 
-    public boolean existCredit() {
+    public boolean checkForCredits() {
 	return this.credit <= 0;
     }
 
