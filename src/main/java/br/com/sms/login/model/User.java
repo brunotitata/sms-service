@@ -43,8 +43,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private UUID idUser;
+    private UUID id;
     private String name;
     private String lastName;
     @Email(message = "Please provide a valid e-mail")
@@ -88,7 +87,6 @@ public class User implements Serializable {
     public void prePersist() {
 	this.createdAt = LocalDate.now();
 	this.credit = 0;
-	this.idUser = UUID.randomUUID();
     }
 
     public String getName() {
@@ -136,17 +134,8 @@ public class User implements Serializable {
 	this.roles = roles;
     }
 
-    public Long getId() {
+    public UUID getId() {
 	return id;
-    }
-
-    public void setId(Long id) {
-	Utils.argumentNotNull(id, ERROR_INVALID_UUID);
-	this.id = id;
-    }
-
-    public UUID getIdUser() {
-	return idUser;
     }
 
     public Integer getCredit() {
@@ -187,9 +176,9 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-	return "User [id=" + id + ", idUser=" + idUser + ", name=" + name + ", lastName=" + lastName + ", email="
-		+ email + ", password=" + password + ", roles=" + roles + ", createdAt=" + createdAt + ", credit="
-		+ credit + ", sms=" + sms + "]";
+	return "User [id=" + id + ", name=" + name + ", lastName=" + lastName + ", email=" + email + ", password="
+		+ password + ", roles=" + roles + ", createdAt=" + createdAt + ", credit=" + credit + ", sms=" + sms
+		+ ", customer=" + customer + "]";
     }
 
 }

@@ -1,7 +1,8 @@
 package br.com.sms.service.impl;
 
-import java.util.List;
+import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import br.com.sms.DTO.CustomerDTO;
@@ -26,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer newCustomer(CustomerDTO customerDTO) {
 
-	User user = userRepository.findByIdUser(customerDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException(
+	User user = userRepository.findById(customerDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException(
 		"Usuario não encontrado para associar a um Cliente: " + customerDTO.getUserId()));
 
 	return customerRepository.save(new Customer(customerDTO.getName(), customerDTO.getLastName(),
@@ -35,8 +36,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> findAllCustomerByUser(Long userId) {
-	return null;
+    public Page<Customer> findAllCustomerByUser(UUID userId) {
+	return customerRepository.findAllCustomerByUserId(userId);
     }
 
 }

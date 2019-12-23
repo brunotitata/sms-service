@@ -22,7 +22,7 @@ public class SmsListenerService {
     @EventListener
     public void processSMS(SmsCommand command) {
 
-	userRepository.findByIdUser(command.getUser()).ifPresent(user -> {
+	userRepository.findById(command.getUser()).ifPresent(user -> {
 	    user.setCredit(user.debitCredits());
 
 	    smsRepository.save(new SMS(command.getNumberPhone(), command.getBody(), command.getStatus(),

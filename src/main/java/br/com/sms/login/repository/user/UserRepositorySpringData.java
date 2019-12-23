@@ -13,6 +13,6 @@ public interface UserRepositorySpringData extends JpaRepository<User, UUID> {
 
     Boolean existsByEmail(String email);
 
-    Optional<User> findByIdUser(UUID idUser);
+    Optional<User> findById(UUID idUser);
 
 }

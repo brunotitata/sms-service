@@ -13,6 +13,6 @@ public interface UserRepository {
 
     User save(User user);
 
-    Optional<User> findByIdUser(UUID idUser);
+    Optional<User> findById(UUID idUser);
 
 }

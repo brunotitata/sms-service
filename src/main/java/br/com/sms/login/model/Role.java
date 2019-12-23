@@ -1,5 +1,7 @@
 package br.com.sms.login.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,7 +12,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements Serializable {
+    private static final long serialVersionUID = -1994895363715782668L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

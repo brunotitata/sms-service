@@ -32,8 +32,8 @@ public class UserRepositoryJpa implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByIdUser(UUID idUser) {
-	return userRepositorySpringData.findByIdUser(idUser);
+    public Optional<User> findById(UUID idUser) {
+	return userRepositorySpringData.findById(idUser);
     }
 
 }
