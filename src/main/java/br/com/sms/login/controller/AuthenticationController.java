@@ -2,7 +2,6 @@ package br.com.sms.login.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,20 +18,21 @@ import br.com.sms.login.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthenticationController {
 
-    @Autowired
     private UserService userService;
 
-    @PostMapping("/login")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public ResponseEntity<AccessToken> authenticateUser(@RequestBody LoginDTO loginData) {
+    public AuthenticationController(UserService userService) {
+	this.userService = userService;
+    }
 
+    @PostMapping("/login")
+    public ResponseEntity<AccessToken> authenticateUser(@RequestBody LoginDTO loginData) {
 	return ResponseEntity.ok().body(userService.authenticateUser(loginData));
     }
 
     @PostMapping("/register")
-    @CrossOrigin(origins = "*")
     public ResponseEntity<User> registerUser(@Valid @RequestBody RegisterDTO registerData) {
 
 	User user = userService.registerUser(registerData);

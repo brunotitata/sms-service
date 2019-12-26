@@ -1,5 +1,6 @@
 package br.com.sms.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -44,6 +45,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findById(UUID id) {
 	return customerRepository.findById(id);
+    }
+
+    @Override
+    public List<Customer> customer(String name, String cellPhone) {
+	return customerRepository.findCustomer(name, cellPhone);
+    }
+
+    @Override
+    public void removeCustomer(UUID customerId) {
+	customerRepository.removeCustomer(customerId);
+
     }
 
 }

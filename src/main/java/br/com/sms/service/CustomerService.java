@@ -1,5 +1,6 @@
 package br.com.sms.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -15,5 +16,9 @@ public interface CustomerService {
     Page<Customer> findAllCustomerByUser(UUID userId, Pageable pageable);
 
     Customer findById(UUID id);
+
+    List<Customer> customer(String name, String cellPhone);
+
+    void removeCustomer(UUID customerId);
 
 }

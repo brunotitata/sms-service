@@ -1,5 +1,6 @@
 package br.com.sms.repository.customer;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -14,5 +15,9 @@ public interface CustomerRepository {
     Page<Customer> findAllCustomerByUserId(UUID id, Pageable pageable);
 
     Customer findById(UUID id);
+
+    List<Customer> findCustomer(String name, String cellphone);
+
+    void removeCustomer(UUID customerId);
 
 }

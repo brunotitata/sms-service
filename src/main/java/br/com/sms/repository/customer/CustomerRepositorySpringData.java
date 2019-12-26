@@ -1,5 +1,6 @@
 package br.com.sms.repository.customer;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,5 +15,7 @@ public interface CustomerRepositorySpringData extends JpaRepository<Customer, UU
     Page<Customer> findAllCustomerByUserId(UUID id, Pageable pageable);
 
     Optional<Customer> findById(UUID uuid);
+
+    List<Customer> findByNameOrCellPhoneContaining(String name, String cellPhone);
 
 }
