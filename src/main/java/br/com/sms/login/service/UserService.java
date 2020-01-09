@@ -11,9 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.sms.login.DTOs.LoginDTO;
-import br.com.sms.login.DTOs.RegisterDTO;
 import br.com.sms.login.config.jwt.JwtProvider;
+import br.com.sms.login.dto.LoginDTO;
+import br.com.sms.login.dto.RegisterDTO;
 import br.com.sms.login.exception.ExistingEmailException;
 import br.com.sms.login.exception.IllegalRoleException;
 import br.com.sms.login.model.AccessToken;

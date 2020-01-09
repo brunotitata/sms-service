@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.sms.login.model.User;
 import br.com.sms.login.util.Utils;
@@ -30,10 +29,9 @@ public class SMS implements Serializable {
     private UUID id;
     private String numberPhone;
     private String body;
-    private String status;
+    private String statusServiceApi;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonProperty("createAt")
-    private LocalDateTime localDateTime;
+    private LocalDateTime createdAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -41,16 +39,16 @@ public class SMS implements Serializable {
     public SMS() {
     }
 
-    public SMS(String numberPhone, String body, String status, User user) {
+    public SMS(String numberPhone, String body, String statusServiceApi, User user) {
 	setNumberPhone(numberPhone);
 	setBody(body);
-	this.status = status;
+	this.statusServiceApi = statusServiceApi;
 	this.user = user;
     }
 
     @PrePersist
     public void prePersist() {
-	this.localDateTime = LocalDateTime.now();
+	this.createdAt = LocalDateTime.now();
     }
 
     public String getNumberPhone() {
@@ -71,20 +69,20 @@ public class SMS implements Serializable {
 	this.body = body;
     }
 
-    public String getStatus() {
-	return status;
+    public String getStatusServiceApi() {
+	return statusServiceApi;
     }
 
-    public void setStatus(String status) {
-	this.status = status;
+    public void setStatusServiceApi(String statusServiceApi) {
+	this.statusServiceApi = statusServiceApi;
     }
 
-    public LocalDateTime getLocalDateTime() {
-	return localDateTime;
+    public LocalDateTime getCreatedAt() {
+	return createdAt;
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-	this.localDateTime = localDateTime;
+    public void setCreatedAt(LocalDateTime createdAt) {
+	this.createdAt = createdAt;
     }
 
     public UUID getId() {
@@ -93,8 +91,8 @@ public class SMS implements Serializable {
 
     @Override
     public String toString() {
-	return "SMS [id=" + id + ", numberPhone=" + numberPhone + ", body=" + body + ", status=" + status
-		+ ", localDateTime=" + localDateTime + ", user=" + user + "]";
+	return "SMS [id=" + id + ", numberPhone=" + numberPhone + ", body=" + body + ", statusServiceApi="
+		+ statusServiceApi + ", createdAt=" + createdAt + ", user=" + user + "]";
     }
 
 }

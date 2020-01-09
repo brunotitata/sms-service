@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import br.com.sms.login.DTOs.UserDTO;
+import br.com.sms.login.dto.UserDTO;
 import br.com.sms.login.exception.EmailNotFoundException;
 import br.com.sms.login.model.User;
 import br.com.sms.login.repository.user.UserRepository;

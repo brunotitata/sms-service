@@ -1,6 +1,6 @@
 package br.com.sms.service;
 
-import br.com.sms.DTO.SmsDTO;
+import br.com.sms.dto.SmsDTO;
 
 public interface SmsService {
 

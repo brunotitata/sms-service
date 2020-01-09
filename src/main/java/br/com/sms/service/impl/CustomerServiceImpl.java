@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.com.sms.DTO.CustomerDTO;
+import br.com.sms.dto.CustomerDTO;
 import br.com.sms.login.exception.IllegalArgumentException;
 import br.com.sms.login.model.User;
 import br.com.sms.login.repository.user.UserRepository;

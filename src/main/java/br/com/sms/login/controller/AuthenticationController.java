@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.sms.login.DTOs.LoginDTO;
-import br.com.sms.login.DTOs.RegisterDTO;
+import br.com.sms.login.dto.LoginDTO;
+import br.com.sms.login.dto.RegisterDTO;
 import br.com.sms.login.model.AccessToken;
 import br.com.sms.login.model.User;
 import br.com.sms.login.service.UserService;

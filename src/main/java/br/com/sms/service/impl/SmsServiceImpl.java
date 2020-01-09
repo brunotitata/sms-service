@@ -9,7 +9,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import br.com.sms.DTO.SmsDTO;
+import br.com.sms.dto.SmsDTO;
 import br.com.sms.login.exception.EmailNotFoundException;
 import br.com.sms.login.exception.InsufficientCreditsException;
 import br.com.sms.login.model.User;

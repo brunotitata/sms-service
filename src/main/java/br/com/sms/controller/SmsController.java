@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.sms.DTO.SmsDTO;
+import br.com.sms.dto.SmsDTO;
 import br.com.sms.model.SMS;
 import br.com.sms.service.SmsService;
 

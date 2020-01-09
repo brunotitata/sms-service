@@ -65,6 +65,8 @@ public class User implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Customer> customer;
 
+    private Integer counterSms;
+
     public User(String name, String lastName, String email, String password) {
 	setName(name);
 	setLastName(lastName);
@@ -87,6 +89,7 @@ public class User implements Serializable {
     public void prePersist() {
 	this.createdAt = LocalDate.now();
 	this.credit = 0;
+	this.counterSms = 0;
     }
 
     public String getName() {
@@ -158,14 +161,6 @@ public class User implements Serializable {
 	this.sms = sms;
     }
 
-    public boolean checkForCredits() {
-	return this.credit <= 0;
-    }
-
-    public Integer debitCredits() {
-	return this.credit - 1;
-    }
-
     public List<Customer> getCustomer() {
 	return customer;
     }
@@ -174,11 +169,31 @@ public class User implements Serializable {
 	this.customer = customer;
     }
 
+    public Integer getCounterSms() {
+	return counterSms;
+    }
+
+    public void setCounterSms(Integer counterSms) {
+	this.counterSms = counterSms;
+    }
+
+    public boolean checkForCredits() {
+	return this.credit <= 0;
+    }
+
+    public Integer debitCredits() {
+	return this.credit - 1;
+    }
+
+    public Integer smsCounter() {
+	return this.counterSms + 1;
+    }
+
     @Override
     public String toString() {
 	return "User [id=" + id + ", name=" + name + ", lastName=" + lastName + ", email=" + email + ", password="
 		+ password + ", roles=" + roles + ", createdAt=" + createdAt + ", credit=" + credit + ", sms=" + sms
-		+ ", customer=" + customer + "]";
+		+ ", customer=" + customer + ", counterSms=" + counterSms + "]";
     }
 
 }

@@ -24,6 +24,7 @@ public class SmsListenerService {
 
 	userRepository.findById(command.getUser()).ifPresent(user -> {
 	    user.setCredit(user.debitCredits());
+	    user.setCounterSms(user.smsCounter());
 
 	    smsRepository.save(new SMS(command.getNumberPhone(), command.getBody(), command.getStatus(),
 		    userRepository.save(user)));

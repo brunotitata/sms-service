@@ -1,4 +1,4 @@
-package br.com.sms.DTO;
+package br.com.sms.dto;
 
 import java.util.UUID;
 

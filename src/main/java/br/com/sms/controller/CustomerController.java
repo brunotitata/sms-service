@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.sms.DTO.CustomerDTO;
+import br.com.sms.dto.CustomerDTO;
 import br.com.sms.model.Customer;
 import br.com.sms.service.CustomerService;
 

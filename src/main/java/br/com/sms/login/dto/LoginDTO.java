@@ -1,4 +1,4 @@
-package br.com.sms.login.DTOs;
+package br.com.sms.login.dto;
 
 public class LoginDTO {
 
