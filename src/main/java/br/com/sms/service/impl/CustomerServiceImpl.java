@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sms.dto.CustomerDTO;
+import br.com.sms.dto.NewCustomerDTO;
 import br.com.sms.login.exception.IllegalArgumentException;
 import br.com.sms.login.model.User;
 import br.com.sms.login.repository.user.UserRepository;
@@ -27,18 +28,18 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer newCustomer(CustomerDTO customerDTO) {
+    public Customer newCustomer(NewCustomerDTO newCustomerDTO) {
 
-	User user = userRepository.findById(customerDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException(
-		"Usuario não encontrado para associar a um Cliente: " + customerDTO.getUserId()));
+	User user = userRepository.findById(newCustomerDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException(
+		"Usuario não encontrado para associar a um Cliente: " + newCustomerDTO.getUserId()));
 
-	return customerRepository.save(new Customer(customerDTO.getName(), customerDTO.getLastName(),
-		customerDTO.getAddress(), customerDTO.getCellPhone(), customerDTO.getTelephone(), user));
+	return customerRepository.save(new Customer(newCustomerDTO.getName(), newCustomerDTO.getLastName(),
+		newCustomerDTO.getAddress(), newCustomerDTO.getCellPhone(), newCustomerDTO.getTelephone(), user));
 
     }
 
     @Override
-    public Page<Customer> findAllCustomerByUser(UUID userId, Pageable pageable) {
+    public Page<CustomerDTO> findAllCustomerByUser(UUID userId, Pageable pageable) {
 	return customerRepository.findAllCustomerByUserId(userId, pageable);
     }
 

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import br.com.sms.dto.CustomerDTO;
 import br.com.sms.login.exception.CustomerNotFound;
 import br.com.sms.model.Customer;
 
@@ -26,8 +27,8 @@ public class CustomerRepositoryJpa implements CustomerRepository {
     }
 
     @Override
-    public Page<Customer> findAllCustomerByUserId(UUID id, Pageable pageable) {
-	return customerRepositorySpringData.findAllCustomerByUserId(id, pageable);
+    public Page<CustomerDTO> findAllCustomerByUserId(UUID id, Pageable pageable) {
+	return customerRepositorySpringData.findAllCustomerByUserId(id, pageable).map(Customer::convertToDto);
     }
 
     @Override

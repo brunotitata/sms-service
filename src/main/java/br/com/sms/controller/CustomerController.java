@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.sms.dto.CustomerDTO;
+import br.com.sms.dto.NewCustomerDTO;
 import br.com.sms.model.Customer;
 import br.com.sms.service.CustomerService;
 
@@ -31,7 +32,7 @@ public class CustomerController {
     }
 
     @PostMapping("/customer")
-    public ResponseEntity<Customer> newCustomer(@RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<Customer> newCustomer(@RequestBody NewCustomerDTO customerDTO) {
 
 	Customer customer = customerService.newCustomer(customerDTO);
 
@@ -46,7 +47,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-    public ResponseEntity<Page<Customer>> findAllCustomer(@RequestParam("user") String id, Pageable pageable) {
+    public ResponseEntity<Page<CustomerDTO>> findAllCustomer(@RequestParam("user") String id, Pageable pageable) {
 	return ResponseEntity.ok(customerService.findAllCustomerByUser(UUID.fromString(id), pageable));
     }
 

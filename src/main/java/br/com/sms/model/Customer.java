@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import br.com.sms.dto.CustomerDTO;
 import br.com.sms.login.model.User;
 import br.com.sms.login.util.Utils;
 
@@ -95,19 +96,20 @@ public class Customer implements Serializable {
 	return id;
     }
 
+    public void setUser(User user) {
+	Utils.argumentNotNull(user, ERROR_INVALID_USER);
+	this.user = user;
+    }
+
+    public static CustomerDTO convertToDto(Customer customer) {
+	return new CustomerDTO(customer.getName(), customer.getLastName(), customer.getAddress(),
+		customer.getCellPhone(), customer.getTelephone());
+    }
+
     @Override
     public String toString() {
 	return "Customer [id=" + id + ", name=" + name + ", lastName=" + lastName + ", address=" + address
 		+ ", cellPhone=" + cellPhone + ", telephone=" + telephone + "]";
-    }
-
-//    public User getUser() {
-//	return user;
-//    }
-//
-    public void setUser(User user) {
-	Utils.argumentNotNull(user, ERROR_INVALID_USER);
-	this.user = user;
     }
 
 }

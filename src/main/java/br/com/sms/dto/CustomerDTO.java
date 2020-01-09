@@ -1,7 +1,5 @@
 package br.com.sms.dto;
 
-import java.util.UUID;
-
 public class CustomerDTO {
 
     private String name;
@@ -9,15 +7,13 @@ public class CustomerDTO {
     private String address;
     private String cellPhone;
     private String telephone;
-    private UUID userId;
 
-    public CustomerDTO(String name, String lastName, String address, String cellPhone, String telephone, UUID userId) {
+    public CustomerDTO(String name, String lastName, String address, String cellPhone, String telephone) {
 	this.name = name;
 	this.lastName = lastName;
 	this.address = address;
 	this.cellPhone = cellPhone;
 	this.telephone = telephone;
-	this.userId = userId;
     }
 
     public CustomerDTO() {
@@ -63,18 +59,10 @@ public class CustomerDTO {
 	this.telephone = telephone;
     }
 
-    public UUID getUserId() {
-	return userId;
-    }
-
-    public void setUserId(UUID userId) {
-	this.userId = userId;
-    }
-
     @Override
     public String toString() {
 	return "CustomerDTO [name=" + name + ", lastName=" + lastName + ", address=" + address + ", cellPhone="
-		+ cellPhone + ", telephone=" + telephone + ", userId=" + userId + "]";
+		+ cellPhone + ", telephone=" + telephone + "]";
     }
 
 }
