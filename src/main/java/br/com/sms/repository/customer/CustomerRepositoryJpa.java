@@ -46,9 +46,10 @@ public class CustomerRepositoryJpa implements CustomerRepository {
     @Override
     public void removeCustomer(UUID customerId) {
 
-	customerRepositorySpringData.findById(customerId)
-		.ifPresent(customer -> customerRepositorySpringData.delete(customer));
+	Customer customer = customerRepositorySpringData.findById(customerId)
+		.orElseThrow(() -> new CustomerNotFound("Customer não encontrado: " + customerId));
 
+	customerRepositorySpringData.delete(customer);
     }
 
 }

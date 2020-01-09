@@ -51,14 +51,14 @@ public class CustomerController {
 	return ResponseEntity.ok(customerService.findAllCustomerByUser(UUID.fromString(id), pageable));
     }
 
-    @GetMapping("/find/customer")
+    @GetMapping("/customer/find")
     public ResponseEntity<List<Customer>> customer(@RequestParam(name = "name", required = false) String name,
 	    @RequestParam(name = "cellphone", required = false) String cellphone) {
 
 	return ResponseEntity.ok(customerService.customer(name, cellphone));
     }
 
-    @DeleteMapping("/customer/{id}/delete")
+    @DeleteMapping("/customer/{id}")
     public ResponseEntity<Void> removeCustomer(@PathVariable("id") String customerId) {
 
 	customerService.removeCustomer(UUID.fromString(customerId));
