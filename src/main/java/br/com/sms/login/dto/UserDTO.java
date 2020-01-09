@@ -23,11 +23,12 @@ public class UserDTO implements UserDetails {
     @JsonIgnore
     private String password;
     private Integer credit;
+    private Integer smsCounter;
 
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDTO(UUID id, String name, String lastName, String email, String password,
-	    Collection<? extends GrantedAuthority> authorities, Integer credit) {
+	    Collection<? extends GrantedAuthority> authorities, Integer credit, Integer smsCounter) {
 	this.id = id;
 	this.name = name;
 	this.lastName = lastName;
@@ -35,6 +36,7 @@ public class UserDTO implements UserDetails {
 	this.password = password;
 	this.authorities = authorities;
 	this.credit = credit;
+	this.smsCounter = smsCounter;
     }
 
     public static UserDTO build(User user) {
@@ -42,7 +44,7 @@ public class UserDTO implements UserDetails {
 		.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
 	return new UserDTO(user.getId(), user.getName(), user.getLastName(), user.getEmail(), user.getPassword(),
-		authorities, user.getCredit());
+		authorities, user.getCredit(), user.getCounterSms());
     }
 
     public UUID getId() {
@@ -69,6 +71,10 @@ public class UserDTO implements UserDetails {
     @Override
     public String getPassword() {
 	return password;
+    }
+
+    public Integer getSmsCounter() {
+	return smsCounter;
     }
 
     @Override
