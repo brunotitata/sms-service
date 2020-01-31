@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import br.com.sms.dto.CustomerDTO;
 import br.com.sms.dto.NewCustomerDTO;
+import br.com.sms.login.exception.CustomerException;
 import br.com.sms.login.exception.IllegalArgumentException;
 import br.com.sms.login.model.User;
 import br.com.sms.login.repository.user.UserRepository;
+import br.com.sms.login.util.Utils;
 import br.com.sms.model.Customer;
 import br.com.sms.repository.customer.CustomerRepository;
 import br.com.sms.service.CustomerService;
@@ -30,12 +32,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer newCustomer(NewCustomerDTO newCustomerDTO) {
 
-	User user = userRepository.findById(newCustomerDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException(
-		"Usuario não encontrado para associar a um Cliente: " + newCustomerDTO.getUserId()));
+	customerRepository.findCellphone(newCustomerDTO.getCellPhone()).ifPresent(customer -> {
+	    throw new CustomerException("Cliente já cadastrado na base com telefone: " + newCustomerDTO.getCellPhone());
+	});
 
 	return customerRepository.save(new Customer(newCustomerDTO.getName(), newCustomerDTO.getLastName(),
-		newCustomerDTO.getAddress(), newCustomerDTO.getCellPhone(), newCustomerDTO.getTelephone(), user));
+		newCustomerDTO.getAddress(), Utils.checkCharactersCellPhone(newCustomerDTO.getCellPhone()),
+		newCustomerDTO.getTelephone(), checkForUser(newCustomerDTO)));
 
+    }
+
+    private User checkForUser(NewCustomerDTO newCustomerDTO) {
+	return userRepository.findById(newCustomerDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException(
+		"Usuario não encontrado para associar a um Cliente: " + newCustomerDTO.getUserId()));
     }
 
     @Override
@@ -54,8 +63,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void removeCustomer(UUID customerId) {
-	customerRepository.removeCustomer(customerId);
+    public void removeCustomer(String cellphone) {
+	customerRepository.removeCustomer(cellphone);
 
     }
 

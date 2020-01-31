@@ -58,10 +58,10 @@ public class CustomerController {
 	return ResponseEntity.ok(customerService.customer(name, cellphone));
     }
 
-    @DeleteMapping("/customer/{id}")
-    public ResponseEntity<Void> removeCustomer(@PathVariable("id") String customerId) {
+    @DeleteMapping("/customer/{cellphone}")
+    public ResponseEntity<Void> removeCustomer(@PathVariable("cellphone") String customerId) {
 
-	customerService.removeCustomer(UUID.fromString(customerId));
+	customerService.removeCustomer(customerId);
 
 	return ResponseEntity.noContent().build();
     }

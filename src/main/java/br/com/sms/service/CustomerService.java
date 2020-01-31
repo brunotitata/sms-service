@@ -20,6 +20,6 @@ public interface CustomerService {
 
     List<Customer> customer(String name, String cellPhone);
 
-    void removeCustomer(UUID customerId);
+    void removeCustomer(String cellphone);
 
 }

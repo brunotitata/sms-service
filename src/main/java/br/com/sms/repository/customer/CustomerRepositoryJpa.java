@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import br.com.sms.dto.CustomerDTO;
+import br.com.sms.login.exception.ArgumentInvalidException;
+import br.com.sms.login.exception.CellphoneException;
 import br.com.sms.login.exception.CustomerNotFound;
 import br.com.sms.model.Customer;
 
@@ -44,12 +46,20 @@ public class CustomerRepositoryJpa implements CustomerRepository {
     }
 
     @Override
-    public void removeCustomer(UUID customerId) {
+    public void removeCustomer(String cellphone) {
 
-	Customer customer = customerRepositorySpringData.findById(customerId)
-		.orElseThrow(() -> new CustomerNotFound("Customer não encontrado: " + customerId));
+	if (cellphone.isEmpty())
+	    throw new ArgumentInvalidException("Para excluir um cliente, é preciso informar o numero do telefone.");
+
+	Customer customer = customerRepositorySpringData.findByCellPhone(cellphone)
+		.orElseThrow(() -> new CellphoneException("Customer não encontrado: " + cellphone));
 
 	customerRepositorySpringData.delete(customer);
+    }
+
+    @Override
+    public Optional<Customer> findCellphone(String cellphone) {
+	return customerRepositorySpringData.findByCellPhone(cellphone);
     }
 
 }

@@ -3,6 +3,7 @@ package br.com.sms.login.util;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
+import br.com.sms.login.exception.ArgumentInvalidException;
 import br.com.sms.login.exception.Sha512Exception;
 
 public class Utils {
@@ -30,6 +31,15 @@ public class Utils {
 	}
 
 	return toReturn;
+    }
+
+    public static String checkCharactersCellPhone(String cellphone) {
+
+	if (!cellphone.matches("\\d+"))
+	    throw new ArgumentInvalidException(
+		    "Numero de telefone deve ter apenas numeros, sem letras ou caracteres especiais.");
+
+	return cellphone;
     }
 
 }

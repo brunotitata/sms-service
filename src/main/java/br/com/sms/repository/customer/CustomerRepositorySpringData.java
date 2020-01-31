@@ -22,4 +22,7 @@ public interface CustomerRepositorySpringData extends JpaRepository<Customer, UU
     @Transactional(readOnly = true)
     List<Customer> findByNameOrCellPhoneContaining(String name, String cellPhone);
 
+    @Transactional(readOnly = true)
+    Optional<Customer> findByCellPhone(String cellphone);
+
 }
