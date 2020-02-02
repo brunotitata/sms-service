@@ -65,15 +65,15 @@ public class ReportSmsSpecificationTest {
 	roleRepository.deleteAll();
     }
 
-    @Test
-    public void smsFilterWithAllParamsNull() {
-
-	List<SMS> sms = smsRepository
-		.findAll(ReportSmsSpecification.filter(new SmsFilter(null, null, null, null, null)));
-
-	System.out.println();
-	assertEquals(0, sms.size());
-    }
+//    @Test
+//    public void smsFilterWithAllParamsNull() {
+//
+//	List<SMS> sms = smsRepository
+//		.findAll(ReportSmsSpecification.filter(new SmsFilter(null, null, null, null, null)));
+//
+//	System.out.println();
+//	assertEquals(0, sms.size());
+//    }
 
     @Test
     public void smsFilterWithStartDateAndEndDate() {
@@ -117,6 +117,24 @@ public class ReportSmsSpecificationTest {
 	assertEquals(1, sms.size());
 	assertEquals("messagem 1", sms.get(0).getBody());
 	assertEquals("11111111111", sms.get(0).getNumberPhone());
+    }
+
+    @Test
+    public void smsFilterWithNameCustomer() {
+
+	List<SMS> sms = smsRepository
+		.findAll(ReportSmsSpecification.filter(new SmsFilter(null, null, null, null, "Tiago")));
+
+	assertEquals(3, sms.size());
+
+	assertEquals("messagem 1", sms.get(0).getBody());
+	assertEquals("11111111111", sms.get(0).getNumberPhone());
+
+	assertEquals("messagem 2", sms.get(1).getBody());
+	assertEquals("22222222222", sms.get(1).getNumberPhone());
+
+	assertEquals("messagem 3", sms.get(2).getBody());
+	assertEquals("33333333333", sms.get(2).getNumberPhone());
     }
 
 }
