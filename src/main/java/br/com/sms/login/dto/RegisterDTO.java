@@ -7,15 +7,15 @@ import javax.validation.constraints.Email;
 public class RegisterDTO {
 
     private String name;
-    private String lastName;
+    private String establishment;
     @Email
     private String email;
     private Set<String> role;
     private String password;
 
-    public RegisterDTO(String name, String lastName, @Email String email, Set<String> role, String password) {
+    public RegisterDTO(String name, String establishment, @Email String email, Set<String> role, String password) {
 	this.name = name;
-	this.lastName = lastName;
+	this.establishment = establishment;
 	this.email = email;
 	this.role = role;
 	this.password = password;
@@ -32,12 +32,12 @@ public class RegisterDTO {
 	this.name = name;
     }
 
-    public String getLastName() {
-	return lastName;
+    public String getEstablishment() {
+	return establishment;
     }
 
-    public void setLastName(String lastName) {
-	this.lastName = lastName;
+    public void setEstablishment(String establishment) {
+	this.establishment = establishment;
     }
 
     public String getEmail() {
@@ -66,7 +66,7 @@ public class RegisterDTO {
 
     @Override
     public String toString() {
-	return "RegisterData [name=" + name + ", lastName=" + lastName + ", email=" + email + ", role=" + role
+	return "RegisterData [name=" + name + ", establishment=" + establishment + ", email=" + email + ", role=" + role
 		+ ", password=" + password + "]";
     }
 

@@ -3,17 +3,13 @@ package br.com.sms.dto;
 public class CustomerDTO {
 
     private String name;
-    private String lastName;
-    private String address;
     private String cellPhone;
-    private String telephone;
+    private String email;
 
-    public CustomerDTO(String name, String lastName, String address, String cellPhone, String telephone) {
+    public CustomerDTO(String name, String cellPhone, String email) {
 	this.name = name;
-	this.lastName = lastName;
-	this.address = address;
 	this.cellPhone = cellPhone;
-	this.telephone = telephone;
+	this.email = email;
     }
 
     public CustomerDTO() {
@@ -27,22 +23,6 @@ public class CustomerDTO {
 	this.name = name;
     }
 
-    public String getLastName() {
-	return lastName;
-    }
-
-    public void setLastName(String lastName) {
-	this.lastName = lastName;
-    }
-
-    public String getAddress() {
-	return address;
-    }
-
-    public void setAddress(String address) {
-	this.address = address;
-    }
-
     public String getCellPhone() {
 	return cellPhone;
     }
@@ -51,18 +31,17 @@ public class CustomerDTO {
 	this.cellPhone = cellPhone;
     }
 
-    public String getTelephone() {
-	return telephone;
+    public String getEmail() {
+	return email;
     }
 
-    public void setTelephone(String telephone) {
-	this.telephone = telephone;
+    public void setEmail(String email) {
+	this.email = email;
     }
 
     @Override
     public String toString() {
-	return "CustomerDTO [name=" + name + ", lastName=" + lastName + ", address=" + address + ", cellPhone="
-		+ cellPhone + ", telephone=" + telephone + "]";
+	return "CustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + "]";
     }
 
 }

@@ -8,15 +8,15 @@ public class NewCustomerDTO {
     private String lastName;
     private String address;
     private String cellPhone;
-    private String telephone;
+    private String email;
     private UUID userId;
 
-    public NewCustomerDTO(String name, String lastName, String address, String cellPhone, String telephone) {
+    public NewCustomerDTO(String name, String lastName, String address, String cellPhone, String email) {
 	this.name = name;
 	this.lastName = lastName;
 	this.address = address;
 	this.cellPhone = cellPhone;
-	this.telephone = telephone;
+	this.email = email;
     }
 
     public NewCustomerDTO() {
@@ -54,12 +54,12 @@ public class NewCustomerDTO {
 	this.cellPhone = cellPhone;
     }
 
-    public String getTelephone() {
-	return telephone;
+    public String getEmail() {
+	return email;
     }
 
-    public void setTelephone(String telephone) {
-	this.telephone = telephone;
+    public void setEmail(String email) {
+	this.email = email;
     }
 
     public UUID getUserId() {
@@ -72,8 +72,8 @@ public class NewCustomerDTO {
 
     @Override
     public String toString() {
-	return "CustomerDTO [name=" + name + ", lastName=" + lastName + ", address=" + address + ", cellPhone="
-		+ cellPhone + ", telephone=" + telephone + ", userId=" + userId + "]";
+	return "NewCustomerDTO [name=" + name + ", lastName=" + lastName + ", address=" + address + ", cellPhone="
+		+ cellPhone + ", email=" + email + ", userId=" + userId + "]";
     }
 
 }

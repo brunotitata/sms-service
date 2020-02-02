@@ -36,9 +36,9 @@ public class CustomerServiceImpl implements CustomerService {
 	    throw new CustomerException("Cliente já cadastrado na base com telefone: " + newCustomerDTO.getCellPhone());
 	});
 
-	return customerRepository.save(new Customer(newCustomerDTO.getName(), newCustomerDTO.getLastName(),
-		newCustomerDTO.getAddress(), Utils.checkCharactersCellPhone(newCustomerDTO.getCellPhone()),
-		newCustomerDTO.getTelephone(), checkForUser(newCustomerDTO)));
+	return customerRepository.save(
+		new Customer(newCustomerDTO.getName(), Utils.checkCharactersCellPhone(newCustomerDTO.getCellPhone()),
+			newCustomerDTO.getEmail(), checkForUser(newCustomerDTO)));
 
     }
 

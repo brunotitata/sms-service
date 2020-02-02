@@ -47,7 +47,7 @@ public class UserService {
 	    throw new ExistingEmailException("Fail -> Email is already in use!");
 	}
 
-	User user = new User(registerData.getName(), registerData.getLastName(), registerData.getEmail(),
+	User user = new User(registerData.getName(), registerData.getEstablishment(), registerData.getEmail(),
 		encoder.encode(registerData.getPassword()));
 
 	Set<String> strRoles = registerData.getRole();

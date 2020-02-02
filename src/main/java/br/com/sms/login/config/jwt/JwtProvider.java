@@ -33,8 +33,8 @@ public class JwtProvider {
 
 	return Jwts.builder().setSubject((userDTO.getEmail())).setIssuedAt(new Date())
 		.claim("uuid", userDTO.getId())
-		.claim("username", userDTO.getName())
-		.claim("lastName", userDTO.getLastName())
+		.claim("username", userDTO.getUsername())
+		.claim("establishment", userDTO.getEstablishment())
 		.claim("credit", userDTO.getCredit())
 		.claim("smsCounter", userDTO.getSmsCounter())
 		.setExpiration(new Date((new Date()).getTime() + jwtExpiration))

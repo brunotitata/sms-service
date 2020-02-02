@@ -33,6 +33,8 @@ public class CustomerController {
 
     @PostMapping("/customer")
     public ResponseEntity<Customer> newCustomer(@RequestBody NewCustomerDTO customerDTO) {
+	
+	System.out.println(customerDTO);
 
 	Customer customer = customerService.newCustomer(customerDTO);
 

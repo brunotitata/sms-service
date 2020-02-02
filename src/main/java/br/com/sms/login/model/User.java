@@ -22,12 +22,14 @@ import javax.validation.constraints.Email;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.sms.login.util.Utils;
 import br.com.sms.model.Customer;
-import br.com.sms.model.SMS;
+import br.com.sms.model.UserStatistics;
 
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
@@ -36,7 +38,7 @@ public class User implements Serializable {
 
     public static final String ERROR_INVALID_PASS = "Password can not be null or empty";
     public static final String ERROR_INVALID_NAME = "Name can not be null or empty";
-    public static final String ERROR_INVALID_LAST_NAME = "Last name can not be null or empty";
+    public static final String ERROR_INVALID_ESTABLISHMENT = "Establishment can not be null or empty";
     public static final String ERROR_INVALID_EMAIL = "Email can not be null or empty";
     public static final String ERROR_INVALID_ROLES = "Roles can not be null or empty";
     public static final String ERROR_INVALID_UUID = "UUID can not be null or empty";
@@ -45,7 +47,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
-    private String lastName;
+    private String establishment;
     @Email(message = "Please provide a valid e-mail")
     private String email;
     private String password;
@@ -58,25 +60,23 @@ public class User implements Serializable {
     private LocalDate createdAt;
     private Integer credit;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SMS> sms;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Customer> customer;
 
     private Integer counterSms;
 
-    public User(String name, String lastName, String email, String password) {
+    public User(String name, String establishment, String email, String password) {
 	setName(name);
-	setLastName(lastName);
+	setEstablishment(establishment);
 	setEmail(email);
 	setPassword(password);
     }
 
-    public User(String name, String lastName, String email, String password, Set<Role> roles) {
+    public User(String name, String establishment, String email, String password, Set<Role> roles) {
 	setName(name);
-	setLastName(lastName);
+	setEstablishment(establishment);
 	setEmail(email);
 	setPassword(password);
 	setRoles(roles);
@@ -101,13 +101,13 @@ public class User implements Serializable {
 	this.name = name;
     }
 
-    public String getLastName() {
-	return lastName;
+    public String getEstablishment() {
+	return establishment;
     }
 
-    public void setLastName(String lastName) {
-	Utils.argumentNotEmpty(lastName, ERROR_INVALID_LAST_NAME);
-	this.lastName = lastName;
+    public void setEstablishment(String establishment) {
+	Utils.argumentNotEmpty(establishment, ERROR_INVALID_ESTABLISHMENT);
+	this.establishment = establishment;
     }
 
     public String getEmail() {
@@ -153,14 +153,6 @@ public class User implements Serializable {
 	return createdAt;
     }
 
-    public List<SMS> getSms() {
-	return sms;
-    }
-
-    public void setSms(List<SMS> sms) {
-	this.sms = sms;
-    }
-
     public List<Customer> getCustomer() {
 	return customer;
     }
@@ -191,9 +183,12 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-	return "User [id=" + id + ", name=" + name + ", lastName=" + lastName + ", email=" + email + ", password="
-		+ password + ", roles=" + roles + ", createdAt=" + createdAt + ", credit=" + credit + ", sms=" + sms
-		+ ", customer=" + customer + ", counterSms=" + counterSms + "]";
+	return "User [id=" + id + ", name=" + name + ", establishment=" + establishment + ", email=" + email
+		+ ", password=" + password + ", roles=" + roles + ", createdAt=" + createdAt + "]";
+    }
+
+    public static UserStatistics getStatistic(User user) {
+	return new UserStatistics(user.getCredit(), user.getCounterSms());
     }
 
 }

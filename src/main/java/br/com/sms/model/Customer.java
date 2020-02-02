@@ -1,14 +1,21 @@
 package br.com.sms.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import br.com.sms.dto.CustomerDTO;
 import br.com.sms.login.model.User;
@@ -28,20 +35,21 @@ public class Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
-    private String lastName;
-    private String address;
     private String cellPhone;
-    private String telephone;
-    @ManyToOne
+    private String email;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Customer(String name, String lastName, String address, String cellPhone, String telephone, User user) {
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<SMS> sms;
+
+    public Customer(String name, String cellPhone, String email, User user) {
 	setName(name);
-	setLastName(lastName);
-	setAddress(address);
 	setCellPhone(cellPhone);
-	setTelephone(telephone);
+	setEmail(email);
 	setUser(user);
     }
 
@@ -57,24 +65,6 @@ public class Customer implements Serializable {
 	this.name = name;
     }
 
-    public String getLastName() {
-	return lastName;
-    }
-
-    public void setLastName(String lastName) {
-	Utils.argumentNotEmpty(lastName, ERROR_INVALID_LASTNAME);
-	this.lastName = lastName;
-    }
-
-    public String getAddress() {
-	return address;
-    }
-
-    public void setAddress(String address) {
-	Utils.argumentNotEmpty(address, ERROR_INVALID_ADDRESS);
-	this.address = address;
-    }
-
     public String getCellPhone() {
 	return cellPhone;
     }
@@ -84,12 +74,12 @@ public class Customer implements Serializable {
 	this.cellPhone = cellPhone;
     }
 
-    public String getTelephone() {
-	return telephone;
+    public String getEmail() {
+	return email;
     }
 
-    public void setTelephone(String telephone) {
-	this.telephone = telephone;
+    public void setEmail(String email) {
+	this.email = email;
     }
 
     public UUID getId() {
@@ -102,14 +92,13 @@ public class Customer implements Serializable {
     }
 
     public static CustomerDTO convertToDto(Customer customer) {
-	return new CustomerDTO(customer.getName(), customer.getLastName(), customer.getAddress(),
-		customer.getCellPhone(), customer.getTelephone());
+	return new CustomerDTO(customer.getName(), customer.getCellPhone(), customer.getEmail());
     }
 
     @Override
     public String toString() {
-	return "Customer [id=" + id + ", name=" + name + ", lastName=" + lastName + ", address=" + address
-		+ ", cellPhone=" + cellPhone + ", telephone=" + telephone + "]";
+	return "Customer [id=" + id + ", name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + ", user="
+		+ user + ", sms=" + sms + "]";
     }
 
 }

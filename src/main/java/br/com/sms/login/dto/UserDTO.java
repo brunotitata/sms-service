@@ -18,7 +18,7 @@ public class UserDTO implements UserDetails {
 
     private UUID id;
     private String name;
-    private String lastName;
+    private String establishment;
     private String email;
     @JsonIgnore
     private String password;
@@ -27,11 +27,11 @@ public class UserDTO implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDTO(UUID id, String name, String lastName, String email, String password,
+    public UserDTO(UUID id, String name, String establishment, String email, String password,
 	    Collection<? extends GrantedAuthority> authorities, Integer credit, Integer smsCounter) {
 	this.id = id;
 	this.name = name;
-	this.lastName = lastName;
+	this.establishment = establishment;
 	this.email = email;
 	this.password = password;
 	this.authorities = authorities;
@@ -43,7 +43,7 @@ public class UserDTO implements UserDetails {
 	List<GrantedAuthority> authorities = user.getRoles().stream()
 		.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
-	return new UserDTO(user.getId(), user.getName(), user.getLastName(), user.getEmail(), user.getPassword(),
+	return new UserDTO(user.getId(), user.getName(), user.getEstablishment(), user.getEmail(), user.getPassword(),
 		authorities, user.getCredit(), user.getCounterSms());
     }
 
@@ -51,12 +51,8 @@ public class UserDTO implements UserDetails {
 	return id;
     }
 
-    public String getName() {
-	return name;
-    }
-
-    public String getLastName() {
-	return lastName;
+    public String getEstablishment() {
+	return establishment;
     }
 
     public String getEmail() {
@@ -65,7 +61,7 @@ public class UserDTO implements UserDetails {
 
     @Override
     public String getUsername() {
-	return lastName;
+	return name;
     }
 
     @Override
@@ -113,7 +109,7 @@ public class UserDTO implements UserDetails {
 	result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
 	result = prime * result + ((email == null) ? 0 : email.hashCode());
 	result = prime * result + ((id == null) ? 0 : id.hashCode());
-	result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+	result = prime * result + ((establishment == null) ? 0 : establishment.hashCode());
 	result = prime * result + ((name == null) ? 0 : name.hashCode());
 	result = prime * result + ((password == null) ? 0 : password.hashCode());
 	return result;
@@ -143,10 +139,10 @@ public class UserDTO implements UserDetails {
 		return false;
 	} else if (!id.equals(other.id))
 	    return false;
-	if (lastName == null) {
-	    if (other.lastName != null)
+	if (establishment == null) {
+	    if (other.establishment != null)
 		return false;
-	} else if (!lastName.equals(other.lastName))
+	} else if (!establishment.equals(other.establishment))
 	    return false;
 	if (name == null) {
 	    if (other.name != null)

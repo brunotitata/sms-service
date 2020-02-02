@@ -36,4 +36,13 @@ public class UserRepositoryJpa implements UserRepository {
 	return userRepositorySpringData.findById(idUser);
     }
 
+    @Override
+    public void delete(User user) {
+
+	if (user == null)
+	    throw new RuntimeException("Usuario null.");
+
+	userRepositorySpringData.delete(user);
+    }
+
 }

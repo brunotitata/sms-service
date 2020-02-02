@@ -1,6 +1,14 @@
 package br.com.sms.smsservice;
 
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import br.com.sms.model.SMS;
+import br.com.sms.repository.SmsFilter;
+import br.com.sms.repository.sms.SmsRepository;
 
 @SpringBootTest
 public class ModelTest {
@@ -19,10 +27,20 @@ public class ModelTest {
 //		HttpStatus.BAD_REQUEST));
 //    }
 //
-//    @Test
-//    public void geayge() {
-//	System.out.println(customerRepository.findCustomer("", "6765"));
-//
-//    }
+    
+    @Autowired
+    private SmsRepository smsRepository;
+    
+    @Test
+    public void geayge() {
+	
+	SmsFilter smsFilter = new SmsFilter();
+	smsFilter.setNameCustomer("drian");
+	
+	List<SMS> findSmsByFilter = smsRepository.findSmsByFilter(smsFilter);
+	
+	System.out.println(findSmsByFilter);
+
+    }
 
 }

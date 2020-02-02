@@ -26,4 +26,10 @@ public class RoleRepositoryJpa implements RoleRepository {
 	return repositorySpringData.save(role);
     }
 
+    @Override
+    public void deleteAll() {
+	repositorySpringData.deleteAll();
+
+    }
+
 }

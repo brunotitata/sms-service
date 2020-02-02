@@ -20,10 +20,10 @@ public class ApplicationConfig {
     public void createRoleWhenInitializing() {
 
 	for (RoleName roleName : RoleName.values()) {
-	    if (!roleRepository.findByName(roleName).isPresent()) {
-		roleRepository.save(new Role(roleName));
+	    if (roleRepository.findByName(roleName).isPresent()) {
+		return;
 	    } else {
-		continue;
+		roleRepository.save(new Role(roleName));
 	    }
 	}
     }

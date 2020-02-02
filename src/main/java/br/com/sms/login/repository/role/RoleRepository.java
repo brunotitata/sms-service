@@ -11,4 +11,6 @@ public interface RoleRepository {
 
     Role save(Role role);
 
+    void deleteAll();
+
 }

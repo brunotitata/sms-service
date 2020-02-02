@@ -5,16 +5,15 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import br.com.sms.login.model.User;
 import br.com.sms.login.util.Utils;
 
 @Entity
@@ -30,25 +29,23 @@ public class SMS implements Serializable {
     private String numberPhone;
     private String body;
     private String statusServiceApi;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     public SMS() {
     }
 
-    public SMS(String numberPhone, String body, String statusServiceApi, User user) {
+    public SMS(String numberPhone, String body, LocalDateTime createdAt, String statusServiceApi, Customer customer) {
 	setNumberPhone(numberPhone);
 	setBody(body);
+	this.createdAt = createdAt;
 	this.statusServiceApi = statusServiceApi;
-	this.user = user;
-    }
-
-    @PrePersist
-    public void prePersist() {
-	this.createdAt = LocalDateTime.now();
+	this.customer = customer;
     }
 
     public String getNumberPhone() {
@@ -92,7 +89,7 @@ public class SMS implements Serializable {
     @Override
     public String toString() {
 	return "SMS [id=" + id + ", numberPhone=" + numberPhone + ", body=" + body + ", statusServiceApi="
-		+ statusServiceApi + ", createdAt=" + createdAt + ", user=" + user + "]";
+		+ statusServiceApi + ", createdAt=" + createdAt + "]";
     }
 
 }
