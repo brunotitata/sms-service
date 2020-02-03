@@ -21,8 +21,6 @@ import javax.validation.constraints.Email;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -60,7 +58,6 @@ public class User implements Serializable {
     private Integer credit;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Customer> customer;
 
