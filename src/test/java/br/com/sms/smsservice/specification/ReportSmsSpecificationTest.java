@@ -22,10 +22,10 @@ import br.com.sms.login.repository.role.RoleRepository;
 import br.com.sms.login.repository.user.UserRepository;
 import br.com.sms.model.Customer;
 import br.com.sms.model.SMS;
-import br.com.sms.repository.ReportSmsSpecification;
 import br.com.sms.repository.SmsFilter;
 import br.com.sms.repository.customer.CustomerRepository;
 import br.com.sms.repository.sms.SmsRepository;
+import br.com.sms.repository.sms.SmsSpecification;
 
 @SpringBootTest
 public class ReportSmsSpecificationTest {
@@ -79,7 +79,7 @@ public class ReportSmsSpecificationTest {
     public void smsFilterWithStartDateAndEndDate() {
 
 	List<SMS> sms = smsRepository
-		.findAll(ReportSmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-02-01T00:00:00.000"),
+		.findAll(SmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-02-01T00:00:00.000"),
 			LocalDateTime.parse("2020-02-01T23:59:21.000"), null, null, null)));
 
 	assertEquals(1, sms.size());
@@ -92,7 +92,7 @@ public class ReportSmsSpecificationTest {
     public void smsFilterWithStartDateAndEndDateNotExist() {
 
 	List<SMS> sms = smsRepository
-		.findAll(ReportSmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-08-01T00:00:00.000"),
+		.findAll(SmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-08-01T00:00:00.000"),
 			LocalDateTime.parse("2020-10-01T23:59:21.000"), null, null, null)));
 
 	assertEquals(0, sms.size());
@@ -103,16 +103,16 @@ public class ReportSmsSpecificationTest {
     public void smsFilterWithStartDateIsAfterEndDateShouldReturnException() {
 
 	assertThatThrownBy(() -> smsRepository
-		.findAll(ReportSmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-09-01T00:00:00.000"),
+		.findAll(SmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-09-01T00:00:00.000"),
 			LocalDateTime.parse("2020-07-01T23:59:21.000"), null, null, null))))
-				.isInstanceOf(RuntimeException.class).hasMessage(ReportSmsSpecification.ERROR_DATE);
+				.isInstanceOf(RuntimeException.class).hasMessage(SmsSpecification.ERROR_DATE);
     }
 
     @Test
     public void smsFilterWithCellPhone() {
 
 	List<SMS> sms = smsRepository
-		.findAll(ReportSmsSpecification.filter(new SmsFilter(null, null, "1111", null, null)));
+		.findAll(SmsSpecification.filter(new SmsFilter(null, null, "1111", null, null)));
 
 	assertEquals(1, sms.size());
 	assertEquals("messagem 1", sms.get(0).getBody());
@@ -123,7 +123,9 @@ public class ReportSmsSpecificationTest {
     public void smsFilterWithNameCustomer() {
 
 	List<SMS> sms = smsRepository
-		.findAll(ReportSmsSpecification.filter(new SmsFilter(null, null, null, null, "Tiago")));
+		.findAll(SmsSpecification.filter(new SmsFilter(null, null, null, null, "Tiago")));
+	
+	System.out.println(sms);
 
 	assertEquals(3, sms.size());
 

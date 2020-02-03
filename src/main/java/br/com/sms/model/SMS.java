@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.sms.dto.SmsDTO;
 import br.com.sms.login.util.Utils;
 
 @Entity
@@ -90,6 +91,10 @@ public class SMS implements Serializable {
     public String toString() {
 	return "SMS [id=" + id + ", numberPhone=" + numberPhone + ", body=" + body + ", statusServiceApi="
 		+ statusServiceApi + ", createdAt=" + createdAt + "]";
+    }
+
+    public static SmsDTO convert(SMS sms) {
+	return new SmsDTO(sms.getNumberPhone(), sms.getBody(), null, sms.getStatusServiceApi(), sms.getCreatedAt());
     }
 
 }

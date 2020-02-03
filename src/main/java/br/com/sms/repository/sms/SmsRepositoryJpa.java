@@ -6,7 +6,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import br.com.sms.model.SMS;
-import br.com.sms.repository.ReportSmsSpecification;
 import br.com.sms.repository.SmsFilter;
 
 @Repository
@@ -25,7 +24,7 @@ public class SmsRepositoryJpa implements SmsRepository {
 
     @Override
     public List<SMS> findSmsByFilter(SmsFilter smsFilter) {
-	return smsRepositorySpringData.findAll(ReportSmsSpecification.filter(smsFilter));
+	return smsRepositorySpringData.findAll(SmsSpecification.filter(smsFilter));
     }
 
     @Override
