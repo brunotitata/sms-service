@@ -33,6 +33,8 @@ public class SmsListenerService {
 	    user.setCredit(user.debitCredits());
 	    user.setCounterSms(user.smsCounter());
 
+	    userRepository.save(user);
+
 	    Customer customer = customerRepository.findCellphone(command.getNumberPhone()).orElse(null);
 
 	    smsRepository.save(new SMS(command.getNumberPhone(), command.getBody(), LocalDateTime.now(),

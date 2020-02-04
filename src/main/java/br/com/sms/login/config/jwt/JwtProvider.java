@@ -34,6 +34,7 @@ public class JwtProvider {
 	return Jwts.builder().setSubject((userDTO.getEmail())).setIssuedAt(new Date())
 		.claim("uuid", userDTO.getId())
 		.claim("username", userDTO.getUsername())
+		.claim("email", userDTO.getEmail())
 		.claim("establishment", userDTO.getEstablishment())
 		.claim("credit", userDTO.getCredit())
 		.claim("smsCounter", userDTO.getSmsCounter())

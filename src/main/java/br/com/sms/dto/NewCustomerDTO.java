@@ -5,16 +5,12 @@ import java.util.UUID;
 public class NewCustomerDTO {
 
     private String name;
-    private String lastName;
-    private String address;
     private String cellPhone;
     private String email;
     private UUID userId;
 
-    public NewCustomerDTO(String name, String lastName, String address, String cellPhone, String email) {
+    public NewCustomerDTO(String name, String cellPhone, String email) {
 	this.name = name;
-	this.lastName = lastName;
-	this.address = address;
 	this.cellPhone = cellPhone;
 	this.email = email;
     }
@@ -28,22 +24,6 @@ public class NewCustomerDTO {
 
     public void setName(String name) {
 	this.name = name;
-    }
-
-    public String getLastName() {
-	return lastName;
-    }
-
-    public void setLastName(String lastName) {
-	this.lastName = lastName;
-    }
-
-    public String getAddress() {
-	return address;
-    }
-
-    public void setAddress(String address) {
-	this.address = address;
     }
 
     public String getCellPhone() {
@@ -72,8 +52,8 @@ public class NewCustomerDTO {
 
     @Override
     public String toString() {
-	return "NewCustomerDTO [name=" + name + ", lastName=" + lastName + ", address=" + address + ", cellPhone="
-		+ cellPhone + ", email=" + email + ", userId=" + userId + "]";
+	return "NewCustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + ", userId=" + userId
+		+ "]";
     }
 
 }

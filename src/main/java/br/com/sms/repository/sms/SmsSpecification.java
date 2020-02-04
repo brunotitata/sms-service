@@ -1,4 +1,4 @@
-package br.com.sms.repository;
+package br.com.sms.repository.sms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 import br.com.sms.model.Customer;
 import br.com.sms.model.SMS;
+import br.com.sms.repository.SmsFilter;
 
-public class ReportSmsSpecification {
+public class SmsSpecification {
 
     public static final String ERROR_DATE = "StartDate não pode ser maior que EndDate.";
 

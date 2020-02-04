@@ -55,6 +55,7 @@ public class User implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
+
     private Integer credit;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,5 +1,8 @@
 package br.com.sms.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpMethod;
@@ -14,6 +17,10 @@ import br.com.sms.login.exception.EmailNotFoundException;
 import br.com.sms.login.exception.InsufficientCreditsException;
 import br.com.sms.login.model.User;
 import br.com.sms.login.repository.user.UserRepository;
+import br.com.sms.model.SMS;
+import br.com.sms.repository.SmsFilter;
+import br.com.sms.repository.sms.SmsRepository;
+import br.com.sms.repository.sms.SmsSpecification;
 import br.com.sms.service.ExceptionCommand;
 import br.com.sms.service.SmsCommand;
 import br.com.sms.service.SmsService;
@@ -25,13 +32,15 @@ public class SmsServiceImpl implements SmsService {
     private ApplicationEventPublisher applicationEventPublisher;
     private String keyApi;
     private UserRepository userRepository;
+    private SmsRepository smsRepository;
 
     public SmsServiceImpl(RestTemplate restTemplate, ApplicationEventPublisher applicationEventPublisher,
-	    @Value("${smsdev.key.api}") String keyApi, UserRepository userRepository) {
+	    @Value("${smsdev.key.api}") String keyApi, UserRepository userRepository, SmsRepository smsRepository) {
 	this.restTemplate = restTemplate;
 	this.applicationEventPublisher = applicationEventPublisher;
 	this.keyApi = keyApi;
 	this.userRepository = userRepository;
+	this.smsRepository = smsRepository;
     }
 
     @Override
@@ -60,6 +69,12 @@ public class SmsServiceImpl implements SmsService {
 		    .publishEvent(new ExceptionCommand(response.getBody(), e.getMessage(), response.getStatusCode()));
 	}
 
+    }
+
+    @Override
+    public List<SmsDTO> smsReport(SmsFilter smsFilter) {
+	return smsRepository.findAll(SmsSpecification.filter(smsFilter)).stream().map(SMS::convert)
+		.collect(Collectors.toList());
     }
 
 }
