@@ -1,17 +1,14 @@
 package br.com.sms.repository;
 
-import java.time.LocalDateTime;
-
 public class SmsFilter {
 
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private String startDate;
+    private String endDate;
     private String cellphone;
     private String message;
     private String nameCustomer;
 
-    public SmsFilter(LocalDateTime startDate, LocalDateTime endDate, String cellphone, String message,
-	    String nameCustomer) {
+    public SmsFilter(String startDate, String endDate, String cellphone, String message, String nameCustomer) {
 	this.startDate = startDate;
 	this.endDate = endDate;
 	this.cellphone = cellphone;
@@ -22,19 +19,19 @@ public class SmsFilter {
     public SmsFilter() {
     }
 
-    public LocalDateTime getStartDate() {
+    public String getStartDate() {
 	return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(String startDate) {
 	this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public String getEndDate() {
 	return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(String endDate) {
 	this.endDate = endDate;
     }
 

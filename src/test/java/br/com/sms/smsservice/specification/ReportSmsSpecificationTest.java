@@ -79,8 +79,7 @@ public class ReportSmsSpecificationTest {
     public void smsFilterWithStartDateAndEndDate() {
 
 	List<SMS> sms = smsRepository
-		.findAll(SmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-02-01T00:00:00.000"),
-			LocalDateTime.parse("2020-02-01T23:59:21.000"), null, null, null)));
+		.findAll(SmsSpecification.filter(new SmsFilter("2020-02-01", "2020-02-01", null, null, null)));
 
 	assertEquals(1, sms.size());
 	assertEquals("messagem 1", sms.get(0).getBody());
@@ -92,8 +91,7 @@ public class ReportSmsSpecificationTest {
     public void smsFilterWithStartDateAndEndDateNotExist() {
 
 	List<SMS> sms = smsRepository
-		.findAll(SmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-08-01T00:00:00.000"),
-			LocalDateTime.parse("2020-10-01T23:59:21.000"), null, null, null)));
+		.findAll(SmsSpecification.filter(new SmsFilter("2020-08-01", "2020-10-01", null, null, null)));
 
 	assertEquals(0, sms.size());
 
@@ -103,16 +101,14 @@ public class ReportSmsSpecificationTest {
     public void smsFilterWithStartDateIsAfterEndDateShouldReturnException() {
 
 	assertThatThrownBy(() -> smsRepository
-		.findAll(SmsSpecification.filter(new SmsFilter(LocalDateTime.parse("2020-09-01T00:00:00.000"),
-			LocalDateTime.parse("2020-07-01T23:59:21.000"), null, null, null))))
-				.isInstanceOf(RuntimeException.class).hasMessage(SmsSpecification.ERROR_DATE);
+		.findAll(SmsSpecification.filter(new SmsFilter("2020-09-01", "2020-07-01", null, null, null))))
+			.isInstanceOf(RuntimeException.class).hasMessage(SmsSpecification.ERROR_DATE);
     }
 
     @Test
     public void smsFilterWithCellPhone() {
 
-	List<SMS> sms = smsRepository
-		.findAll(SmsSpecification.filter(new SmsFilter(null, null, "1111", null, null)));
+	List<SMS> sms = smsRepository.findAll(SmsSpecification.filter(new SmsFilter(null, null, "1111", null, null)));
 
 	assertEquals(1, sms.size());
 	assertEquals("messagem 1", sms.get(0).getBody());
@@ -122,9 +118,8 @@ public class ReportSmsSpecificationTest {
     @Test
     public void smsFilterWithNameCustomer() {
 
-	List<SMS> sms = smsRepository
-		.findAll(SmsSpecification.filter(new SmsFilter(null, null, null, null, "Tiago")));
-	
+	List<SMS> sms = smsRepository.findAll(SmsSpecification.filter(new SmsFilter(null, null, null, null, "Tiago")));
+
 	System.out.println(sms);
 
 	assertEquals(3, sms.size());

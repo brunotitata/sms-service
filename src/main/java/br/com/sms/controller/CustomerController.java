@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +34,7 @@ public class CustomerController {
 
     @PostMapping("/customer")
     public ResponseEntity<Customer> newCustomer(@RequestBody NewCustomerDTO customerDTO) {
-	
+
 	System.out.println(customerDTO);
 
 	Customer customer = customerService.newCustomer(customerDTO);
@@ -57,13 +58,22 @@ public class CustomerController {
     public ResponseEntity<List<Customer>> customer(@RequestParam(name = "name", required = false) String name,
 	    @RequestParam(name = "cellphone", required = false) String cellphone) {
 
-	return ResponseEntity.ok(customerService.customer(name, cellphone));
+	return ResponseEntity.ok(customerService.findCustomerByNameOrCellphone(name, cellphone));
     }
 
     @DeleteMapping("/customer/{cellphone}")
     public ResponseEntity<Void> removeCustomer(@PathVariable("cellphone") String customerId) {
 
 	customerService.removeCustomer(customerId);
+
+	return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/customer/{cellphone}")
+    public ResponseEntity<Void> editCustomer(@PathVariable("cellphone") String customerId,
+	    @RequestBody CustomerDTO customerDTO) {
+
+	customerService.editCustomer(customerDTO);
 
 	return ResponseEntity.noContent().build();
     }

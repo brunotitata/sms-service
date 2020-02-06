@@ -18,8 +18,10 @@ public interface CustomerService {
 
     Customer findById(UUID id);
 
-    List<Customer> customer(String name, String cellPhone);
+    List<Customer> findCustomerByNameOrCellphone(String name, String cellPhone);
 
     void removeCustomer(String cellphone);
+
+    void editCustomer(CustomerDTO cellphone);
 
 }

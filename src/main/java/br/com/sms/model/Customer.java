@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import br.com.sms.dto.CustomerDTO;
 import br.com.sms.login.model.User;
 import br.com.sms.login.util.Utils;
@@ -40,6 +43,7 @@ public class Customer implements Serializable {
     private User user;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<SMS> sms;
 
     public Customer(String name, String cellPhone, String email, User user) {
@@ -93,8 +97,7 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-	return "Customer [id=" + id + ", name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + ", user="
-		+ user + ", sms=" + sms + "]";
+	return "Customer [id=" + id + ", name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + "]";
     }
 
 }
