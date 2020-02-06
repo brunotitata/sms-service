@@ -1,9 +1,7 @@
 package br.com.sms.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +37,8 @@ public class SmsController {
 
     @GetMapping("/sms/report")
     public ResponseEntity<List<SmsDTO>> generateReport(
-	    @RequestParam(name = "startDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-	    @RequestParam(name = "endDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+	    @RequestParam(name = "startDate", required = true) String startDate,
+	    @RequestParam(name = "endDate", required = true) String endDate,
 	    @RequestParam(name = "cellphone", required = false) String cellphone,
 	    @RequestParam(name = "message", required = false) String message,
 	    @RequestParam(name = "customer", required = false) String nameCustomer) {

@@ -1,5 +1,6 @@
 package br.com.sms.repository.sms;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +47,13 @@ public class SmsSpecification {
 
 		if (smsFilter.getStartDate() != null && smsFilter.getEndDate() != null) {
 
-		    if (smsFilter.getStartDate().isAfter(smsFilter.getEndDate()))
+		    LocalDateTime newStartDate = LocalDateTime.parse(smsFilter.getStartDate().concat("T00:00:00.000"));
+		    LocalDateTime newEndDate = LocalDateTime.parse(smsFilter.getEndDate().concat("T23:59:59.000"));
+
+		    if (newStartDate.isAfter(newEndDate))
 			throw new RuntimeException(ERROR_DATE);
 
-		    predicates.add(criteriaBuilder.between(root.get("createdAt"), smsFilter.getStartDate(),
-			    smsFilter.getEndDate()));
+		    predicates.add(criteriaBuilder.between(root.get("createdAt"), newStartDate, newEndDate));
 		}
 
 		if (predicates.isEmpty()) {

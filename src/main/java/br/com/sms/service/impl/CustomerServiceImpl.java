@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.sms.dto.CustomerDTO;
 import br.com.sms.dto.NewCustomerDTO;
+import br.com.sms.login.exception.ArgumentInvalidException;
 import br.com.sms.login.exception.CustomerException;
 import br.com.sms.login.exception.IllegalArgumentException;
 import br.com.sms.login.model.User;
@@ -58,13 +59,28 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> customer(String name, String cellPhone) {
+    public List<Customer> findCustomerByNameOrCellphone(String name, String cellPhone) {
 	return customerRepository.findCustomer(name, cellPhone);
     }
 
     @Override
     public void removeCustomer(String cellphone) {
 	customerRepository.removeCustomer(cellphone);
+
+    }
+
+    @Override
+    public void editCustomer(CustomerDTO customerDTO) {
+
+	Customer customer = customerRepository.findCellphone(customerDTO.getCellPhone())
+		.orElseThrow(() -> new ArgumentInvalidException(
+			"Cliente não encontrado com celular: " + customerDTO.getCellPhone()));
+
+	customer.setCellPhone(customerDTO.getCellPhone());
+	customer.setEmail(customerDTO.getEmail());
+	customer.setName(customerDTO.getName());
+
+	customerRepository.save(customer);
 
     }
 

@@ -51,4 +51,10 @@ public class SmsCommand {
 	this.user = user;
     }
 
+    @Override
+    public String toString() {
+	return "SmsCommand [numberPhone=" + numberPhone + ", body=" + body + ", status=" + status + ", user=" + user
+		+ "]";
+    }
+
 }

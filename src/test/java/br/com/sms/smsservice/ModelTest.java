@@ -1,5 +1,6 @@
 package br.com.sms.smsservice;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import br.com.sms.model.SMS;
 import br.com.sms.repository.SmsFilter;
 import br.com.sms.repository.sms.SmsRepository;
 
-@SpringBootTest
+//@SpringBootTest
 public class ModelTest {
 
 //    @Autowired
@@ -34,12 +35,11 @@ public class ModelTest {
     @Test
     public void geayge() {
 	
-	SmsFilter smsFilter = new SmsFilter();
-	smsFilter.setNameCustomer("drian");
+	String date = "2020-02-05".concat("T00:00:00.000");
+	System.out.println(date);
 	
-	List<SMS> findSmsByFilter = smsRepository.findSmsByFilter(smsFilter);
-	
-	System.out.println(findSmsByFilter);
+	LocalDateTime parse = LocalDateTime.parse(date);
+	System.out.println(parse);
 
     }
 
