@@ -1,5 +1,6 @@
 package br.com.sms.controller;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class UserController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<UserStatistics> getStatisticsByUserId(@PathVariable String userId) {
 	return ResponseEntity.ok(userService.getUserStatistics(UUID.fromString(userId)));
+    }
+
+    @GetMapping("/user/cron")
+    public ResponseEntity<String> cronJob() {
+	return ResponseEntity.ok("Checked - " + LocalDateTime.now());
     }
 
 }
