@@ -48,7 +48,7 @@ public class UserService {
 	}
 
 	User user = new User(registerData.getName(), registerData.getEstablishment(), registerData.getEmail(),
-		encoder.encode(registerData.getPassword()));
+		encoder.encode(registerData.getPassword()), registerData.getCredit());
 
 	Set<String> strRoles = registerData.getRole();
 	Set<Role> roles = new HashSet<>();
@@ -73,6 +73,7 @@ public class UserService {
 	});
 
 	user.setRoles(roles);
+	user.setCredit(registerData.getCredit() == null ? 0 : registerData.getCredit());
 	return userRepository.save(user);
 
     }

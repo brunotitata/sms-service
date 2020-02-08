@@ -26,7 +26,6 @@ public class SmsController {
     }
 
     @PostMapping("/sms/send")
-//    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<SMS> sendSMS(@RequestBody SmsDTO sms) {
 
 	smsService.send(sms);

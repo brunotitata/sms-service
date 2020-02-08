@@ -5,15 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.sms.login.model.Role;
 import br.com.sms.login.model.Role.RoleName;
@@ -42,14 +42,20 @@ public class ReportSmsSpecificationTest {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private User user;
     private Customer customer;
 
     @BeforeEach
     public void setUp() {
 
-	user = userRepository.save(new User("Bruno", "Costa", "bruno123@bruno.com", "123456",
-		Stream.of(roleRepository.save(new Role(RoleName.ROLE_USER))).collect(Collectors.toSet())));
+	user = new User("Bruno Costa", "Estabelecimento Teste", "bruno123@bruno.com", passwordEncoder.encode("123456"),
+		1000);
+	Role role = roleRepository.findByName(RoleName.ROLE_USER).get();
+	user.setRoles(Collections.singleton(role));
+	userRepository.save(user);
 
 	customer = customerRepository.save(new Customer("Tiago", "16992700000", "tiago123@gmail.com", user));
 
@@ -62,7 +68,6 @@ public class ReportSmsSpecificationTest {
     @AfterEach
     public void tearDown() {
 	userRepository.delete(user);
-	roleRepository.deleteAll();
     }
 
 //    @Test
@@ -119,8 +124,6 @@ public class ReportSmsSpecificationTest {
     public void smsFilterWithNameCustomer() {
 
 	List<SMS> sms = smsRepository.findAll(SmsSpecification.filter(new SmsFilter(null, null, null, null, "Tiago")));
-
-	System.out.println(sms);
 
 	assertEquals(3, sms.size());
 

@@ -55,6 +55,7 @@ public class User implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -69,19 +70,12 @@ public class User implements Serializable {
 
     private Integer counterSms;
 
-    public User(String name, String establishment, String email, String password) {
+    public User(String name, String establishment, String email, String password, Integer credit) {
 	setName(name);
 	setEstablishment(establishment);
 	setEmail(email);
 	setPassword(password);
-    }
-
-    public User(String name, String establishment, String email, String password, Set<Role> roles) {
-	setName(name);
-	setEstablishment(establishment);
-	setEmail(email);
-	setPassword(password);
-	setRoles(roles);
+	setCredit(credit);
     }
 
     public User() {
@@ -90,7 +84,6 @@ public class User implements Serializable {
     @PrePersist
     public void prePersist() {
 	this.createdAt = LocalDate.now();
-	this.credit = 0;
 	this.counterSms = 0;
     }
 

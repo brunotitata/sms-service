@@ -12,13 +12,16 @@ public class RegisterDTO {
     private String email;
     private Set<String> role;
     private String password;
+    private Integer credit;
 
-    public RegisterDTO(String name, String establishment, @Email String email, Set<String> role, String password) {
+    public RegisterDTO(String name, String establishment, @Email String email, Set<String> role, String password,
+	    Integer credit) {
 	this.name = name;
 	this.establishment = establishment;
 	this.email = email;
 	this.role = role;
 	this.password = password;
+	this.credit = credit;
     }
 
     public RegisterDTO() {
@@ -64,10 +67,18 @@ public class RegisterDTO {
 	this.role = role;
     }
 
+    public Integer getCredit() {
+	return credit;
+    }
+
+    public void setCredit(Integer credit) {
+	this.credit = credit;
+    }
+
     @Override
     public String toString() {
-	return "RegisterData [name=" + name + ", establishment=" + establishment + ", email=" + email + ", role=" + role
-		+ ", password=" + password + "]";
+	return "RegisterDTO [name=" + name + ", establishment=" + establishment + ", email=" + email + ", role=" + role
+		+ ", password=" + password + ", credit=" + credit + "]";
     }
 
 }

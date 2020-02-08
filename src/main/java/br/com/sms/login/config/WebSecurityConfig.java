@@ -9,11 +9,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 
-import br.com.sms.login.config.jwt.JwtAuthEntryPoint;
 import br.com.sms.login.config.jwt.JwtAuthTokenFilter;
 import br.com.sms.login.service.UserDetailsServiceImpl;
 
@@ -24,9 +24,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private JwtAuthEntryPoint unauthorizedHandler;
 
     @Bean
     public JwtAuthTokenFilter authenticationJwtTokenFilter() {
@@ -55,16 +52,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // http.csrf().disable().authorizeRequests()
-        // .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-        // .antMatchers(HttpMethod.POST, "/api/forgot/**").permitAll()
-        // .antMatchers(HttpMethod.POST, "/reset/**").permitAll()
-        // .anyRequest().authenticated().and().exceptionHandling()
-        // .authenticationEntryPoint(unauthorizedHandler).and()
-        // .sessionManagement()
-        // .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	http.cors()
+	.and()
+	.csrf()
+	.disable()
+	.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	.and()
+	.authorizeRequests()
+	.antMatchers("/new-user").hasRole("ADMIN")
+	.anyRequest().permitAll();
+	
+//	http
+//	.authorizeRequests()
+//	.antMatchers("/api/auth/register/**").permitAll()
+//	.antMatchers("/api/user/**").permitAll()
+//	.antMatchers("/api/customer/**").permitAll()
+//	.antMatchers("/api/sms/**").permitAll()
+//	.and()
+//	.authorizeRequests()
+//        .anyRequest().authenticated();
+	
 
-        http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
+//        http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
 
     }
 
