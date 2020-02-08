@@ -2,6 +2,7 @@ package br.com.sms.login.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,8 +14,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.sms.login.dto.LoginDTO;
 import br.com.sms.login.dto.RegisterDTO;
+import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.login.model.AccessToken;
 import br.com.sms.login.model.User;
+import br.com.sms.login.repository.user.UserRepository;
 import br.com.sms.login.service.UserService;
 
 @RestController
@@ -23,13 +26,22 @@ import br.com.sms.login.service.UserService;
 public class AuthenticationController {
 
     private UserService userService;
+    private UserRepository userRepository;
 
-    public AuthenticationController(UserService userService) {
+    public AuthenticationController(UserService userService, UserRepository userRepository) {
 	this.userService = userService;
+	this.userRepository = userRepository;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AccessToken> authenticateUser(@RequestBody LoginDTO loginData) {
+
+	User user = userRepository.findByEmail(loginData.getEmail()).orElseThrow(
+		() -> new UserNotFoundException("Usuario não encontrado com email: " + loginData.getEmail()));
+
+	if (user.getActive().equals(false))
+	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
 	return ResponseEntity.ok().body(userService.authenticateUser(loginData));
     }
 
