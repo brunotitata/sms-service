@@ -44,7 +44,7 @@ public class AuthenticationControllerTest {
     public void setUp() {
 	mockMvc = MockMvcBuilders.webAppContextSetup(wac).apply(springSecurity()).build();
 
-	user = new User("Bruno Costa", "Estabelecimento Teste", "brunotitata123@gmail.com", "123456", 0);
+	user = new User("Bruno Costa", "Estabelecimento Teste", "brunotitata123@gmail.com", "123456", 0, true);
 	Role role = roleRepository.findByName(RoleName.ROLE_ADMIN).get();
 	user.setRoles(Collections.singleton(role));
 	userRepository.save(user);

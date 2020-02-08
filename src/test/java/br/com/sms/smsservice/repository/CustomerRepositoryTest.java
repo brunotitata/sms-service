@@ -51,7 +51,7 @@ public class CustomerRepositoryTest {
     public void setUp() {
 
 	user = new User("Bruno Costa", "Estabelecimento Teste", "bruno123@bruno.com", passwordEncoder.encode("123456"),
-		1000);
+		1000, true);
 	Role role = roleRepository.findByName(RoleName.ROLE_USER).get();
 	user.setRoles(Collections.singleton(role));
 	userRepository.save(user);
@@ -89,6 +89,11 @@ public class CustomerRepositoryTest {
 
 	assertFalse(customer.isPresent());
 
+    }
+
+    @Test
+    public void teste() {
+	System.out.println(passwordEncoder.encode("degauss123"));
     }
 
 }

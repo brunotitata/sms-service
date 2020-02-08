@@ -13,15 +13,17 @@ public class RegisterDTO {
     private Set<String> role;
     private String password;
     private Integer credit;
+    private Boolean active;
 
     public RegisterDTO(String name, String establishment, @Email String email, Set<String> role, String password,
-	    Integer credit) {
+	    Integer credit, Boolean active) {
 	this.name = name;
 	this.establishment = establishment;
 	this.email = email;
 	this.role = role;
 	this.password = password;
 	this.credit = credit;
+	this.active = active;
     }
 
     public RegisterDTO() {
@@ -75,10 +77,18 @@ public class RegisterDTO {
 	this.credit = credit;
     }
 
+    public Boolean getActive() {
+	return active;
+    }
+
+    public void setActive(Boolean active) {
+	this.active = active;
+    }
+
     @Override
     public String toString() {
 	return "RegisterDTO [name=" + name + ", establishment=" + establishment + ", email=" + email + ", role=" + role
-		+ ", password=" + password + ", credit=" + credit + "]";
+		+ ", password=" + password + ", credit=" + credit + ", active=" + active + "]";
     }
 
 }

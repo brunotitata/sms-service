@@ -49,6 +49,7 @@ public class User implements Serializable {
     private UUID id;
     private String name;
     private String establishment;
+
     @Email(message = "Please provide a valid e-mail")
     private String email;
     private String password;
@@ -70,12 +71,15 @@ public class User implements Serializable {
 
     private Integer counterSms;
 
-    public User(String name, String establishment, String email, String password, Integer credit) {
+    private Boolean active;
+
+    public User(String name, String establishment, String email, String password, Integer credit, Boolean active) {
 	setName(name);
 	setEstablishment(establishment);
 	setEmail(email);
 	setPassword(password);
 	setCredit(credit);
+	setActive(active);
     }
 
     public User() {
@@ -176,10 +180,19 @@ public class User implements Serializable {
 	return this.counterSms + 1;
     }
 
+    public Boolean getActive() {
+	return active;
+    }
+
+    public void setActive(Boolean active) {
+	this.active = active;
+    }
+
     @Override
     public String toString() {
 	return "User [id=" + id + ", name=" + name + ", establishment=" + establishment + ", email=" + email
-		+ ", password=" + password + ", roles=" + roles + ", createdAt=" + createdAt + "]";
+		+ ", password=" + password + ", roles=" + roles + ", createdAt=" + createdAt + ", credit=" + credit
+		+ ", counterSms=" + counterSms + ", active=" + active + "]";
     }
 
     public static UserStatistics getStatistic(User user) {
