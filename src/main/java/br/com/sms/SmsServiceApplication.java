@@ -37,7 +37,7 @@ public class SmsServiceApplication {
 
 	    if (!repository.findByEmail("brunotitata@gmail.com").isPresent()) {
 		User user = new User("Bruno Costa", "Estabelecimento Teste", "brunotitata@gmail.com",
-			encoder.encode("123456"), 1000, true);
+			encoder.encode("degauss123"), 1000, true);
 		Role role = roleRepository.findByName(RoleName.ROLE_ADMIN).get();
 		user.setRoles(Collections.singleton(role));
 		repository.save(user);
