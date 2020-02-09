@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.sms.login.util.Utils;
 import br.com.sms.model.Customer;
-import br.com.sms.model.UserStatistics;
 
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) })
@@ -193,10 +192,6 @@ public class User implements Serializable {
 	return "User [id=" + id + ", name=" + name + ", establishment=" + establishment + ", email=" + email
 		+ ", password=" + password + ", roles=" + roles + ", createdAt=" + createdAt + ", credit=" + credit
 		+ ", counterSms=" + counterSms + ", active=" + active + "]";
-    }
-
-    public static UserStatistics getStatistic(User user) {
-	return new UserStatistics(user.getCredit(), user.getCounterSms());
     }
 
 }
