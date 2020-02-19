@@ -1,14 +1,14 @@
 package br.com.sms.repository.customer;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
-import br.com.sms.dto.CustomerDTO;
 import br.com.sms.login.exception.ArgumentInvalidException;
 import br.com.sms.login.exception.CellphoneException;
 import br.com.sms.login.exception.CustomerNotFound;
@@ -28,14 +28,14 @@ public class CustomerRepositoryJpa implements CustomerRepository {
 	return customerRepositorySpringData.save(customer);
     }
 
-    @Override
-    public Page<CustomerDTO> findAllCustomerByUserId(UUID id, Pageable pageable) {
-	return customerRepositorySpringData.findAllCustomerByUserId(id, pageable).map(Customer::convertToDto);
-    }
+//    @Override
+//    public Page<CustomerDTO> findAllCustomerByUserId(UUID id, Pageable pageable) {
+//	return customerRepositorySpringData.findAllCustomerByUserId(id, pageable).map(Customer::convertToDto);
+//    }
 
     @Override
     public Customer findById(UUID id) {
-	return customerRepositorySpringData.findById(id)
+	return customerRepositorySpringData.findByEstablishment_Id(id)
 		.orElseThrow(() -> new CustomerNotFound("Cliente não encontrado: " + id));
     }
 
@@ -60,6 +60,22 @@ public class CustomerRepositoryJpa implements CustomerRepository {
     @Override
     public Optional<Customer> findCellphone(String cellphone) {
 	return customerRepositorySpringData.findByCellPhone(cellphone);
+    }
+
+    @Override
+    public Set<Customer> saveAll(Set<Customer> customers) {
+	return new HashSet<>(customerRepositorySpringData.saveAll(customers));
+    }
+
+    @Override
+    public void deleteAll() {
+	customerRepositorySpringData.deleteAll();
+
+    }
+
+    @Override
+    public List<Customer> find(Specification<Customer> user) {
+	return customerRepositorySpringData.findAll(user);
     }
 
 }

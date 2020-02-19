@@ -1,76 +1,53 @@
 package br.com.sms.login.dto;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import br.com.sms.login.model.User;
+import br.com.sms.model.User;
 
 public class UserDTO implements UserDetails {
     private static final long serialVersionUID = -5745731685321252631L;
 
-    private UUID id;
+    private UUID userId;
     private String name;
-    private String establishment;
     private String email;
-    @JsonIgnore
-    private String password;
+    private String establishment;
     private Integer credit;
     private Integer smsCounter;
-
+    private String password;
+    private String cpf;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDTO(UUID id, String name, String establishment, String email, String password,
-	    Collection<? extends GrantedAuthority> authorities, Integer credit, Integer smsCounter) {
-	this.id = id;
+    public UserDTO(UUID userId, String name, String email, String establishment, Integer credit, Integer smsCounter,
+	    String password, String cpf, Collection<? extends GrantedAuthority> authorities) {
+	this.userId = userId;
 	this.name = name;
-	this.establishment = establishment;
 	this.email = email;
-	this.password = password;
-	this.authorities = authorities;
+	this.establishment = establishment;
 	this.credit = credit;
 	this.smsCounter = smsCounter;
+	this.password = password;
+	this.cpf = cpf;
+	this.authorities = authorities;
     }
 
     public static UserDTO build(User user) {
-	List<GrantedAuthority> authorities = user.getRoles().stream()
-		.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+	List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getRole().name()));
 
-	return new UserDTO(user.getId(), user.getName(), user.getEstablishment(), user.getEmail(), user.getPassword(),
-		authorities, user.getCredit(), user.getCounterSms());
-    }
-
-    public UUID getId() {
-	return id;
-    }
-
-    public String getEstablishment() {
-	return establishment;
-    }
-
-    public String getEmail() {
-	return email;
+	return new UserDTO(user.getUserId().getId(), user.getNome(), user.getEmail(), user.getEstablishment().getNome(),
+		user.getCreditoDisponivel(), user.getQuantidadeTotalDeSmsEnviado(), user.getPassword(), user.getCpf(),
+		authorities);
     }
 
     @Override
     public String getUsername() {
 	return name;
-    }
-
-    @Override
-    public String getPassword() {
-	return password;
-    }
-
-    public Integer getSmsCounter() {
-	return smsCounter;
     }
 
     @Override
@@ -102,16 +79,52 @@ public class UserDTO implements UserDetails {
 	return true;
     }
 
+    public UUID getUserId() {
+	return userId;
+    }
+
+    public String getName() {
+	return name;
+    }
+
+    public String getEmail() {
+	return email;
+    }
+
+    public Integer getSmsCounter() {
+	return smsCounter;
+    }
+
+    public String getEstablishment() {
+	return establishment;
+    }
+
+    public String getCpf() {
+	return cpf;
+    }
+
+    @Override
+    public String getPassword() {
+	return password;
+    }
+
+    @Override
+    public String toString() {
+	return "UserDTO [userId=" + userId + ", name=" + name + ", email=" + email + ", establishment=" + establishment
+		+ ", credit=" + credit + ", smsCounter=" + smsCounter + ", authorities=" + authorities + "]";
+    }
+
     @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
+	result = prime * result + ((credit == null) ? 0 : credit.hashCode());
 	result = prime * result + ((email == null) ? 0 : email.hashCode());
-	result = prime * result + ((id == null) ? 0 : id.hashCode());
 	result = prime * result + ((establishment == null) ? 0 : establishment.hashCode());
 	result = prime * result + ((name == null) ? 0 : name.hashCode());
-	result = prime * result + ((password == null) ? 0 : password.hashCode());
+	result = prime * result + ((smsCounter == null) ? 0 : smsCounter.hashCode());
+	result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 	return result;
     }
 
@@ -129,15 +142,15 @@ public class UserDTO implements UserDetails {
 		return false;
 	} else if (!authorities.equals(other.authorities))
 	    return false;
+	if (credit == null) {
+	    if (other.credit != null)
+		return false;
+	} else if (!credit.equals(other.credit))
+	    return false;
 	if (email == null) {
 	    if (other.email != null)
 		return false;
 	} else if (!email.equals(other.email))
-	    return false;
-	if (id == null) {
-	    if (other.id != null)
-		return false;
-	} else if (!id.equals(other.id))
 	    return false;
 	if (establishment == null) {
 	    if (other.establishment != null)
@@ -149,10 +162,15 @@ public class UserDTO implements UserDetails {
 		return false;
 	} else if (!name.equals(other.name))
 	    return false;
-	if (password == null) {
-	    if (other.password != null)
+	if (smsCounter == null) {
+	    if (other.smsCounter != null)
 		return false;
-	} else if (!password.equals(other.password))
+	} else if (!smsCounter.equals(other.smsCounter))
+	    return false;
+	if (userId == null) {
+	    if (other.userId != null)
+		return false;
+	} else if (!userId.equals(other.userId))
 	    return false;
 	return true;
     }

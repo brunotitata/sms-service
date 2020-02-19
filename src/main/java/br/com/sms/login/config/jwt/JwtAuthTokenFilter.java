@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,16 +24,13 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private JwtBlacklist blacklist;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	    throws ServletException, IOException {
+	try {
 
-	String jwt = getJwt(request);
-	if (!blacklist.check(jwt)) {
-	    if (StringUtils.isNotBlank(jwt) && tokenProvider.validateJwtToken(jwt)) {
+	    String jwt = getJwt(request);
+	    if (jwt != null && tokenProvider.validateJwtToken(jwt)) {
 		String username = tokenProvider.getUserNameFromJwtToken(jwt);
 
 		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -43,14 +39,12 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 		authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-
 	    }
-	    filterChain.doFilter(request, response);
-	} else {
-	    response.reset();
-	    response.sendError(403, "Unauthorized access");
-	    return;
+	} catch (Exception e) {
+	    logger.error("Can NOT set user authentication -> Message: {}", e);
 	}
+
+	filterChain.doFilter(request, response);
 
     }
 
@@ -63,5 +57,4 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
 	return null;
     }
-
 }

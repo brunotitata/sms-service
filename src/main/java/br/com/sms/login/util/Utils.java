@@ -10,12 +10,12 @@ public class Utils {
 
     public static void argumentNotEmpty(String field, String errMessage) {
 	if (field == null || field.isEmpty())
-	    throw new IllegalArgumentException(errMessage);
+	    throw new ArgumentInvalidException(errMessage);
     }
 
     public static void argumentNotNull(Object obj, String errMessage) {
 	if (obj == null)
-	    throw new IllegalArgumentException(errMessage);
+	    throw new ArgumentInvalidException(errMessage);
     }
 
     public static String getSHA512(String input) {

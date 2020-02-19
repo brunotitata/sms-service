@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
@@ -27,41 +27,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAuthTokenFilter authenticationJwtTokenFilter() {
-        return new JwtAuthTokenFilter();
+	return new JwtAuthTokenFilter();
     }
 
     @Override
-    public void configure(
-            AuthenticationManagerBuilder authenticationManagerBuilder)
-            throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+	authenticationManagerBuilder.authenticationProvider(authProvider());
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+	DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+	authProvider.setUserDetailsService(userDetailsService);
+	authProvider.setPasswordEncoder(passwordEncoder());
+
+	return authProvider;
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+	return super.authenticationManagerBean();
     }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
+	return new BCryptPasswordEncoder();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-	http.cors()
-	.and()
-	.csrf()
-	.disable()
-	.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	.and()
-	.authorizeRequests()
-	.antMatchers("/new-user").hasRole("ADMIN")
-	.anyRequest().permitAll();
-	
+//	http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//		.and().authorizeRequests().antMatchers("/new-user").hasRole("ADMIN").anyRequest().permitAll();
+
 //	http
 //	.authorizeRequests()
 //	.antMatchers("/api/auth/register/**").permitAll()
@@ -71,15 +70,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //	.and()
 //	.authorizeRequests()
 //        .anyRequest().authenticated();
-	
 
-//        http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
+	http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
 
     }
 
     @Bean
     public HttpFirewall defaultHttpFirewall() {
-        return new DefaultHttpFirewall();
+	return new DefaultHttpFirewall();
     }
 
 }
