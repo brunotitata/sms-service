@@ -1,13 +1,11 @@
 package br.com.sms.repository.user;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
 import br.com.sms.login.exception.ArgumentInvalidException;
-import br.com.sms.model.Customer;
 import br.com.sms.model.User;
 import br.com.sms.model.UserId;
 
@@ -67,11 +65,6 @@ public class UserRepositoryJpa implements UserRepository {
     public User findByEmail(String email) {
 	return userRepositorySpringData.findByEmail(email)
 		.orElseThrow(() -> new ArgumentInvalidException("Cliente não encontrado com email: " + email));
-    }
-
-    @Override
-    public List<Customer> findAllCustomers(UUID establishment) {
-	return userRepositorySpringData.findAllCustomer(establishment);
     }
 
 }

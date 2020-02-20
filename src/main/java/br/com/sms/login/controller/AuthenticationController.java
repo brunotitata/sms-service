@@ -25,17 +25,17 @@ import br.com.sms.repository.user.UserRepository;
 public class AuthenticationController {
 
     private UserService userService;
-    private UserRepository clientRepository;
+    private UserRepository userRepository;
 
     public AuthenticationController(UserService userService, UserRepository clientRepository) {
 	this.userService = userService;
-	this.clientRepository = clientRepository;
+	this.userRepository = clientRepository;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AccessToken> authenticateUser(@RequestBody LoginDTO loginData) {
 
-	User user = clientRepository.findByEmail(loginData.getEmail());
+	User user = userRepository.findByEmail(loginData.getEmail());
 
 	if (user.getActive().equals(Active.INATIVO))
 	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

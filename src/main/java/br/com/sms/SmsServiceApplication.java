@@ -68,7 +68,7 @@ public class SmsServiceApplication {
 				customers));
 
 		userRepository.save(new User(new UserId(UUID.fromString("ad416334-e578-4181-8c2f-75e1859a4f1e")),
-			"Bruno Costa", "16991034148", "38441868832", "brunocosta@gmail.com", password.encode("123456"),
+			"Bruno Costa", "16991034148", "38441868832", "brunotitata@gmail.com", password.encode("123456"),
 			estabelecimento));
 
 		User user = userRepository.findClientById(UUID.fromString("ad416334-e578-4181-8c2f-75e1859a4f1e"))

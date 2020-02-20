@@ -6,9 +6,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
+import br.com.sms.dto.CustomerDTO;
 import br.com.sms.login.exception.ArgumentInvalidException;
 import br.com.sms.login.exception.CellphoneException;
 import br.com.sms.login.exception.CustomerNotFound;
@@ -76,6 +79,11 @@ public class CustomerRepositoryJpa implements CustomerRepository {
     @Override
     public List<Customer> find(Specification<Customer> user) {
 	return customerRepositorySpringData.findAll(user);
+    }
+
+    @Override
+    public Page<CustomerDTO> findAllCustomerByUserCpf(Specification<Customer> customer, Pageable pageable) {
+	return customerRepositorySpringData.findAll(customer, pageable).map(Customer::convertToDto);
     }
 
 }

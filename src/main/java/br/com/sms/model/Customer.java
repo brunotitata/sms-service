@@ -97,7 +97,8 @@ public class Customer implements Serializable {
     }
 
     public static CustomerDTO convertToDto(Customer customer) {
-	return new CustomerDTO(customer.getName(), customer.getCellPhone(), customer.getEmail());
+	return new CustomerDTO(customer.getName(), customer.getCellPhone(), customer.getEmail(),
+		customer.getQuantityOfSmsSent());
     }
 
     public Integer getQuantityOfSmsSent() {

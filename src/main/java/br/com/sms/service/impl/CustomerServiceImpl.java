@@ -3,6 +3,8 @@ package br.com.sms.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sms.dto.CustomerDTO;
@@ -13,6 +15,7 @@ import br.com.sms.model.Customer;
 import br.com.sms.model.CustomerId;
 import br.com.sms.model.User;
 import br.com.sms.repository.customer.CustomerRepository;
+import br.com.sms.repository.customer.CustomerSpecification;
 import br.com.sms.repository.user.UserRepository;
 import br.com.sms.service.CustomerService;
 
@@ -33,8 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 	User user = userRepository.findByCpf(newCustomerDTO.getUserCpf());
 
 	user.getEstablishment().getCustomer().stream()
-		.filter(customer -> customer.getCellPhone().equals(newCustomerDTO.getCellPhone()))
-		.findFirst()
+		.filter(customer -> customer.getCellPhone().equals(newCustomerDTO.getCellPhone())).findFirst()
 		.ifPresent(customer -> {
 		    throw new RuntimeException("Cliente já cadastrado na plataforma: " + newCustomerDTO.getCellPhone());
 		});
@@ -48,11 +50,6 @@ public class CustomerServiceImpl implements CustomerService {
 //    private User checkForUser(NewCustomerDTO newCustomerDTO) {
 //	return userRepository.findById(newCustomerDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException(
 //		"Usuario não encontrado para associar a um Cliente: " + newCustomerDTO.getUserId()));
-//    }
-
-//    @Override
-//    public Page<CustomerDTO> findAllCustomerByUser(UUID userId, Pageable pageable) {
-//	return customerRepository.findAllCustomerByUserId(userId, pageable);
 //    }
 
     @Override
@@ -84,6 +81,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 	customerRepository.save(customer);
 
+    }
+
+    @Override
+    public Page<CustomerDTO> findAllCustomerByUserCpf(String cpf, Pageable pageable) {
+	return customerRepository.findAllCustomerByUserCpf(CustomerSpecification.findCustomerByCpf(cpf), pageable);
     }
 
 }

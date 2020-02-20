@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import br.com.sms.login.exception.ArgumentInvalidException;
 import br.com.sms.model.Active;
 import br.com.sms.model.Customer;
 import br.com.sms.model.CustomerId;
@@ -54,9 +55,11 @@ public class CustomerSpecificationTest {
 		"Leopoldo Carlos de Oliveira 350", "06.100.428/0001-92", employees, sms, customers));
 
 	userRepository.save(new User(new UserId(UUID.fromString("46c2c662-d900-4f4f-9520-036c0a7ce1e9")), "Arley",
-		"16991034148", "384.418.688-32", "arley@arley.com", "123456", estabelecimento));
+		"16991034148", "384.418.688-32", "brunotitata@gmail.com", "123456", estabelecimento));
 
-	User user = userRepository.findClientById(UUID.fromString("46c2c662-d900-4f4f-9520-036c0a7ce1e9"));
+	User user = userRepository.findClientById(UUID.fromString("46c2c662-d900-4f4f-9520-036c0a7ce1e9"))
+		.orElseThrow(() -> new ArgumentInvalidException(
+			"Cliente não encontrado com ID: " + "ad416334-e578-4181-8c2f-75e1859a4f1e"));
 	Establishment establishment = user.getEstablishment();
 
 	establishment.setEmployee(Stream.of(
@@ -125,14 +128,9 @@ public class CustomerSpecificationTest {
     @Test
     public void hauhaeu() {
 
-	boolean existEmployee = userRepository.findByCpf("384.418.688-32").getEstablishment().getEmployee().stream()
-		.map(employee -> employee.getNome().equals("Rodrigo")).findFirst().isPresent();
-
-	boolean existCustomer = userRepository.findByCpf("384.418.688-32").getEstablishment().getCustomer().stream()
-		.map(customer -> customer.getCellPhone().equals("12121212121")).findFirst().isPresent();
-
-	System.out.println("Customer: " + existCustomer);
-	System.out.println("Employee: " + existEmployee);
+	User user = userRepository.findByEmail("brunotitata@gmail.com");
+	
+	assertEquals("brunotitata@gmail.com", user.getEmail());
     }
 
 }

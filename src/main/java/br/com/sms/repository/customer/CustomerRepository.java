@@ -5,8 +5,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import br.com.sms.dto.CustomerDTO;
 import br.com.sms.model.Customer;
 
 public interface CustomerRepository {
@@ -17,7 +20,7 @@ public interface CustomerRepository {
 
     Set<Customer> saveAll(Set<Customer> customers);
 
-//    Page<CustomerDTO> findAllCustomerByUserId(UUID id, Pageable pageable);
+    Page<CustomerDTO> findAllCustomerByUserCpf(Specification<Customer> customer, Pageable pageable);
 
     Customer findById(UUID id);
 

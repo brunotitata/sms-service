@@ -1,10 +1,8 @@
 package br.com.sms.repository.user;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.sms.model.Customer;
 import br.com.sms.model.User;
 
 public interface UserRepository {
@@ -25,5 +23,4 @@ public interface UserRepository {
 
     User findByEmail(String email);
 
-    List<Customer> findAllCustomers(UUID establishment);
 }

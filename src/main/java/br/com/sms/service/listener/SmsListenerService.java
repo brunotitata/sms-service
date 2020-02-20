@@ -39,14 +39,16 @@ public class SmsListenerService {
 	user.setCreditoDisponivel(user.getCreditoContratado() - 1);
 
 	user.getEstablishment().getEmployee().stream()
-		.filter(employee -> employee.getNome().equals(command.getNameEmployee())).findFirst()
+		.filter(employee -> employee.getNome().equals(command.getNameEmployee()))
+		.findFirst()
 		.ifPresent(employee -> {
 		    employee.setQuantidadeDeSmsEnviado(employee.smsCounter());
 		    employeeRepository.save(employee);
 		});
 
 	user.getEstablishment().getCustomer().stream()
-		.filter(customer -> customer.getCellPhone().equals(command.getNumberPhone())).findFirst()
+		.filter(customer -> customer.getCellPhone().equals(command.getNumberPhone()))
+		.findFirst()
 		.ifPresent(customer -> {
 		    customer.setQuantityOfSmsSent(customer.counterSms());
 		    customerRepository.save(customer);
