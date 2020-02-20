@@ -7,6 +7,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.sns.model.PublishResult;
 
 import br.com.sms.dto.SmsDTO;
+import br.com.sms.login.exception.InsufficientCreditsException;
 import br.com.sms.login.util.Utils;
 import br.com.sms.model.User;
 import br.com.sms.repository.user.UserRepository;
@@ -32,13 +33,18 @@ public class SmsServiceImpl implements SmsService {
     public void send(SmsDTO smsDTO) {
 
 	User user = userRepository.findByCpf(smsDTO.getCpfUser());
+	
+	if (user.getCreditoDisponivel() <= 0)
+		throw new InsufficientCreditsException("Saldo de creditos insuficiente.");
 
 	user.getEstablishment().getCustomer().stream()
-		.filter(customer -> customer.getCellPhone().equals(smsDTO.getNumber())).findFirst()
+		.filter(customer -> customer.getCellPhone().equals(smsDTO.getNumber()))
+		.findFirst()
 		.ifPresent(customer -> {
 
 		    user.getEstablishment().getEmployee().stream()
-			    .filter(employee -> employee.getNome().equals(smsDTO.getNameEmployee())).findFirst()
+			    .filter(employee -> employee.getNome().equals(smsDTO.getNameEmployee()))
+			    .findFirst()
 			    .ifPresent(employee -> {
 
 				try {
