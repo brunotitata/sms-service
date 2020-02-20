@@ -73,4 +73,25 @@ public class ClientRepositoryTest {
 
     }
 
+    @Test
+    public void haueheu() {
+
+	User user = userRepository.findByCpf("38441868832");
+
+	user.getEstablishment().getEmployee().stream().map(employee -> employee.getNome().equals("Leandro")).findFirst()
+		.ifPresent(employee -> {
+
+		    System.out.println("Entrou dentro de employeee !!!");
+
+		    user.getEstablishment().getCustomer().stream()
+			    .map(customer -> customer.getCellPhone().equals("16991034148")).findFirst()
+			    .ifPresent(customer -> {
+
+				System.out.println("Entrou dentro do customer, entao executa !!!");
+			    });
+
+		});
+
+    }
+
 }

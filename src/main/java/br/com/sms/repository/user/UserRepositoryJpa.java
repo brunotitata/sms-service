@@ -1,6 +1,7 @@
 package br.com.sms.repository.user;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -32,9 +33,8 @@ public class UserRepositoryJpa implements UserRepository {
     }
 
     @Override
-    public User findClientById(UUID uuid) {
-	return userRepositorySpringData.findByUserId(new UserId(uuid))
-		.orElseThrow(() -> new ArgumentInvalidException("Cliente não encontrado com ID: " + uuid));
+    public Optional<User> findClientById(UUID uuid) {
+	return userRepositorySpringData.findByUserId(new UserId(uuid));
     }
 
     @Override
@@ -45,7 +45,8 @@ public class UserRepositoryJpa implements UserRepository {
     @Override
     public void delete(UUID uuid) {
 
-	User client = findClientById(uuid);
+	User client = findClientById(uuid)
+		.orElseThrow(() -> new ArgumentInvalidException("Cliente não encontrado com ID: " + uuid));
 
 	userRepositorySpringData.delete(client);
 

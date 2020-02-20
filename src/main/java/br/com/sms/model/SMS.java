@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,19 +31,28 @@ public class SMS implements Serializable {
     private String nomeFuncionario;
     private String messagem;
     private String numero;
+    @Column(name = "createdAt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime localDateTime;
+    private String awsMessageId;
+    private String status;
+    private String messageError;
 
     @ManyToOne
     @JoinColumn(name = "ESTABLISHMENT_ID")
     private Establishment establishment;
 
-    public SMS(SmsId smsId, String nomeFuncionario, String messagem, String numero, LocalDateTime localDateTime) {
+    public SMS(SmsId smsId, String nomeFuncionario, String messagem, String numero, LocalDateTime localDateTime,
+	    String awsMessageId, String status, String messageError, Establishment establishment) {
 	setSmsId(smsId);
 	setNomeFuncionario(nomeFuncionario);
 	setMessagem(messagem);
 	setNumero(numero);
 	setLocalDateTime(localDateTime);
+	setAwsMessageId(awsMessageId);
+	setStatus(status);
+	setMessageError(messageError);
+	this.establishment = establishment;
     }
 
     @SuppressWarnings("unused")
@@ -93,65 +103,43 @@ public class SMS implements Serializable {
 	this.localDateTime = localDateTime;
     }
 
+    public Establishment getEstablishment() {
+	return establishment;
+    }
+
+    public void setEstablishment(Establishment establishment) {
+	this.establishment = establishment;
+    }
+
+    public String getAwsMessageId() {
+	return awsMessageId;
+    }
+
+    public void setAwsMessageId(String awsMessageId) {
+	this.awsMessageId = awsMessageId;
+    }
+
+    public String getStatus() {
+	return status;
+    }
+
+    public void setStatus(String status) {
+	this.status = status;
+    }
+
+    public String getMessageError() {
+	return messageError;
+    }
+
+    public void setMessageError(String messageError) {
+	this.messageError = messageError;
+    }
+
     @Override
     public String toString() {
 	return "SMS [id=" + id + ", smsId=" + smsId + ", nomeFuncionario=" + nomeFuncionario + ", messagem=" + messagem
-		+ ", numero=" + numero + ", localDateTime=" + localDateTime + "]";
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((id == null) ? 0 : id.hashCode());
-	result = prime * result + ((localDateTime == null) ? 0 : localDateTime.hashCode());
-	result = prime * result + ((messagem == null) ? 0 : messagem.hashCode());
-	result = prime * result + ((nomeFuncionario == null) ? 0 : nomeFuncionario.hashCode());
-	result = prime * result + ((numero == null) ? 0 : numero.hashCode());
-	result = prime * result + ((smsId == null) ? 0 : smsId.hashCode());
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	SMS other = (SMS) obj;
-	if (id == null) {
-	    if (other.id != null)
-		return false;
-	} else if (!id.equals(other.id))
-	    return false;
-	if (localDateTime == null) {
-	    if (other.localDateTime != null)
-		return false;
-	} else if (!localDateTime.equals(other.localDateTime))
-	    return false;
-	if (messagem == null) {
-	    if (other.messagem != null)
-		return false;
-	} else if (!messagem.equals(other.messagem))
-	    return false;
-	if (nomeFuncionario == null) {
-	    if (other.nomeFuncionario != null)
-		return false;
-	} else if (!nomeFuncionario.equals(other.nomeFuncionario))
-	    return false;
-	if (numero == null) {
-	    if (other.numero != null)
-		return false;
-	} else if (!numero.equals(other.numero))
-	    return false;
-	if (smsId == null) {
-	    if (other.smsId != null)
-		return false;
-	} else if (!smsId.equals(other.smsId))
-	    return false;
-	return true;
+		+ ", numero=" + numero + ", localDateTime=" + localDateTime + ", awsMessageId=" + awsMessageId
+		+ ", status=" + status + ", messageError=" + messageError + "]";
     }
 
 }

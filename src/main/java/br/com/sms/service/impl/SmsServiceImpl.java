@@ -1,80 +1,70 @@
 package br.com.sms.service.impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
+
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.sns.model.PublishResult;
 
 import br.com.sms.dto.SmsDTO;
-import br.com.sms.login.exception.EmailNotFoundException;
-import br.com.sms.login.exception.InsufficientCreditsException;
-import br.com.sms.model.SMS;
+import br.com.sms.login.util.Utils;
 import br.com.sms.model.User;
-import br.com.sms.repository.SmsFilter;
-import br.com.sms.repository.sms.SmsRepository;
-import br.com.sms.repository.sms.SmsSpecification;
 import br.com.sms.repository.user.UserRepository;
-import br.com.sms.service.ExceptionCommand;
+import br.com.sms.service.AwsService;
 import br.com.sms.service.SmsCommand;
 import br.com.sms.service.SmsService;
 
 @Service
 public class SmsServiceImpl implements SmsService {
 
-    private RestTemplate restTemplate;
     private ApplicationEventPublisher applicationEventPublisher;
-    private String keyApi;
+    private AwsService awsService;
     private UserRepository userRepository;
-    private SmsRepository smsRepository;
 
-    public SmsServiceImpl(RestTemplate restTemplate, ApplicationEventPublisher applicationEventPublisher,
-	    @Value("${smsdev.key.api}") String keyApi, UserRepository userRepository, SmsRepository smsRepository) {
-	this.restTemplate = restTemplate;
+    public SmsServiceImpl(ApplicationEventPublisher applicationEventPublisher, AwsService awsService,
+	    UserRepository userRepository) {
 	this.applicationEventPublisher = applicationEventPublisher;
-	this.keyApi = keyApi;
+	this.awsService = awsService;
 	this.userRepository = userRepository;
-	this.smsRepository = smsRepository;
     }
 
     @Override
     public void send(SmsDTO smsDTO) {
 
-	User user = userRepository.findById(smsDTO.getUserId())
-		.orElseThrow(() -> new EmailNotFoundException("User not found: " + smsDTO.getUserId()));
+	User user = userRepository.findByCpf(smsDTO.getCpfUser());
 
-	if (user.checkForCredits())
-	    throw new InsufficientCreditsException(
-		    "Não há mais credito para enviar SMS. Por favor, entrar em contato com o administrador.");
+	user.getEstablishment().getCustomer().stream()
+		.filter(customer -> customer.getCellPhone().equals(smsDTO.getNumber())).findFirst()
+		.ifPresent(customer -> {
 
-	ResponseEntity<String> response = null;
+		    user.getEstablishment().getEmployee().stream()
+			    .filter(employee -> employee.getNome().equals(smsDTO.getNameEmployee())).findFirst()
+			    .ifPresent(employee -> {
 
-	try {
+				try {
+				    PublishResult publishResult = awsService.sendSms(smsDTO);
 
-	    response = restTemplate.exchange("https://api.smsdev.com.br/send?key=" + keyApi + "&type=9&number="
-		    + smsDTO.getNumber() + "&msg=" + smsDTO.getBody(), HttpMethod.GET, null, String.class);
+				    applicationEventPublisher
+					    .publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getMessageBody(),
+						    Utils.convertHttpStatus(
+							    publishResult.getSdkHttpMetadata().getHttpStatusCode()),
+						    publishResult.getMessageId(), smsDTO.getCpfUser(),
+						    smsDTO.getNameEmployee(), null));
+				} catch (AmazonServiceException e) {
 
-	    applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getBody(),
-		    response.getStatusCode().name(), smsDTO.getUserId()));
-
-	} catch (HttpClientErrorException | HttpServerErrorException e) {
-
-	    applicationEventPublisher
-		    .publishEvent(new ExceptionCommand(response.getBody(), e.getMessage(), response.getStatusCode()));
-	}
+				    applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(),
+					    smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()), null,
+					    smsDTO.getCpfUser(), smsDTO.getNameEmployee(), e.getMessage()));
+				}
+			    });
+		});
 
     }
 
-    @Override
-    public List<SmsDTO> smsReport(SmsFilter smsFilter) {
-	return smsRepository.findAll(SmsSpecification.filter(smsFilter)).stream().map(SMS::convert)
-		.collect(Collectors.toList());
-    }
+//    @Override
+//    public List<SmsDTO> smsReport(SmsFilter smsFilter) {
+//	return smsRepository.findAll(SmsSpecification.filter(smsFilter)).stream().map(SMS::convert)
+//		.collect(Collectors.toList());
+//    }
 
 }

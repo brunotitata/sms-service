@@ -42,4 +42,19 @@ public class Utils {
 	return cellphone;
     }
 
+    public static String convertHttpStatus(Integer httpStatus) {
+	switch (httpStatus) {
+	case 200:
+	    return "ENVIADO";
+	case 400:
+	    return "ERROR";
+	case 401:
+	    return "NÃO AUTORIZADO";
+	case 403:
+	    return "AWS ERROR";
+	default:
+	    return String.valueOf(httpStatus);
+	}
+    }
+
 }

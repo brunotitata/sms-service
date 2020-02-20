@@ -30,6 +30,8 @@ public class Customer implements Serializable {
     private String cellPhone;
     private String email;
 
+    private Integer quantityOfSmsSent = 0;
+
     @ManyToOne
     @JoinColumn(name = "ESTABLISHMENT_ID")
     private Establishment establishment;
@@ -98,10 +100,22 @@ public class Customer implements Serializable {
 	return new CustomerDTO(customer.getName(), customer.getCellPhone(), customer.getEmail());
     }
 
+    public Integer getQuantityOfSmsSent() {
+	return quantityOfSmsSent;
+    }
+
+    public void setQuantityOfSmsSent(Integer quantityOfSmsSent) {
+	this.quantityOfSmsSent = quantityOfSmsSent;
+    }
+
+    public Integer counterSms() {
+	return this.quantityOfSmsSent + 1;
+    }
+
     @Override
     public String toString() {
 	return "Customer [id=" + id + ", customerId=" + customerId + ", name=" + name + ", cellPhone=" + cellPhone
-		+ ", email=" + email + "]";
+		+ ", email=" + email + ", quantityOfSmsSent=" + quantityOfSmsSent + "]";
     }
 
     @Override

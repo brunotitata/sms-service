@@ -26,7 +26,7 @@ public class Employee {
     private String senha;
     @Enumerated(EnumType.STRING)
     private Active active;
-    private String quantidadeDeSmsEnviado;
+    private Integer quantidadeDeSmsEnviado;
 
     @ManyToOne
     @JoinColumn(name = "ESTABLISHMENT_ID")
@@ -86,11 +86,11 @@ public class Employee {
 	this.active = active;
     }
 
-    public String getQuantidadeDeSmsEnviado() {
+    public Integer getQuantidadeDeSmsEnviado() {
 	return quantidadeDeSmsEnviado;
     }
 
-    public void setQuantidadeDeSmsEnviado(String quantidadeDeSmsEnviado) {
+    public void setQuantidadeDeSmsEnviado(Integer quantidadeDeSmsEnviado) {
 	this.quantidadeDeSmsEnviado = quantidadeDeSmsEnviado;
     }
 
@@ -104,6 +104,10 @@ public class Employee {
 
     public void setEstablishment(Establishment establishment) {
 	this.establishment = establishment;
+    }
+
+    public Integer smsCounter() {
+	return this.quantidadeDeSmsEnviado = +1;
     }
 
     @Override

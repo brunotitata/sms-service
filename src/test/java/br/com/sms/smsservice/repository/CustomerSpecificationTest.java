@@ -122,4 +122,17 @@ public class CustomerSpecificationTest {
 	assertEquals(0, customers.size());
     }
 
+    @Test
+    public void hauhaeu() {
+
+	boolean existEmployee = userRepository.findByCpf("384.418.688-32").getEstablishment().getEmployee().stream()
+		.map(employee -> employee.getNome().equals("Rodrigo")).findFirst().isPresent();
+
+	boolean existCustomer = userRepository.findByCpf("384.418.688-32").getEstablishment().getCustomer().stream()
+		.map(customer -> customer.getCellPhone().equals("12121212121")).findFirst().isPresent();
+
+	System.out.println("Customer: " + existCustomer);
+	System.out.println("Employee: " + existEmployee);
+    }
+
 }

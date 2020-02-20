@@ -182,6 +182,10 @@ public class User implements Serializable {
 	this.password = password;
     }
 
+    public Integer smsCounter() {
+	return this.quantidadeTotalDeSmsEnviado + 1;
+    }
+
     @Override
     public String toString() {
 	return "Client [id=" + id + ", userId=" + userId + ", nome=" + nome + ", celular=" + celular + ", cpf=" + cpf

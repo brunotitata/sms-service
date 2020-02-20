@@ -1,18 +1,17 @@
 package br.com.sms.dto;
 
-import java.util.UUID;
-
 public class NewCustomerDTO {
 
     private String name;
     private String cellPhone;
     private String email;
-    private UUID userId;
+    private String userCpf;
 
-    public NewCustomerDTO(String name, String cellPhone, String email) {
+    public NewCustomerDTO(String name, String cellPhone, String email, String userCpf) {
 	this.name = name;
 	this.cellPhone = cellPhone;
 	this.email = email;
+	this.userCpf = userCpf;
     }
 
     public NewCustomerDTO() {
@@ -42,17 +41,17 @@ public class NewCustomerDTO {
 	this.email = email;
     }
 
-    public UUID getUserId() {
-	return userId;
+    public String getUserCpf() {
+	return userCpf;
     }
 
-    public void setUserId(UUID userId) {
-	this.userId = userId;
+    public void setUserCpf(String userCpf) {
+	this.userCpf = userCpf;
     }
 
     @Override
     public String toString() {
-	return "NewCustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + ", userId=" + userId
+	return "NewCustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + ", userCpf=" + userCpf
 		+ "]";
     }
 
