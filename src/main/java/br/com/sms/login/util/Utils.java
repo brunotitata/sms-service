@@ -10,12 +10,12 @@ public class Utils {
 
     public static void argumentNotEmpty(String field, String errMessage) {
 	if (field == null || field.isEmpty())
-	    throw new IllegalArgumentException(errMessage);
+	    throw new ArgumentInvalidException(errMessage);
     }
 
     public static void argumentNotNull(Object obj, String errMessage) {
 	if (obj == null)
-	    throw new IllegalArgumentException(errMessage);
+	    throw new ArgumentInvalidException(errMessage);
     }
 
     public static String getSHA512(String input) {
@@ -40,6 +40,21 @@ public class Utils {
 		    "Numero de telefone deve ter apenas numeros, sem letras ou caracteres especiais.");
 
 	return cellphone;
+    }
+
+    public static String convertHttpStatus(Integer httpStatus) {
+	switch (httpStatus) {
+	case 200:
+	    return "ENVIADO";
+	case 400:
+	    return "ERROR";
+	case 401:
+	    return "NÃO AUTORIZADO";
+	case 403:
+	    return "AWS ERROR";
+	default:
+	    return String.valueOf(httpStatus);
+	}
     }
 
 }

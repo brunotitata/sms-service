@@ -1,6 +1,5 @@
 package br.com.sms.service.impl;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -9,14 +8,14 @@ import org.springframework.stereotype.Service;
 
 import br.com.sms.dto.CustomerDTO;
 import br.com.sms.dto.NewCustomerDTO;
-import br.com.sms.login.exception.ArgumentInvalidException;
 import br.com.sms.login.exception.CustomerException;
-import br.com.sms.login.exception.IllegalArgumentException;
-import br.com.sms.login.model.User;
-import br.com.sms.login.repository.user.UserRepository;
 import br.com.sms.login.util.Utils;
 import br.com.sms.model.Customer;
+import br.com.sms.model.CustomerId;
+import br.com.sms.model.User;
 import br.com.sms.repository.customer.CustomerRepository;
+import br.com.sms.repository.customer.CustomerSpecification;
+import br.com.sms.repository.user.UserRepository;
 import br.com.sms.service.CustomerService;
 
 @Service
@@ -33,54 +32,54 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer newCustomer(NewCustomerDTO newCustomerDTO) {
 
-	customerRepository.findCellphone(newCustomerDTO.getCellPhone()).ifPresent(customer -> {
-	    throw new CustomerException("Cliente já cadastrado na base com telefone: " + newCustomerDTO.getCellPhone());
-	});
+	User user = userRepository.findByCpf(newCustomerDTO.getUserCpf());
 
-	return customerRepository.save(
-		new Customer(newCustomerDTO.getName(), Utils.checkCharactersCellPhone(newCustomerDTO.getCellPhone()),
-			newCustomerDTO.getEmail(), checkForUser(newCustomerDTO)));
+	user.getEstablishment().getCustomer().stream()
+		.filter(customer -> customer.getCellPhone().equals(newCustomerDTO.getCellPhone())).findFirst()
+		.ifPresent(customer -> {
+		    throw new CustomerException(
+			    "Cliente já cadastrado na plataforma: " + newCustomerDTO.getCellPhone());
+		});
 
-    }
-
-    private User checkForUser(NewCustomerDTO newCustomerDTO) {
-	return userRepository.findById(newCustomerDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException(
-		"Usuario não encontrado para associar a um Cliente: " + newCustomerDTO.getUserId()));
-    }
-
-    @Override
-    public Page<CustomerDTO> findAllCustomerByUser(UUID userId, Pageable pageable) {
-	return customerRepository.findAllCustomerByUserId(userId, pageable);
-    }
-
-    @Override
-    public Customer findById(UUID id) {
-	return customerRepository.findById(id);
-    }
-
-    @Override
-    public List<Customer> findCustomerByNameOrCellphone(String name, String cellPhone) {
-	return customerRepository.findCustomer(name, cellPhone);
-    }
-
-    @Override
-    public void removeCustomer(String cellphone) {
-	customerRepository.removeCustomer(cellphone);
+	return customerRepository.save(new Customer(new CustomerId(UUID.randomUUID()), newCustomerDTO.getName(),
+		Utils.checkCharactersCellPhone(newCustomerDTO.getCellPhone()), newCustomerDTO.getEmail(),
+		user.getEstablishment()));
 
     }
 
     @Override
-    public void editCustomer(CustomerDTO customerDTO) {
+    public void editCustomer(String userCpf, String cellphone, CustomerDTO customerDTO) {
+	
+	
+	customerRepository.find(CustomerSpecification.findCustomerByCellphone(userCpf, cellphone))
+		.stream()
+		.filter(customer -> customer.getCellPhone().equals(cellphone))
+		.findFirst()
+		.ifPresent(customer -> {
+		    customer.setCellPhone(customerDTO.getCellPhone());
+		    customer.setEmail(customerDTO.getEmail());
+		    customer.setName(customerDTO.getName());
+		    
+		    customerRepository.save(customer);
+		});
+	
+    }
 
-	Customer customer = customerRepository.findCellphone(customerDTO.getCellPhone())
-		.orElseThrow(() -> new ArgumentInvalidException(
-			"Cliente não encontrado com celular: " + customerDTO.getCellPhone()));
+    @Override
+    public Page<CustomerDTO> findAllCustomerByUserCpf(String cpf, Pageable pageable) {
+	return customerRepository.findAllCustomerByUserCpf(CustomerSpecification.findCustomerByCpf(cpf), pageable);
+    }
 
-	customer.setCellPhone(customerDTO.getCellPhone());
-	customer.setEmail(customerDTO.getEmail());
-	customer.setName(customerDTO.getName());
+    @Override
+    public void removeCustomer(String cpf, String cellphone) {
 
-	customerRepository.save(customer);
+	customerRepository.find(CustomerSpecification.findCustomerByCellphone(cpf, cellphone))
+		.stream()
+		.filter(customer -> customer.getCellPhone().equals(cellphone))
+		.findFirst()
+		.ifPresent(customer -> {
+		    customerRepository.deleteCustomer(customer);
+		});
 
     }
 

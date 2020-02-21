@@ -1,14 +1,10 @@
 package br.com.sms.controller;
 
-import java.util.List;
-import java.util.UUID;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,36 +38,25 @@ public class CustomerController {
 		.build();
     }
 
-    @GetMapping("/customer/{id}")
-    public ResponseEntity<Customer> find(@PathVariable String id) {
-	return ResponseEntity.ok(customerService.findById(UUID.fromString(id)));
-    }
-
     @GetMapping("/customer")
-    public ResponseEntity<Page<CustomerDTO>> findAllCustomer(@RequestParam("user") String id, Pageable pageable) {
-	return ResponseEntity.ok(customerService.findAllCustomerByUser(UUID.fromString(id), pageable));
+    public ResponseEntity<Page<CustomerDTO>> findAllCustomer(@RequestParam("cpf") String cpf, Pageable pageable) {
+	return ResponseEntity.ok(customerService.findAllCustomerByUserCpf(cpf, pageable));
     }
 
-    @GetMapping("/customer/find")
-    public ResponseEntity<List<Customer>> customer(@RequestParam(name = "name", required = false) String name,
-	    @RequestParam(name = "cellphone", required = false) String cellphone) {
+    @DeleteMapping("/customer")
+    public ResponseEntity<Void> removeCustomer(@RequestParam(name = "cpf", required = true) String userCpf,
+	    @RequestParam(name = "cellphone", required = true) String cellphone) {
 
-	return ResponseEntity.ok(customerService.findCustomerByNameOrCellphone(name, cellphone));
-    }
-
-    @DeleteMapping("/customer/{cellphone}")
-    public ResponseEntity<Void> removeCustomer(@PathVariable("cellphone") String customerId) {
-
-	customerService.removeCustomer(customerId);
+	customerService.removeCustomer(userCpf, cellphone);
 
 	return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/customer/{cellphone}")
-    public ResponseEntity<Void> editCustomer(@PathVariable("cellphone") String customerId,
-	    @RequestBody CustomerDTO customerDTO) {
+    @PutMapping("/customer")
+    public ResponseEntity<Void> editCustomer(@RequestParam(name = "cpf", required = true) String userCpf,
+	    @RequestParam(name = "cellphone", required = true) String cellphone, @RequestBody CustomerDTO customerDTO) {
 
-	customerService.editCustomer(customerDTO);
+	customerService.editCustomer(userCpf, cellphone, customerDTO);
 
 	return ResponseEntity.noContent().build();
     }

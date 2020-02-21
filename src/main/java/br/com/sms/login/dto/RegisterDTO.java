@@ -1,48 +1,49 @@
 package br.com.sms.login.dto;
 
-import java.util.Set;
-
-import javax.validation.constraints.Email;
-
 public class RegisterDTO {
 
-    private String name;
-    private String establishment;
-    @Email
+    private String nome;
+    private String celular;
+    private String cpf;
     private String email;
-    private Set<String> role;
     private String password;
-    private Integer credit;
-    private Boolean active;
+    private EstablishmentDTO establishment;
 
-    public RegisterDTO(String name, String establishment, @Email String email, Set<String> role, String password,
-	    Integer credit, Boolean active) {
-	this.name = name;
-	this.establishment = establishment;
+    public RegisterDTO(String nome, String celular, String cpf, String email, String password,
+	    EstablishmentDTO establishment) {
+	this.nome = nome;
+	this.celular = celular;
+	this.cpf = cpf;
 	this.email = email;
-	this.role = role;
 	this.password = password;
-	this.credit = credit;
-	this.active = active;
+	this.establishment = establishment;
     }
 
     public RegisterDTO() {
     }
 
-    public String getName() {
-	return name;
+    public String getNome() {
+	return nome;
     }
 
-    public void setName(String name) {
-	this.name = name;
+    public void setNome(String nome) {
+	this.nome = nome;
     }
 
-    public String getEstablishment() {
-	return establishment;
+    public String getCelular() {
+	return celular;
     }
 
-    public void setEstablishment(String establishment) {
-	this.establishment = establishment;
+    public void setCelular(String celular) {
+	this.celular = celular;
+    }
+
+    public String getCpf() {
+	return cpf;
+    }
+
+    public void setCpf(String cpf) {
+	this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -53,6 +54,14 @@ public class RegisterDTO {
 	this.email = email;
     }
 
+    public EstablishmentDTO getEstablishment() {
+	return establishment;
+    }
+
+    public void setEstablishment(EstablishmentDTO establishment) {
+	this.establishment = establishment;
+    }
+
     public String getPassword() {
 	return password;
     }
@@ -61,34 +70,54 @@ public class RegisterDTO {
 	this.password = password;
     }
 
-    public Set<String> getRole() {
-	return this.role;
-    }
-
-    public void setRole(Set<String> role) {
-	this.role = role;
-    }
-
-    public Integer getCredit() {
-	return credit;
-    }
-
-    public void setCredit(Integer credit) {
-	this.credit = credit;
-    }
-
-    public Boolean getActive() {
-	return active;
-    }
-
-    public void setActive(Boolean active) {
-	this.active = active;
-    }
-
     @Override
     public String toString() {
-	return "RegisterDTO [name=" + name + ", establishment=" + establishment + ", email=" + email + ", role=" + role
-		+ ", password=" + password + ", credit=" + credit + ", active=" + active + "]";
+	return "RegisterDTO [nome=" + nome + ", celular=" + celular + ", cpf=" + cpf + ", email=" + email
+		+ ", password=" + password + ", establishment=" + establishment + "]";
+    }
+
+    public static class EstablishmentDTO {
+	private String nome;
+	private String endereco;
+	private String cnpj;
+
+	public EstablishmentDTO(String nome, String endereco, String cnpj) {
+	    this.nome = nome;
+	    this.endereco = endereco;
+	    this.cnpj = cnpj;
+	}
+
+	public EstablishmentDTO() {
+	}
+
+	public String getNome() {
+	    return nome;
+	}
+
+	public void setNome(String nome) {
+	    this.nome = nome;
+	}
+
+	public String getEndereco() {
+	    return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+	    this.endereco = endereco;
+	}
+
+	public String getCnpj() {
+	    return cnpj;
+	}
+
+	public void setCnpj(String cnpj) {
+	    this.cnpj = cnpj;
+	}
+
+	@Override
+	public String toString() {
+	    return "EstablishmentDTO [nome=" + nome + ", endereco=" + endereco + ", cnpj=" + cnpj + "]";
+	}
     }
 
 }
