@@ -28,7 +28,6 @@ import br.com.sms.model.User;
 import br.com.sms.model.UserId;
 import br.com.sms.repository.customer.CustomerRepository;
 import br.com.sms.repository.customer.CustomerSpecification;
-import br.com.sms.repository.employee.EmployeeRepository;
 import br.com.sms.repository.establishment.EstablishmentRepository;
 import br.com.sms.repository.user.UserRepository;
 
@@ -43,9 +42,6 @@ public class CustomerSpecificationTest {
 
     @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
 
     @BeforeEach
     public void setUp() {
@@ -127,14 +123,6 @@ public class CustomerSpecificationTest {
 		.find(CustomerSpecification.findCustomerByCellphone("384.418.688-32", "22222211122"));
 
 	assertEquals(0, customers.size());
-    }
-
-    @Test
-    public void hauhaeu() {
-
-	User user = userRepository.findByEmail("brunotitata@gmail.com");
-
-	assertEquals("brunotitata@gmail.com", user.getEmail());
     }
 
 }
