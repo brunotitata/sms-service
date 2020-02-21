@@ -187,6 +187,10 @@ public class User implements Serializable {
 	return this.quantidadeTotalDeSmsEnviado + 1;
     }
 
+    public Integer creditAvailable() {
+	return this.creditoContratado = this.creditoContratado - 1;
+    }
+
     @Override
     public String toString() {
 	return "Client [id=" + id + ", userId=" + userId + ", nome=" + nome + ", celular=" + celular + ", cpf=" + cpf

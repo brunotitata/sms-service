@@ -51,6 +51,10 @@ public class UserService {
 	    throw new UserExistingException("Error -> Cliente já cadastrado com CPF: " + registerData.getCpf());
 	}
 
+	userRepository.findByEmail(registerData.getEmail()).ifPresent(user -> {
+	    throw new UserExistingException("Error -> Cliente já cadastrado com EMAIL: " + registerData.getEmail());
+	});
+
 	List<SMS> sms = Collections.emptyList();
 	Set<Customer> customer = Collections.emptySet();
 	Set<Employee> employee = Collections.emptySet();

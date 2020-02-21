@@ -36,7 +36,7 @@ public class SmsListenerService {
 
 	User user = userRepository.findByCpf(command.getUserCpf());
 	user.setQuantidadeTotalDeSmsEnviado(user.smsCounter());
-	user.setCreditoDisponivel(user.getCreditoContratado() - 1);
+	user.setCreditoDisponivel(Math.subtractExact(user.getCreditoContratado(), 1));
 
 	user.getEstablishment().getEmployee().stream()
 		.filter(employee -> employee.getNome().equals(command.getNameEmployee()))

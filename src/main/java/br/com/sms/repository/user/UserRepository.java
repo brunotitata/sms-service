@@ -21,6 +21,6 @@ public interface UserRepository {
 
     Boolean existClient(String cpf);
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
 }

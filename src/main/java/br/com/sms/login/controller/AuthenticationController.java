@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.sms.login.dto.LoginDTO;
 import br.com.sms.login.dto.RegisterDTO;
+import br.com.sms.login.exception.ArgumentInvalidException;
 import br.com.sms.login.model.AccessToken;
 import br.com.sms.login.service.UserService;
 import br.com.sms.model.Active;
@@ -35,7 +36,8 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<AccessToken> authenticateUser(@RequestBody LoginDTO loginData) {
 
-	User user = userRepository.findByEmail(loginData.getEmail());
+	User user = userRepository.findByEmail(loginData.getEmail()).orElseThrow(
+		() -> new ArgumentInvalidException("Cliente não encontrado com email: " + loginData.getEmail()));
 
 	if (user.getActive().equals(Active.INATIVO))
 	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

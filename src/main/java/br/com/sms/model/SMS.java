@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.sms.dto.SmsSpecificationDTO;
+
 @Entity
 public class SMS implements Serializable {
     private static final long serialVersionUID = -2969899889965050481L;
@@ -133,6 +135,11 @@ public class SMS implements Serializable {
 
     public void setMessageError(String messageError) {
 	this.messageError = messageError;
+    }
+
+    public static SmsSpecificationDTO convertToDTO(SMS sms) {
+	return new SmsSpecificationDTO(sms.getNomeFuncionario(), sms.getMessagem(), sms.getNumero(), sms.getLocalDateTime(),
+		sms.getStatus(), sms.getMessageError());
     }
 
     @Override

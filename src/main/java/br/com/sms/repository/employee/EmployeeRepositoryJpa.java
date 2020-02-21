@@ -1,6 +1,7 @@
 package br.com.sms.repository.employee;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,11 @@ public class EmployeeRepositoryJpa implements EmployeeRepository {
     public void deleteAll() {
 	employeeRepositorySpringData.deleteAll();
 
+    }
+
+    @Override
+    public List<Employee> findEmployeeByUserCpf(String userCpf) {
+	return employeeRepositorySpringData.findAll(EmployeeSpecification.findAllEmployeeByUserCpf(userCpf));
     }
 
 }

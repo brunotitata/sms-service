@@ -62,9 +62,8 @@ public class UserRepositoryJpa implements UserRepository {
     }
 
     @Override
-    public User findByEmail(String email) {
-	return userRepositorySpringData.findByEmail(email)
-		.orElseThrow(() -> new ArgumentInvalidException("Cliente não encontrado com email: " + email));
+    public Optional<User> findByEmail(String email) {
+	return userRepositorySpringData.findByEmail(email);
     }
 
 }

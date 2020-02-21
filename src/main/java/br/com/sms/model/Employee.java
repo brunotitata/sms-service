@@ -26,7 +26,7 @@ public class Employee {
     private String senha;
     @Enumerated(EnumType.STRING)
     private Active active;
-    private Integer quantidadeDeSmsEnviado;
+    private Integer quantidadeDeSmsEnviado = 0;
 
     @ManyToOne
     @JoinColumn(name = "ESTABLISHMENT_ID")
@@ -107,7 +107,7 @@ public class Employee {
     }
 
     public Integer smsCounter() {
-	return this.quantidadeDeSmsEnviado = +1;
+	return this.quantidadeDeSmsEnviado + 1;
     }
 
     @Override
