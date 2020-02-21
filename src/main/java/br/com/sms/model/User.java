@@ -49,6 +49,7 @@ public class User implements Serializable {
     @JoinColumn(name = "ESTABLISHMENT_ID")
     private Establishment establishment;
 
+    @Enumerated(EnumType.STRING)
     private Active active;
     private Integer creditoDisponivel;
     private Integer creditoContratado;

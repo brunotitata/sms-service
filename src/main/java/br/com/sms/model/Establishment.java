@@ -33,7 +33,7 @@ public class Establishment {
     @OneToMany(mappedBy = "establishment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<SMS> sms;
 
-    @OneToMany(mappedBy = "establishment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "establishment", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Customer> customer;
 
     @OneToOne(mappedBy = "establishment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

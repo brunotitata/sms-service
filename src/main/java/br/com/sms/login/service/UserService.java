@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import br.com.sms.login.config.jwt.JwtProvider;
 import br.com.sms.login.dto.LoginDTO;
 import br.com.sms.login.dto.RegisterDTO;
-import br.com.sms.login.exception.ExistingEmailException;
+import br.com.sms.login.exception.UserExistingException;
 import br.com.sms.login.model.AccessToken;
 import br.com.sms.model.Customer;
 import br.com.sms.model.Employee;
@@ -48,7 +48,7 @@ public class UserService {
     public User registerUser(RegisterDTO registerData) {
 
 	if (userRepository.existClient(registerData.getCpf())) {
-	    throw new ExistingEmailException("Error -> Cliente já cadastrado com CPF: " + registerData.getCpf());
+	    throw new UserExistingException("Error -> Cliente já cadastrado com CPF: " + registerData.getCpf());
 	}
 
 	List<SMS> sms = Collections.emptyList();

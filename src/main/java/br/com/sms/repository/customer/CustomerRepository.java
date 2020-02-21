@@ -1,9 +1,7 @@
 package br.com.sms.repository.customer;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,14 +20,10 @@ public interface CustomerRepository {
 
     Page<CustomerDTO> findAllCustomerByUserCpf(Specification<Customer> customer, Pageable pageable);
 
-    Customer findById(UUID id);
-
-    List<Customer> findCustomer(String name, String cellphone);
-
-    void removeCustomer(String cellphone);
-
-    Optional<Customer> findCellphone(String cellphone);
+    void deleteCustomer(Customer customer);
 
     List<Customer> find(Specification<Customer> user);
+
+    List<Customer> findCustomerByUserCpfAndCellphone(String cpf, String cellphone);
 
 }
