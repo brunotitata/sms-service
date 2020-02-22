@@ -23,7 +23,9 @@ public class SmsFilter {
 	this.status = status;
     }
 
-    public SmsFilter() {
+    public SmsFilter(String startDate, String endDate) {
+	this.startDate = startDate;
+	this.endDate = endDate;
     }
 
     public String getStartDate() {

@@ -7,7 +7,7 @@ import br.com.sms.model.Employee;
 
 public interface EmployeeRepository {
 
-    void save(Employee employee);
+    Employee save(Employee employee);
 
     void deleteAll();
 

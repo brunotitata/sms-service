@@ -188,7 +188,7 @@ public class User implements Serializable {
     }
 
     public Integer creditAvailable() {
-	return this.creditoContratado = this.creditoContratado - 1;
+	return this.creditoDisponivel - 1;
     }
 
     @Override

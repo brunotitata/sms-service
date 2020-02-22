@@ -18,12 +18,6 @@ public class EmployeeRepositoryJpa implements EmployeeRepository {
     }
 
     @Override
-    public void save(Employee employee) {
-	employeeRepositorySpringData.save(employee);
-
-    }
-
-    @Override
     public Set<Employee> saveAll(Set<Employee> employees) {
 	return new HashSet<>(employeeRepositorySpringData.saveAll(employees));
     }
@@ -37,6 +31,11 @@ public class EmployeeRepositoryJpa implements EmployeeRepository {
     @Override
     public List<Employee> findEmployeeByUserCpf(String userCpf) {
 	return employeeRepositorySpringData.findAll(EmployeeSpecification.findAllEmployeeByUserCpf(userCpf));
+    }
+
+    @Override
+    public Employee save(Employee employee) {
+	return employeeRepositorySpringData.save(employee);
     }
 
 }
