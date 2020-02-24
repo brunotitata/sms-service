@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.validator.constraints.br.CNPJ;
+
 @Entity
 public class Establishment {
 
@@ -25,6 +27,7 @@ public class Establishment {
     private EstablishmentId establishmentId;
     private String nome;
     private String endereco;
+    @CNPJ
     private String cnpj;
 
     @OneToMany(mappedBy = "establishment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

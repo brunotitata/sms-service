@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.sms.model.Customer;
 import br.com.sms.model.Employee;
@@ -33,6 +34,9 @@ public class ClientRepositoryTest {
     private EstablishmentRepository establishmentRepository;
 
     protected User user;
+    
+    @Autowired
+    private PasswordEncoder password;
 
     @BeforeEach
     public void setUp() {
@@ -76,21 +80,7 @@ public class ClientRepositoryTest {
     @Test
     public void haueheu() {
 
-	User user = userRepository.findByCpf("38441868832");
-
-	user.getEstablishment().getEmployee().stream().map(employee -> employee.getNome().equals("Leandro")).findFirst()
-		.ifPresent(employee -> {
-
-		    System.out.println("Entrou dentro de employeee !!!");
-
-		    user.getEstablishment().getCustomer().stream()
-			    .map(customer -> customer.getCellPhone().equals("16991034148")).findFirst()
-			    .ifPresent(customer -> {
-
-				System.out.println("Entrou dentro do customer, entao executa !!!");
-			    });
-
-		});
+	System.out.println(password.encode("degauss123"));
 
     }
 

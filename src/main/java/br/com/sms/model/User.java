@@ -39,7 +39,7 @@ public class User implements Serializable {
     private String nome;
     private String celular;
 
-    @CPF
+    @CPF(message = "CPF informado invalido.")
     private String cpf;
     private String email;
 
