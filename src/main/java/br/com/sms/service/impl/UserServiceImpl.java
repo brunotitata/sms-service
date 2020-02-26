@@ -27,18 +27,18 @@ public class UserServiceImpl implements UserService {
     public UserStatistics getUserStatistics(String userCpf) {
 
 	long sevenDays = smsRepository
-		.findAll(SmsSpecification
-			.filter(new SmsFilter(LocalDate.now().minusDays(7).toString(), LocalDate.now().toString())))
+		.findAll(SmsSpecification.filter(
+			new SmsFilter(LocalDate.now().minusDays(7).toString(), LocalDate.now().toString(), userCpf)))
 		.stream().count();
 
 	long fifteenDays = smsRepository
-		.findAll(SmsSpecification
-			.filter(new SmsFilter(LocalDate.now().minusDays(15).toString(), LocalDate.now().toString())))
+		.findAll(SmsSpecification.filter(
+			new SmsFilter(LocalDate.now().minusDays(15).toString(), LocalDate.now().toString(), userCpf)))
 		.stream().count();
 
 	long thirtyDays = smsRepository
-		.findAll(SmsSpecification
-			.filter(new SmsFilter(LocalDate.now().minusDays(30).toString(), LocalDate.now().toString())))
+		.findAll(SmsSpecification.filter(
+			new SmsFilter(LocalDate.now().minusDays(30).toString(), LocalDate.now().toString(), userCpf)))
 		.stream().count();
 
 	User user = userRepository.findByCpf(userCpf);

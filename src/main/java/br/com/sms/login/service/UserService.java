@@ -47,6 +47,9 @@ public class UserService {
 
     public User registerUser(RegisterDTO registerData) {
 
+	if (registerData == null)
+	    throw new RuntimeException("Objeto Usuario não pode ser nulo.");
+
 	if (userRepository.existClient(registerData.getCpf())) {
 	    throw new UserExistingException("Error -> Cliente já cadastrado com CPF: " + registerData.getCpf());
 	}

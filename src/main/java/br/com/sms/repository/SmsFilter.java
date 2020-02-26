@@ -23,9 +23,10 @@ public class SmsFilter {
 	this.status = status;
     }
 
-    public SmsFilter(String startDate, String endDate) {
+    public SmsFilter(String startDate, String endDate, String cpf) {
 	this.startDate = startDate;
 	this.endDate = endDate;
+	this.cpf = cpf;
     }
 
     public String getStartDate() {
