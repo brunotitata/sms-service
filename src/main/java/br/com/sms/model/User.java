@@ -37,10 +37,12 @@ public class User implements Serializable {
     private UserId userId;
 
     private String nome;
+
     private String celular;
 
     @CPF(message = "CPF informado invalido.")
     private String cpf;
+
     private String email;
 
     private String password;
@@ -51,12 +53,15 @@ public class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Active active;
+
     private Integer creditoDisponivel;
-    private Integer creditoContratado;
+
     private Integer quantidadeTotalDeSmsEnviado;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private String mensagemPrefixo;
 
     public User(UserId clientId, String nome, String celular, String cpf, String email, String password,
 	    Establishment establishment) {
@@ -75,7 +80,6 @@ public class User implements Serializable {
     @PrePersist
     public void prePersist() {
 	this.active = Active.ATIVO;
-	this.creditoContratado = 0;
 	this.creditoDisponivel = 0;
 	this.role = Role.USER;
 	this.quantidadeTotalDeSmsEnviado = 0;
@@ -147,14 +151,6 @@ public class User implements Serializable {
 	this.creditoDisponivel = creditoDisponivel;
     }
 
-    public Integer getCreditoContratado() {
-	return creditoContratado;
-    }
-
-    public void setCreditoContratado(Integer creditoContratado) {
-	this.creditoContratado = creditoContratado;
-    }
-
     public Integer getQuantidadeTotalDeSmsEnviado() {
 	return quantidadeTotalDeSmsEnviado;
     }
@@ -191,103 +187,20 @@ public class User implements Serializable {
 	return this.creditoDisponivel - 1;
     }
 
+    public String getMensagemPrefixo() {
+	return mensagemPrefixo;
+    }
+
+    public void setMensagemPrefixo(String mensagemPrefixo) {
+	this.mensagemPrefixo = mensagemPrefixo;
+    }
+
     @Override
     public String toString() {
-	return "Client [id=" + id + ", userId=" + userId + ", nome=" + nome + ", celular=" + celular + ", cpf=" + cpf
+	return "User [id=" + id + ", userId=" + userId + ", nome=" + nome + ", celular=" + celular + ", cpf=" + cpf
 		+ ", email=" + email + ", password=" + password + ", establishment=" + establishment + ", active="
-		+ active + ", creditoDisponivel=" + creditoDisponivel + ", creditoContratado=" + creditoContratado
-		+ ", quantidadeTotalDeSmsEnviado=" + quantidadeTotalDeSmsEnviado + ", role=" + role + "]";
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((active == null) ? 0 : active.hashCode());
-	result = prime * result + ((celular == null) ? 0 : celular.hashCode());
-	result = prime * result + ((userId == null) ? 0 : userId.hashCode());
-	result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
-	result = prime * result + ((creditoContratado == null) ? 0 : creditoContratado.hashCode());
-	result = prime * result + ((creditoDisponivel == null) ? 0 : creditoDisponivel.hashCode());
-	result = prime * result + ((email == null) ? 0 : email.hashCode());
-	result = prime * result + ((establishment == null) ? 0 : establishment.hashCode());
-	result = prime * result + ((id == null) ? 0 : id.hashCode());
-	result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-	result = prime * result + ((password == null) ? 0 : password.hashCode());
-	result = prime * result + ((quantidadeTotalDeSmsEnviado == null) ? 0 : quantidadeTotalDeSmsEnviado.hashCode());
-	result = prime * result + ((role == null) ? 0 : role.hashCode());
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	User other = (User) obj;
-	if (active != other.active)
-	    return false;
-	if (celular == null) {
-	    if (other.celular != null)
-		return false;
-	} else if (!celular.equals(other.celular))
-	    return false;
-	if (userId == null) {
-	    if (other.userId != null)
-		return false;
-	} else if (!userId.equals(other.userId))
-	    return false;
-	if (cpf == null) {
-	    if (other.cpf != null)
-		return false;
-	} else if (!cpf.equals(other.cpf))
-	    return false;
-	if (creditoContratado == null) {
-	    if (other.creditoContratado != null)
-		return false;
-	} else if (!creditoContratado.equals(other.creditoContratado))
-	    return false;
-	if (creditoDisponivel == null) {
-	    if (other.creditoDisponivel != null)
-		return false;
-	} else if (!creditoDisponivel.equals(other.creditoDisponivel))
-	    return false;
-	if (email == null) {
-	    if (other.email != null)
-		return false;
-	} else if (!email.equals(other.email))
-	    return false;
-	if (establishment == null) {
-	    if (other.establishment != null)
-		return false;
-	} else if (!establishment.equals(other.establishment))
-	    return false;
-	if (id == null) {
-	    if (other.id != null)
-		return false;
-	} else if (!id.equals(other.id))
-	    return false;
-	if (nome == null) {
-	    if (other.nome != null)
-		return false;
-	} else if (!nome.equals(other.nome))
-	    return false;
-	if (password == null) {
-	    if (other.password != null)
-		return false;
-	} else if (!password.equals(other.password))
-	    return false;
-	if (quantidadeTotalDeSmsEnviado == null) {
-	    if (other.quantidadeTotalDeSmsEnviado != null)
-		return false;
-	} else if (!quantidadeTotalDeSmsEnviado.equals(other.quantidadeTotalDeSmsEnviado))
-	    return false;
-	if (role != other.role)
-	    return false;
-	return true;
+		+ active + ", creditoDisponivel=" + creditoDisponivel + ", quantidadeTotalDeSmsEnviado="
+		+ quantidadeTotalDeSmsEnviado + ", role=" + role + ", mensagemPrefixo=" + mensagemPrefixo + "]";
     }
 
 }
