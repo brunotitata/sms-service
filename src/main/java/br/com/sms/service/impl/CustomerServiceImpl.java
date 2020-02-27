@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.sms.dto.CustomerDTO;
+import br.com.sms.dto.EditCustomerDTO;
 import br.com.sms.dto.NewCustomerDTO;
 import br.com.sms.login.exception.CustomerException;
 import br.com.sms.login.util.Utils;
@@ -32,7 +33,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer newCustomer(NewCustomerDTO newCustomerDTO) {
 
-	User user = userRepository.findByCpf(newCustomerDTO.getUserCpf());
+	User user = userRepository.findUserByUserId(newCustomerDTO.getUserId()).orElseThrow(
+		() -> new RuntimeException("Usuario não encontrado com ID: " + newCustomerDTO.getUserId()));
 
 	user.getEstablishment().getCustomer().stream()
 		.filter(customer -> customer.getCellPhone().equals(newCustomerDTO.getCellPhone())).findFirst()
@@ -48,10 +50,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void editCustomer(String userCpf, String cellphone, CustomerDTO customerDTO) {
-	
-	
-	customerRepository.find(CustomerSpecification.findCustomerByCellphone(userCpf, cellphone))
+    public void editCustomer(String userId, String cellphone, EditCustomerDTO customerDTO) {
+
+	customerRepository.find(CustomerSpecification.findCustomerByCellphone(userId, cellphone))
 		.stream()
 		.filter(customer -> customer.getCellPhone().equals(cellphone))
 		.findFirst()
@@ -59,21 +60,21 @@ public class CustomerServiceImpl implements CustomerService {
 		    customer.setCellPhone(customerDTO.getCellPhone());
 		    customer.setEmail(customerDTO.getEmail());
 		    customer.setName(customerDTO.getName());
-		    
+
 		    customerRepository.save(customer);
 		});
-	
+
     }
 
     @Override
-    public Page<CustomerDTO> findAllCustomerByUserCpf(String cpf, Pageable pageable) {
-	return customerRepository.findAllCustomerByUserCpf(CustomerSpecification.findCustomerByCpf(cpf), pageable);
+    public Page<CustomerDTO> findAllCustomerByUserId(String userId, Pageable pageable) {
+	return customerRepository.findAllCustomerByUserId(CustomerSpecification.findCustomerByUserId(userId), pageable);
     }
 
     @Override
-    public void removeCustomer(String cpf, String cellphone) {
+    public void removeCustomer(String userId, String cellphone) {
 
-	customerRepository.find(CustomerSpecification.findCustomerByCellphone(cpf, cellphone))
+	customerRepository.find(CustomerSpecification.findCustomerByCellphone(userId, cellphone))
 		.stream()
 		.filter(customer -> customer.getCellPhone().equals(cellphone))
 		.findFirst()

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
 
+import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.model.User;
 import br.com.sms.model.UserStatistics;
 import br.com.sms.repository.SmsFilter;
@@ -24,24 +25,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserStatistics getUserStatistics(String userCpf) {
+    public UserStatistics getUserStatistics(String userId) {
 
 	long sevenDays = smsRepository
 		.findAll(SmsSpecification.filter(
-			new SmsFilter(LocalDate.now().minusDays(7).toString(), LocalDate.now().toString(), userCpf)))
+			new SmsFilter(LocalDate.now().minusDays(7).toString(), LocalDate.now().toString(), userId)))
 		.stream().count();
 
 	long fifteenDays = smsRepository
 		.findAll(SmsSpecification.filter(
-			new SmsFilter(LocalDate.now().minusDays(15).toString(), LocalDate.now().toString(), userCpf)))
+			new SmsFilter(LocalDate.now().minusDays(15).toString(), LocalDate.now().toString(), userId)))
 		.stream().count();
 
 	long thirtyDays = smsRepository
 		.findAll(SmsSpecification.filter(
-			new SmsFilter(LocalDate.now().minusDays(30).toString(), LocalDate.now().toString(), userCpf)))
+			new SmsFilter(LocalDate.now().minusDays(30).toString(), LocalDate.now().toString(), userId)))
 		.stream().count();
 
-	User user = userRepository.findByCpf(userCpf);
+	User user = userRepository.findUserByUserId(userId)
+		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + userId));
 
 	return new UserStatistics(user.getCreditoDisponivel(), user.getQuantidadeTotalDeSmsEnviado(),
 		Integer.valueOf(String.valueOf(sevenDays)), Integer.valueOf(String.valueOf(fifteenDays)),

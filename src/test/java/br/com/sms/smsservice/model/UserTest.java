@@ -11,15 +11,15 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import br.com.sms.login.exception.ArgumentInvalidException;
-import br.com.sms.model.User;
-import br.com.sms.model.UserId;
 import br.com.sms.model.Customer;
 import br.com.sms.model.Employee;
 import br.com.sms.model.Establishment;
 import br.com.sms.model.EstablishmentId;
 import br.com.sms.model.SMS;
+import br.com.sms.model.User;
+import br.com.sms.model.UserId;
 
-public class ClientTest {
+public class UserTest {
 
     @Test
     public void criandoUsuario() {
@@ -43,7 +43,7 @@ public class ClientTest {
 	assertEquals("123456", client.getPassword());
 
 	assertEquals(UUID.fromString("23ede4a7-9219-4e88-8262-4cac0a3973e8"),
-		client.getEstablishment().getEstablishmentId().getEstablishmentId());
+		client.getEstablishment().getEstablishmentId().getId());
 	assertEquals("Arley Chopão", client.getEstablishment().getNome());
 	assertEquals("Leopoldo Carlos de Oliveira 350", client.getEstablishment().getEndereco());
 	assertEquals("68.861.290/0001-00", client.getEstablishment().getCnpj());

@@ -12,6 +12,7 @@ import com.amazonaws.services.sns.model.PublishResult;
 import br.com.sms.dto.SmsDTO;
 import br.com.sms.dto.SmsSpecificationDTO;
 import br.com.sms.login.exception.InsufficientCreditsException;
+import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.login.util.Utils;
 import br.com.sms.model.SMS;
 import br.com.sms.model.User;
@@ -42,7 +43,8 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public void send(SmsDTO smsDTO) {
 
-	User user = userRepository.findByCpf(smsDTO.getCpfUser());
+	User user = userRepository.findUserByUserId(smsDTO.getUserId())
+		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + smsDTO.getUserId()));
 
 	if (user.getCreditoDisponivel() <= 0)
 	    throw new InsufficientCreditsException("Saldo de creditos insuficiente.");
@@ -62,13 +64,13 @@ public class SmsServiceImpl implements SmsService {
 					    .publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getMessageBody(),
 						    Utils.convertHttpStatus(
 							    publishResult.getSdkHttpMetadata().getHttpStatusCode()),
-						    publishResult.getMessageId(), smsDTO.getCpfUser(),
+						    publishResult.getMessageId(), smsDTO.getUserId(),
 						    smsDTO.getNameEmployee(), null));
 				} catch (AmazonServiceException e) {
 
 				    applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(),
 					    smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()), null,
-					    smsDTO.getCpfUser(), smsDTO.getNameEmployee(), e.getMessage()));
+					    smsDTO.getUserId(), smsDTO.getNameEmployee(), e.getMessage()));
 				}
 			    });
 		});

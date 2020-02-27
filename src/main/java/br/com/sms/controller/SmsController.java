@@ -38,7 +38,7 @@ public class SmsController {
     public ResponseEntity<List<SmsSpecificationDTO>> generateReport(
 	    @RequestParam(name = "startDate", required = true) String startDate,
 	    @RequestParam(name = "endDate", required = true) String endDate,
-	    @RequestParam(name = "cpf", required = true) String cpf,
+	    @RequestParam(name = "userId", required = true) String userId,
 	    @RequestParam(name = "cellphone", required = false) String cellphone,
 	    @RequestParam(name = "message", required = false) String message,
 	    @RequestParam(name = "customer", required = false) String nameCustomer,
@@ -46,7 +46,7 @@ public class SmsController {
 	    @RequestParam(name = "status", required = false) String status) {
 
 	return ResponseEntity.ok(smsService.smsReport(
-		new SmsFilter(startDate, endDate, cpf, cellphone, message, nameCustomer, nameEmployee, status)));
+		new SmsFilter(startDate, endDate, userId, cellphone, message, nameCustomer, nameEmployee, status)));
     }
 
 }

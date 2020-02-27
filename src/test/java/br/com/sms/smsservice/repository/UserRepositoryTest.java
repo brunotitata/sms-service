@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.sms.model.Customer;
 import br.com.sms.model.Employee;
@@ -25,7 +24,7 @@ import br.com.sms.repository.establishment.EstablishmentRepository;
 import br.com.sms.repository.user.UserRepository;
 
 @SpringBootTest
-public class ClientRepositoryTest {
+public class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -34,9 +33,6 @@ public class ClientRepositoryTest {
     private EstablishmentRepository establishmentRepository;
 
     protected User user;
-    
-    @Autowired
-    private PasswordEncoder password;
 
     @BeforeEach
     public void setUp() {
@@ -45,18 +41,18 @@ public class ClientRepositoryTest {
 	Set<Customer> customer = Collections.emptySet();
 	Set<Employee> employees = Collections.emptySet();
 
-	Establishment estabelecimento = establishmentRepository.save(new Establishment(
-		new EstablishmentId(UUID.fromString("0e488aac-1a68-412a-baad-e1319a49fd01")), "Arley Chopão",
-		"Leopoldo Carlos de Oliveira 350", "06.100.428/0001-92", employees, sms, customer));
+	Establishment estabelecimento = establishmentRepository
+		.save(new Establishment(new EstablishmentId(UUID.fromString("0e488aac-1a68-412a-baad-e1319a49fd01")),
+			"Arley Chopão", "Leopoldo Carlos de Oliveira 350", "06100428000192", employees, sms, customer));
 
 	user = userRepository.save(new User(new UserId(UUID.fromString("46c2c662-d900-4f4f-9520-036c0a7ce1e9")),
-		"Arley", "16991034148", "384.418.688-32", "arley@arley.com", "123456", estabelecimento));
+		"Arley", "16991034148", "38441868832", "arley@arley.com", "123456", estabelecimento));
 
     }
 
     @AfterEach
     public void tearDown() {
-	userRepository.delete(UUID.fromString("46c2c662-d900-4f4f-9520-036c0a7ce1e9"));
+	userRepository.delete("46c2c662-d900-4f4f-9520-036c0a7ce1e9");
     }
 
     @Test
@@ -78,10 +74,22 @@ public class ClientRepositoryTest {
     }
 
     @Test
-    public void haueheu() {
+    public void findUserByUserId() {
 
-	System.out.println(password.encode("degauss123"));
+	User user = userRepository.findUserByUserId("46c2c662-d900-4f4f-9520-036c0a7ce1e9").get();
 
+	assertEquals("46c2c662-d900-4f4f-9520-036c0a7ce1e9", user.getUserId().getId().toString());
+	assertEquals("Arley", user.getNome());
+	assertEquals("16991034148", user.getCelular());
+	assertEquals("38441868832", user.getCpf());
+	assertEquals("arley@arley.com", user.getEmail());
+	assertEquals("123456", user.getPassword());
+
+	assertEquals("0e488aac-1a68-412a-baad-e1319a49fd01",
+		user.getEstablishment().getEstablishmentId().getId().toString());
+	assertEquals("Arley Chopão", user.getEstablishment().getNome());
+	assertEquals("Leopoldo Carlos de Oliveira 350", user.getEstablishment().getEndereco());
+	assertEquals("06100428000192", user.getEstablishment().getCnpj());
     }
 
 }

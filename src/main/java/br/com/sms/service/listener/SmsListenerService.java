@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.model.SMS;
 import br.com.sms.model.SmsId;
 import br.com.sms.model.User;
@@ -34,32 +35,41 @@ public class SmsListenerService {
     @EventListener
     public void processSMS(SmsCommand command) {
 
-	User user = userRepository.findByCpf(command.getUserCpf());
-	user.setQuantidadeTotalDeSmsEnviado(user.smsCounter());
-	user.setCreditoDisponivel(user.creditAvailable());
+	User user = userRepository.findUserByUserId(command.getUserId())
+		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + command.getUserId()));
+	
+	if (command.getStatus().equals("AWS ERROR") || command.getStatus().equals("ERROR") || command.getStatus().equals("NÃO AUTORIZADO")) {
+	    
+	    smsRepository.save(new SMS(new SmsId(UUID.randomUUID()), command.getNameEmployee(), command.getBody(),
+			command.getNumberPhone(), LocalDateTime.now(), command.getAwsMessageId(), command.getStatus(),
+			command.getMessageError(), user.getEstablishment()));
+	} else {
+		user.setQuantidadeTotalDeSmsEnviado(user.smsCounter());
+		user.setCreditoDisponivel(user.creditAvailable());
 
-	user.getEstablishment().getEmployee().stream()
-		.filter(employee -> employee.getNome().equals(command.getNameEmployee()))
-		.findFirst()
-		.ifPresent(employee -> {
-		    employee.setQuantidadeDeSmsEnviado(employee.smsCounter());
-		    employeeRepository.save(employee);
-		});
+		user.getEstablishment().getEmployee().stream()
+			.filter(employee -> employee.getNome().equals(command.getNameEmployee()))
+			.findFirst()
+			.ifPresent(employee -> {
+			    employee.setQuantidadeDeSmsEnviado(employee.smsCounter());
+			    employeeRepository.save(employee);
+			});
 
-	user.getEstablishment().getCustomer().stream()
-		.filter(customer -> customer.getCellPhone().equals(command.getNumberPhone()))
-		.findFirst()
-		.ifPresent(customer -> {
-		    customer.setQuantityOfSmsSent(customer.counterSms());
-		    customerRepository.save(customer);
-		});
+		user.getEstablishment().getCustomer().stream()
+			.filter(customer -> customer.getCellPhone().equals(command.getNumberPhone()))
+			.findFirst()
+			.ifPresent(customer -> {
+			    customer.setQuantityOfSmsSent(customer.counterSms());
+			    customerRepository.save(customer);
+			});
 
-	userRepository.save(user);
+		userRepository.save(user);
 
-	smsRepository.save(new SMS(new SmsId(UUID.randomUUID()), command.getNameEmployee(), command.getBody(),
-		command.getNumberPhone(), LocalDateTime.now(), command.getAwsMessageId(), command.getStatus(),
-		command.getMessageError(), user.getEstablishment()));
-
+		smsRepository.save(new SMS(new SmsId(UUID.randomUUID()), command.getNameEmployee(), command.getBody(),
+			command.getNumberPhone(), LocalDateTime.now(), command.getAwsMessageId(), command.getStatus(),
+			command.getMessageError(), user.getEstablishment()));
+	}
+	
     }
 
 }

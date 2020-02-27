@@ -32,9 +32,8 @@ public class JwtProvider {
 	UserDTO userDTO = (UserDTO) authentication.getPrincipal();
 
 	return Jwts.builder().setSubject((userDTO.getEmail())).setIssuedAt(new Date())
-		.claim("uuid", userDTO.getUserId())
 		.claim("username", userDTO.getUsername())
-		.claim("cpf", userDTO.getCpf())
+		.claim("user", userDTO.getUserId())
 		.claim("email", userDTO.getEmail())
 		.claim("establishment", userDTO.getEstablishment())
 		.claim("credit", userDTO.getCredit())

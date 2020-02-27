@@ -18,7 +18,7 @@ public interface CustomerRepository {
 
     Set<Customer> saveAll(Set<Customer> customers);
 
-    Page<CustomerDTO> findAllCustomerByUserCpf(Specification<Customer> customer, Pageable pageable);
+    Page<CustomerDTO> findAllCustomerByUserId(Specification<Customer> customer, Pageable pageable);
 
     void deleteCustomer(Customer customer);
 

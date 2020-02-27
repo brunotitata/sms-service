@@ -53,8 +53,7 @@ public class SmsServiceApplication {
     public CommandLineRunner run() throws Exception {
 	return args -> {
 
-	    Optional<User> userAdmin = userRepository
-		    .findClientById(UUID.fromString("ad416334-e578-4181-8c2f-75e1859a4f1e"));
+	    Optional<User> userAdmin = userRepository.findUserByUserId("ad416334-e578-4181-8c2f-75e1859a4f1e");
 
 	    if (!userAdmin.isPresent()) {
 
@@ -71,7 +70,7 @@ public class SmsServiceApplication {
 			"Bruno Costa", "16991034148", "38441868832", "brunotitata@gmail.com", password.encode("123456"),
 			estabelecimento));
 
-		User user = userRepository.findClientById(UUID.fromString("ad416334-e578-4181-8c2f-75e1859a4f1e"))
+		User user = userRepository.findUserByUserId("ad416334-e578-4181-8c2f-75e1859a4f1e")
 			.orElseThrow(() -> new ArgumentInvalidException(
 				"Cliente não encontrado com ID: " + "ad416334-e578-4181-8c2f-75e1859a4f1e"));
 

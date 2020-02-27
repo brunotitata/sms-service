@@ -27,7 +27,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO employeeDto(EmployeeDTO employeeDTO) {
 
-	User user = userRepository.findByCpf(employeeDTO.getUserCpf());
+	User user = userRepository.findUserByUserId(employeeDTO.getUserId())
+		.orElseThrow(() -> new RuntimeException("Usuario não encontrado com ID: " + employeeDTO.getUserId()));
 
 	user.getEstablishment().getEmployee().stream()
 		.filter(employee -> employee.getEmail().equals(employeeDTO.getEmail())).findFirst()
@@ -40,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	Employee employee = employeeRepository.save(new Employee(new EmployeeId(UUID.randomUUID()),
 		employeeDTO.getNome(), employeeDTO.getEmail(), null, employeeDTO.getActive(), user.getEstablishment()));
 
-	return new EmployeeDTO(employee.getNome(), employee.getEmail(), employee.getActive(), employeeDTO.getUserCpf());
+	return new EmployeeDTO(employee.getNome(), employee.getEmail(), employee.getActive(), employeeDTO.getUserId());
     }
 
 }

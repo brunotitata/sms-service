@@ -57,7 +57,7 @@ public class CustomerSpecificationTest {
 	userRepository.save(new User(new UserId(UUID.fromString("46c2c662-d900-4f4f-9520-036c0a7ce1e9")), "Arley",
 		"16991034148", "384.418.688-32", "brunotitata@gmail.com", "123456", estabelecimento));
 
-	User user = userRepository.findClientById(UUID.fromString("46c2c662-d900-4f4f-9520-036c0a7ce1e9"))
+	User user = userRepository.findUserByUserId("46c2c662-d900-4f4f-9520-036c0a7ce1e9")
 		.orElseThrow(() -> new ArgumentInvalidException(
 			"Cliente não encontrado com ID: " + "ad416334-e578-4181-8c2f-75e1859a4f1e"));
 	Establishment establishment = user.getEstablishment();
@@ -82,13 +82,14 @@ public class CustomerSpecificationTest {
 
     @AfterEach
     public void tearDown() {
-	userRepository.delete(UUID.fromString("46c2c662-d900-4f4f-9520-036c0a7ce1e9"));
+	userRepository.delete("46c2c662-d900-4f4f-9520-036c0a7ce1e9");
     }
 
     @Test
-    public void findAllCustomerByCpf() {
+    public void findAllCustomerByUserId() {
 
-	List<Customer> customers = customerRepository.find(CustomerSpecification.findCustomerByCpf("384.418.688-32"));
+	List<Customer> customers = customerRepository
+		.find(CustomerSpecification.findCustomerByUserId("46c2c662-d900-4f4f-9520-036c0a7ce1e9"));
 
 	assertEquals(2, customers.size());
 	assertEquals(UUID.fromString("cd754feb-aa23-489e-bfc2-20d1c4d82978"), customers.get(0).getCustomerId().getId());
@@ -98,8 +99,8 @@ public class CustomerSpecificationTest {
     @Test
     public void findCustomerByCellphone() {
 
-	List<Customer> customer = customerRepository
-		.find(CustomerSpecification.findCustomerByCellphone("384.418.688-32", "2222222222"));
+	List<Customer> customer = customerRepository.find(
+		CustomerSpecification.findCustomerByCellphone("46c2c662-d900-4f4f-9520-036c0a7ce1e9", "2222222222"));
 
 	assertEquals(UUID.fromString("cd754feb-aa23-489e-bfc2-20d1c4d82978"), customer.get(0).getCustomerId().getId());
 	assertEquals("Borracheiro do João", customer.get(0).getName());
@@ -108,10 +109,10 @@ public class CustomerSpecificationTest {
     }
 
     @Test
-    public void findCustomerWithCpfInvalid() {
+    public void findCustomerWithUserIdInvalid() {
 
-	List<Customer> customers = customerRepository
-		.find(CustomerSpecification.findCustomerByCellphone("384.418.688-300", "2222222222"));
+	List<Customer> customers = customerRepository.find(
+		CustomerSpecification.findCustomerByCellphone("46c2c662-d900-4f4f-9520-036c0a72229", "2222222222"));
 
 	assertEquals(0, customers.size());
     }
@@ -119,10 +120,30 @@ public class CustomerSpecificationTest {
     @Test
     public void findCustomerWithCellphoneInvalid() {
 
-	List<Customer> customers = customerRepository
-		.find(CustomerSpecification.findCustomerByCellphone("384.418.688-32", "22222211122"));
+	List<Customer> customers = customerRepository.find(
+		CustomerSpecification.findCustomerByCellphone("46c2c662-d900-4f4f-9520-036c0a7ce1e9", "22222211122"));
 
 	assertEquals(0, customers.size());
     }
+    
+    @Test
+    public void findCustomer() {
+	
+	List<Customer> establishment = customerRepository.find(CustomerSpecification.findCustomer("0e488aac-1a68-412a-baad-e1319a49fd01"));
+    
+	assertEquals("1d776c06-dfec-49cf-acf8-a48012ceaf15", establishment.get(1).getCustomerId().getId().toString());
+	assertEquals("Farmacia do Seizi", establishment.get(1).getName());
+	assertEquals("12121212121", establishment.get(1).getCellPhone());
+	assertEquals("seizi@farmacia.com", establishment.get(1).getEmail());
+	
+	assertEquals("cd754feb-aa23-489e-bfc2-20d1c4d82978",  establishment.get(0).getCustomerId().getId().toString());
+	assertEquals("Borracheiro do João", establishment.get(0).getName());
+	assertEquals("2222222222", establishment.get(0).getCellPhone());
+	assertEquals("borracheiro@loja.com", establishment.get(0).getEmail());
+	
+	assertEquals(2, establishment.size());
+    
+    }
+    
 
 }
