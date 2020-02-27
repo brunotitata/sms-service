@@ -6,17 +6,17 @@ public class SmsCommand {
     private String body;
     private String status;
     private String awsMessageId;
-    private String userCpf;
+    private String userId;
     private String nameEmployee;
     private String messageError;
 
-    public SmsCommand(String numberPhone, String body, String status, String awsMessageId, String userCpf,
+    public SmsCommand(String numberPhone, String body, String status, String awsMessageId, String userId,
 	    String nameEmployee, String messageError) {
 	setNumberPhone(numberPhone);
 	setBody(body);
 	setStatus(status);
 	setAwsMessageId(awsMessageId);
-	setUserCpf(userCpf);
+	setUserId(userId);
 	setNameEmployee(nameEmployee);
 	setMessageError(messageError);
     }
@@ -56,12 +56,12 @@ public class SmsCommand {
 	this.awsMessageId = awsMessageId;
     }
 
-    public String getUserCpf() {
-	return userCpf;
+    public String getUserId() {
+	return userId;
     }
 
-    public void setUserCpf(String userCpf) {
-	this.userCpf = userCpf;
+    public void setUserId(String userId) {
+	this.userId = userId;
     }
 
     public String getNameEmployee() {
@@ -83,7 +83,7 @@ public class SmsCommand {
     @Override
     public String toString() {
 	return "SmsCommand [numberPhone=" + numberPhone + ", body=" + body + ", status=" + status + ", awsMessageId="
-		+ awsMessageId + ", userCpf=" + userCpf + ", nameEmployee=" + nameEmployee + ", messageError="
+		+ awsMessageId + ", userId=" + userId + ", nameEmployee=" + nameEmployee + ", messageError="
 		+ messageError + "]";
     }
 

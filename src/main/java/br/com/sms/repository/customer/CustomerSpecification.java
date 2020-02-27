@@ -25,7 +25,8 @@ public class CustomerSpecification {
 
 		Join<Customer, Establishment> joinEstablishment = root.join("establishment", JoinType.INNER);
 
-		return criteriaBuilder.equal(joinEstablishment.get("id"), UUID.fromString(establishmentId));
+		return criteriaBuilder.equal(joinEstablishment.get("establishmentId").get("id"),
+			UUID.fromString(establishmentId));
 
 	    }
 
@@ -33,7 +34,7 @@ public class CustomerSpecification {
 
     }
 
-    public static Specification<Customer> findCustomerByCpf(String cpf) {
+    public static Specification<Customer> findCustomerByUserId(String userId) {
 	return new Specification<Customer>() {
 	    private static final long serialVersionUID = 1L;
 
@@ -42,7 +43,8 @@ public class CustomerSpecification {
 
 		Join<Customer, Establishment> joinEstablishment = root.join("establishment", JoinType.INNER);
 
-		return criteriaBuilder.equal(joinEstablishment.get("user").get("cpf"), cpf);
+		return criteriaBuilder.equal(joinEstablishment.get("user").get("userId").get("id"),
+			UUID.fromString(userId));
 
 	    }
 
@@ -50,7 +52,7 @@ public class CustomerSpecification {
 
     }
 
-    public static Specification<Customer> findCustomerByCellphone(String cpf, String cellphone) {
+    public static Specification<Customer> findCustomerByCellphone(String userId, String cellphone) {
 	return new Specification<Customer>() {
 	    private static final long serialVersionUID = 1L;
 
@@ -60,7 +62,8 @@ public class CustomerSpecification {
 		Join<Customer, Establishment> joinEstablishment = root.join("establishment", JoinType.INNER);
 
 		Predicate equal = criteriaBuilder.equal(root.get("cellPhone"), cellphone);
-		Predicate equal2 = criteriaBuilder.equal(joinEstablishment.get("user").get("cpf"), cpf);
+		Predicate equal2 = criteriaBuilder.equal(joinEstablishment.get("user").get("userId").get("id"),
+			UUID.fromString(userId));
 
 		return criteriaBuilder.and(equal, equal2);
 

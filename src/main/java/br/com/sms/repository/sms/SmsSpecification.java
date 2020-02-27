@@ -3,6 +3,7 @@ package br.com.sms.repository.sms;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -72,7 +73,8 @@ public class SmsSpecification {
 		    return criteriaBuilder.conjunction();
 		}
 
-		predicates.add(criteriaBuilder.equal(joinEstablishment.get("user").get("cpf"), smsFilter.getCpf()));
+		predicates.add(criteriaBuilder.equal(joinEstablishment.get("user").get("userId").get("id"),
+			UUID.fromString(smsFilter.getUserId())));
 
 		return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 	    }

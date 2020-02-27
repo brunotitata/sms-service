@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.sms.dto.CustomerDTO;
+import br.com.sms.dto.EditCustomerDTO;
 import br.com.sms.dto.NewCustomerDTO;
 import br.com.sms.model.Customer;
 import br.com.sms.service.CustomerService;
@@ -39,24 +40,25 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-    public ResponseEntity<Page<CustomerDTO>> findAllCustomer(@RequestParam("cpf") String cpf, Pageable pageable) {
-	return ResponseEntity.ok(customerService.findAllCustomerByUserCpf(cpf, pageable));
+    public ResponseEntity<Page<CustomerDTO>> findAllCustomer(@RequestParam("user") String user, Pageable pageable) {
+	return ResponseEntity.ok(customerService.findAllCustomerByUserId(user, pageable));
     }
 
     @DeleteMapping("/customer")
-    public ResponseEntity<Void> removeCustomer(@RequestParam(name = "cpf", required = true) String userCpf,
+    public ResponseEntity<Void> removeCustomer(@RequestParam(name = "user", required = true) String userId,
 	    @RequestParam(name = "cellphone", required = true) String cellphone) {
 
-	customerService.removeCustomer(userCpf, cellphone);
+	customerService.removeCustomer(userId, cellphone);
 
 	return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/customer")
-    public ResponseEntity<Void> editCustomer(@RequestParam(name = "cpf", required = true) String userCpf,
-	    @RequestParam(name = "cellphone", required = true) String cellphone, @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<Void> editCustomer(@RequestParam(name = "user", required = true) String userId,
+	    @RequestParam(name = "cellphone", required = true) String cellphone,
+	    @RequestBody EditCustomerDTO customerDTO) {
 
-	customerService.editCustomer(userCpf, cellphone, customerDTO);
+	customerService.editCustomer(userId, cellphone, customerDTO);
 
 	return ResponseEntity.noContent().build();
     }

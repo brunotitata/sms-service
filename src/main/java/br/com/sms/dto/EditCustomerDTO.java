@@ -1,20 +1,18 @@
 package br.com.sms.dto;
 
-public class NewCustomerDTO {
+public class EditCustomerDTO {
 
     private String name;
     private String cellPhone;
     private String email;
-    private String userId;
 
-    public NewCustomerDTO(String name, String cellPhone, String email, String userId) {
+    public EditCustomerDTO(String name, String cellPhone, String email) {
 	this.name = name;
 	this.cellPhone = cellPhone;
 	this.email = email;
-	this.userId = userId;
     }
 
-    public NewCustomerDTO() {
+    public EditCustomerDTO() {
     }
 
     public String getName() {
@@ -41,18 +39,9 @@ public class NewCustomerDTO {
 	this.email = email;
     }
 
-    public String getUserId() {
-	return userId;
-    }
-
-    public void setUserId(String userId) {
-	this.userId = userId;
-    }
-
     @Override
     public String toString() {
-	return "NewCustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + ", userId=" + userId
-		+ "]";
+	return "EditCustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + "]";
     }
 
 }

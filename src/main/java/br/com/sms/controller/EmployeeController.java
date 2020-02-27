@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sms.dto.EmployeeDTO;
+import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.model.Employee;
+import br.com.sms.model.User;
 import br.com.sms.repository.user.UserRepository;
 import br.com.sms.service.EmployeeService;
 
@@ -29,9 +31,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/employee")
-    public ResponseEntity<List<String>> allEmployee(@RequestParam(name = "cpf", required = true) String userCpf) {
-	return ResponseEntity.ok(userRepository.findByCpf(userCpf).getEstablishment().getEmployee().stream()
-		.map(employee -> employee.getNome()).collect(Collectors.toList()));
+    public ResponseEntity<List<String>> allEmployee(@RequestParam(name = "user", required = true) String userId) {
+
+	User user = userRepository.findUserByUserId(userId)
+		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + userId));
+
+	return ResponseEntity.ok(user.getEstablishment().getEmployee().stream().map(employee -> employee.getNome())
+		.collect(Collectors.toList()));
     }
 
     @PostMapping("/employee")

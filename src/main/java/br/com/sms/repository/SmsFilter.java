@@ -4,18 +4,18 @@ public class SmsFilter {
 
     private String startDate;
     private String endDate;
-    private String cpf;
+    private String userId;
     private String cellphone;
     private String message;
     private String nameCustomer;
     private String nameEmployee;
     private String status;
 
-    public SmsFilter(String startDate, String endDate, String cpf, String cellphone, String message,
+    public SmsFilter(String startDate, String endDate, String userId, String cellphone, String message,
 	    String nameCustomer, String nameEmployee, String status) {
 	this.startDate = startDate;
 	this.endDate = endDate;
-	this.cpf = cpf;
+	this.userId = userId;
 	this.cellphone = cellphone;
 	this.message = message;
 	this.nameCustomer = nameCustomer;
@@ -23,10 +23,10 @@ public class SmsFilter {
 	this.status = status;
     }
 
-    public SmsFilter(String startDate, String endDate, String cpf) {
+    public SmsFilter(String startDate, String endDate, String userId) {
 	this.startDate = startDate;
 	this.endDate = endDate;
-	this.cpf = cpf;
+	this.userId = userId;
     }
 
     public String getStartDate() {
@@ -45,12 +45,12 @@ public class SmsFilter {
 	this.endDate = endDate;
     }
 
-    public String getCpf() {
-	return cpf;
+    public String getUserId() {
+	return userId;
     }
 
-    public void setCpf(String cpf) {
-	this.cpf = cpf;
+    public void setUserId(String userId) {
+	this.userId = userId;
     }
 
     public String getCellphone() {
@@ -95,7 +95,7 @@ public class SmsFilter {
 
     @Override
     public String toString() {
-	return "SmsFilter [startDate=" + startDate + ", endDate=" + endDate + ", cpf=" + cpf + ", cellphone="
+	return "SmsFilter [startDate=" + startDate + ", endDate=" + endDate + ", userId=" + userId + ", cellphone="
 		+ cellphone + ", message=" + message + ", nameCustomer=" + nameCustomer + ", nameEmployee="
 		+ nameEmployee + ", status=" + status + "]";
     }

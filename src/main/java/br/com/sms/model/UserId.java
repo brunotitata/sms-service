@@ -15,9 +15,9 @@ import br.com.sms.login.util.Utils;
 public class UserId implements Serializable {
     private static final long serialVersionUID = 625614282738652897L;
 
-    public static final String ERROR_USER_ID = "Client ID não pode ser nulo ou vazio.";
+    public static final String ERROR_USER_ID = "UserID não pode ser nulo ou vazio.";
 
-    @Column(name = "CLIENT_ID", columnDefinition = "uuid")
+    @Column(name = "USER_ID", columnDefinition = "uuid")
     private UUID id;
 
     public UserId(UUID id) {

@@ -21,10 +21,10 @@ public class UserController {
 	this.userService = userService;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/statistic")
     public ResponseEntity<UserStatistics> getStatisticsByUserId(
-	    @RequestParam(name = "cpf", required = true) String userCpf) {
-	return ResponseEntity.ok(userService.getUserStatistics(userCpf));
+	    @RequestParam(name = "user", required = true) String userId) {
+	return ResponseEntity.ok(userService.getUserStatistics(userId));
     }
 
     @GetMapping("/user/cron")

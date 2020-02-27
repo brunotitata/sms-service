@@ -11,34 +11,34 @@ public class EstablishmentId implements Serializable {
     private static final long serialVersionUID = 2365534913716156506L;
 
     @Column(name = "ESTABLISHMENT_ID", columnDefinition = "uuid")
-    private UUID establishmentId;
+    private UUID id;
 
     public EstablishmentId(UUID establishmentId) {
-	this.establishmentId = establishmentId;
+	this.id = establishmentId;
     }
 
     @SuppressWarnings("unused")
     private EstablishmentId() {
     }
 
-    public UUID getEstablishmentId() {
-	return establishmentId;
+    public UUID getId() {
+	return id;
     }
 
-    public void setEstablishmentId(UUID establishmentId) {
-	this.establishmentId = establishmentId;
+    public void setId(UUID id) {
+	this.id = id;
     }
 
     @Override
     public String toString() {
-	return "EstablishmentId [establishmentId=" + establishmentId + "]";
+	return "EstablishmentId [id=" + id + "]";
     }
 
     @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((establishmentId == null) ? 0 : establishmentId.hashCode());
+	result = prime * result + ((id == null) ? 0 : id.hashCode());
 	return result;
     }
 
@@ -51,10 +51,10 @@ public class EstablishmentId implements Serializable {
 	if (getClass() != obj.getClass())
 	    return false;
 	EstablishmentId other = (EstablishmentId) obj;
-	if (establishmentId == null) {
-	    if (other.establishmentId != null)
+	if (id == null) {
+	    if (other.id != null)
 		return false;
-	} else if (!establishmentId.equals(other.establishmentId))
+	} else if (!id.equals(other.id))
 	    return false;
 	return true;
     }

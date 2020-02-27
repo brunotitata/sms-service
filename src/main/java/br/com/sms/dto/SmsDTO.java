@@ -4,13 +4,13 @@ public class SmsDTO {
     private String nameEmployee;
     private String number;
     private String messageBody;
-    private String cpfUser;
+    private String userId;
 
-    public SmsDTO(String nameEmployee, String number, String messageBody, String cpfUser) {
+    public SmsDTO(String nameEmployee, String number, String messageBody, String userId) {
 	this.nameEmployee = nameEmployee;
 	this.number = number;
 	this.messageBody = messageBody;
-	this.cpfUser = cpfUser;
+	this.userId = userId;
     }
 
     public SmsDTO() {
@@ -40,18 +40,18 @@ public class SmsDTO {
 	this.messageBody = messageBody;
     }
 
-    public String getCpfUser() {
-	return cpfUser;
+    public String getUserId() {
+	return userId;
     }
 
-    public void setCpfUser(String cpfUser) {
-	this.cpfUser = cpfUser;
+    public void setUserId(String userId) {
+	this.userId = userId;
     }
 
     @Override
     public String toString() {
 	return "SmsDTO [nameEmployee=" + nameEmployee + ", number=" + number + ", messageBody=" + messageBody
-		+ ", cpfUser=" + cpfUser + "]";
+		+ ", userId=" + userId + "]";
     }
 
 }

@@ -31,23 +31,13 @@ public class UserRepositoryJpa implements UserRepository {
     }
 
     @Override
-    public Optional<User> findClientById(UUID uuid) {
-	return userRepositorySpringData.findByUserId(new UserId(uuid));
+    public Optional<User> findUserByUserId(String uuid) {
+	return userRepositorySpringData.findByUserId(new UserId(UUID.fromString(uuid)));
     }
 
     @Override
-    public Boolean client(UUID uuid) {
-	return userRepositorySpringData.findByUserId(new UserId(uuid)).isPresent();
-    }
-
-    @Override
-    public void delete(UUID uuid) {
-
-	User client = findClientById(uuid)
-		.orElseThrow(() -> new ArgumentInvalidException("Cliente não encontrado com ID: " + uuid));
-
-	userRepositorySpringData.delete(client);
-
+    public Boolean client(String userId) {
+	return userRepositorySpringData.findByUserId(new UserId(UUID.fromString(userId))).isPresent();
     }
 
     @Override
@@ -64,6 +54,16 @@ public class UserRepositoryJpa implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
 	return userRepositorySpringData.findByEmail(email);
+    }
+
+    @Override
+    public void delete(String userId) {
+
+	User user = findUserByUserId(userId)
+		.orElseThrow(() -> new ArgumentInvalidException("Cliente não encontrado com ID: " + userId));
+
+	userRepositorySpringData.delete(user);
+
     }
 
 }

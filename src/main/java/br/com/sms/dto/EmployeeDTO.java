@@ -11,13 +11,13 @@ public class EmployeeDTO {
     private String email;
     @Enumerated(EnumType.STRING)
     private Active active;
-    private String userCpf;
+    private String userId;
 
-    public EmployeeDTO(String nome, String email, Active active, String userCpf) {
+    public EmployeeDTO(String nome, String email, Active active, String userId) {
 	this.nome = nome;
 	this.email = email;
 	this.active = active;
-	this.userCpf = userCpf;
+	this.userId = userId;
     }
 
     public EmployeeDTO() {
@@ -47,17 +47,17 @@ public class EmployeeDTO {
 	this.active = active;
     }
 
-    public String getUserCpf() {
-	return userCpf;
+    public String getUserId() {
+	return userId;
     }
 
-    public void setUserCpf(String userCpf) {
-	this.userCpf = userCpf;
+    public void setUserId(String userId) {
+	this.userId = userId;
     }
 
     @Override
     public String toString() {
-	return "EmployeeDTO [nome=" + nome + ", email=" + email + ", active=" + active + ", userCpf=" + userCpf + "]";
+	return "EmployeeDTO [nome=" + nome + ", email=" + email + ", active=" + active + ", userId=" + userId + "]";
     }
 
 }

@@ -1,7 +1,6 @@
 package br.com.sms.repository.user;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import br.com.sms.model.User;
 
@@ -11,11 +10,11 @@ public interface UserRepository {
 
     void deleteAll();
 
-    void delete(UUID uuid);
+    void delete(String userId);
 
-    Optional<User> findClientById(UUID uuid);
+    Optional<User> findUserByUserId(String userId);
 
-    Boolean client(UUID uuid);
+    Boolean client(String userId);
 
     User findByCpf(String cpf);
 

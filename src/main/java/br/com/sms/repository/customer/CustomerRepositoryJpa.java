@@ -43,7 +43,7 @@ public class CustomerRepositoryJpa implements CustomerRepository {
     }
 
     @Override
-    public Page<CustomerDTO> findAllCustomerByUserCpf(Specification<Customer> customer, Pageable pageable) {
+    public Page<CustomerDTO> findAllCustomerByUserId(Specification<Customer> customer, Pageable pageable) {
 	return customerRepositorySpringData.findAll(customer, pageable).map(Customer::convertToDto);
     }
 
