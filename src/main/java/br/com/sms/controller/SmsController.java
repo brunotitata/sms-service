@@ -34,6 +34,14 @@ public class SmsController {
 	return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/sms/send-all")
+    public ResponseEntity<Void> sendAllClients(@RequestBody SmsDTO smsDTO) {
+
+	smsService.sendAll(smsDTO);
+
+	return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/sms/report")
     public ResponseEntity<List<SmsSpecificationDTO>> generateReport(
 	    @RequestParam(name = "startDate", required = true) String startDate,

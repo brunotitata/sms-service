@@ -36,6 +36,7 @@ public class JwtProvider {
 		.claim("user", userDTO.getUserId())
 		.claim("email", userDTO.getEmail())
 		.claim("establishment", userDTO.getEstablishment())
+		.claim("messagePrefix", userDTO.getMessagePrefix())
 		.claim("credit", userDTO.getCredit())
 		.claim("smsCounter", userDTO.getSmsCounter())
 		.setExpiration(new Date((new Date()).getTime() + jwtExpiration))

@@ -50,4 +50,11 @@ public class UserServiceImpl implements UserService {
 		Integer.valueOf(String.valueOf(thirtyDays)));
     }
 
+    @Override
+    public String messagePrefix(String userId) {
+	return userRepository.findUserByUserId(userId)
+		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + userId))
+		.getMensagemPrefixo();
+    }
+
 }

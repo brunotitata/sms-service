@@ -6,4 +6,6 @@ public interface UserService {
 
     UserStatistics getUserStatistics(String cpf);
 
+    String messagePrefix(String userId);
+
 }

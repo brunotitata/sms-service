@@ -27,6 +27,11 @@ public class UserController {
 	return ResponseEntity.ok(userService.getUserStatistics(userId));
     }
 
+    @GetMapping("/user/message-prefix")
+    public ResponseEntity<String> messagePrefix(@RequestParam(name = "user", required = true) String userId) {
+	return ResponseEntity.ok(userService.messagePrefix(userId));
+    }
+
     @GetMapping("/user/cron")
     public ResponseEntity<String> cronJob() {
 	return ResponseEntity.ok("Checked - " + LocalDateTime.now());

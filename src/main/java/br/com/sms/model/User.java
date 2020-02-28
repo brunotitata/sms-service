@@ -1,6 +1,7 @@
 package br.com.sms.model;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -188,7 +189,7 @@ public class User implements Serializable {
     }
 
     public String getMensagemPrefixo() {
-	return mensagemPrefixo;
+	return Optional.ofNullable(mensagemPrefixo).orElse("");
     }
 
     public void setMensagemPrefixo(String mensagemPrefixo) {
@@ -198,9 +199,9 @@ public class User implements Serializable {
     @Override
     public String toString() {
 	return "User [id=" + id + ", userId=" + userId + ", nome=" + nome + ", celular=" + celular + ", cpf=" + cpf
-		+ ", email=" + email + ", password=" + password + ", establishment=" + establishment + ", active="
-		+ active + ", creditoDisponivel=" + creditoDisponivel + ", quantidadeTotalDeSmsEnviado="
-		+ quantidadeTotalDeSmsEnviado + ", role=" + role + ", mensagemPrefixo=" + mensagemPrefixo + "]";
+		+ ", email=" + email + ", password=" + password + ", active=" + active + ", creditoDisponivel="
+		+ creditoDisponivel + ", quantidadeTotalDeSmsEnviado=" + quantidadeTotalDeSmsEnviado + ", role=" + role
+		+ ", mensagemPrefixo=" + mensagemPrefixo + "]";
     }
 
 }

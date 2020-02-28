@@ -23,9 +23,10 @@ public class UserDTO implements UserDetails {
     private String password;
     private String cpf;
     private Collection<? extends GrantedAuthority> authorities;
+    private String messagePrefix;
 
     public UserDTO(UUID userId, String name, String email, String establishment, Integer credit, Integer smsCounter,
-	    String password, String cpf, Collection<? extends GrantedAuthority> authorities) {
+	    String password, String cpf, Collection<? extends GrantedAuthority> authorities, String messagePrefix) {
 	this.userId = userId;
 	this.name = name;
 	this.email = email;
@@ -35,6 +36,7 @@ public class UserDTO implements UserDetails {
 	this.password = password;
 	this.cpf = cpf;
 	this.authorities = authorities;
+	this.messagePrefix = messagePrefix;
     }
 
     public static UserDTO build(User user) {
@@ -42,7 +44,7 @@ public class UserDTO implements UserDetails {
 
 	return new UserDTO(user.getUserId().getId(), user.getNome(), user.getEmail(), user.getEstablishment().getNome(),
 		user.getCreditoDisponivel(), user.getQuantidadeTotalDeSmsEnviado(), user.getPassword(), user.getCpf(),
-		authorities);
+		authorities, user.getMensagemPrefixo());
     }
 
     @Override
@@ -101,6 +103,10 @@ public class UserDTO implements UserDetails {
 
     public String getCpf() {
 	return cpf;
+    }
+
+    public String getMessagePrefix() {
+	return messagePrefix;
     }
 
     @Override

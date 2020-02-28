@@ -58,7 +58,7 @@ public class SmsServiceImpl implements SmsService {
 			    .ifPresent(employee -> {
 
 				try {
-				    PublishResult publishResult = awsService.sendSms(smsDTO);
+				    PublishResult publishResult = awsService.sendSms(smsDTO.getNumber(), smsDTO.getMessageBody());
 
 				    applicationEventPublisher
 					    .publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getMessageBody(),
@@ -81,6 +81,35 @@ public class SmsServiceImpl implements SmsService {
     public List<SmsSpecificationDTO> smsReport(SmsFilter smsFilter) {
 	return smsRepository.findAll(SmsSpecification.filter(smsFilter)).stream().map(SMS::convertToDTO)
 		.collect(Collectors.toList());
+    }
+
+    @Override
+    public void sendAll(SmsDTO smsDTO) {
+	
+	User user = userRepository.findUserByUserId(smsDTO.getUserId())
+		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID : " + smsDTO.getUserId()));
+	
+	user.getEstablishment().getCustomer().stream()
+		.map(customer -> customer.getCellPhone()).forEach(number -> {
+		    
+			try {
+			    PublishResult publishResult = awsService.sendSms(number, smsDTO.getMessageBody());
+
+			    applicationEventPublisher
+				    .publishEvent(new SmsCommand(number, smsDTO.getMessageBody(),
+					    Utils.convertHttpStatus(
+						    publishResult.getSdkHttpMetadata().getHttpStatusCode()),
+					    publishResult.getMessageId(), smsDTO.getUserId(),
+					    smsDTO.getNameEmployee(), null));
+			} catch (AmazonServiceException e) {
+
+			    applicationEventPublisher.publishEvent(new SmsCommand(number,
+				    smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()), null,
+				    smsDTO.getUserId(), smsDTO.getNameEmployee(), e.getMessage()));
+			}
+		    
+		});
+	
     }
 
 }

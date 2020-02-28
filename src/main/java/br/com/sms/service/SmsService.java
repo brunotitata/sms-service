@@ -11,5 +11,7 @@ public interface SmsService {
     void send(SmsDTO smsDTO);
 
     List<SmsSpecificationDTO> smsReport(SmsFilter smsFilter);
+    
+    void sendAll(SmsDTO smsDTO);
 
 }

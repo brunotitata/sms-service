@@ -10,7 +10,6 @@ import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
 
-import br.com.sms.dto.SmsDTO;
 import br.com.sms.service.AwsService;
 
 @Component
@@ -23,15 +22,14 @@ public class AwsServiceImpl implements AwsService {
     }
 
     @Override
-    public PublishResult sendSms(SmsDTO smsDTO) {
+    public PublishResult sendSms(String number, String messageBody) {
 
 	Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
 	smsAttributes.put("AWS.SNS.SMS.SMSType",
 		new MessageAttributeValue().withStringValue("Promotional").withDataType("String"));
 
 	PublishRequest request = new PublishRequest();
-	request.withMessage(smsDTO.getMessageBody()).withPhoneNumber("+55".concat(smsDTO.getNumber()))
-		.withMessageAttributes(smsAttributes);
+	request.withMessage(messageBody).withPhoneNumber("+55".concat(number)).withMessageAttributes(smsAttributes);
 
 	return amazonSNS.publish(request);
     }
