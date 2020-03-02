@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
 
+import br.com.sms.dto.UserDTO;
+import br.com.sms.dto.UserDTO.EstablishmentDTO;
 import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.model.User;
 import br.com.sms.model.UserStatistics;
@@ -55,6 +57,31 @@ public class UserServiceImpl implements UserService {
 	return userRepository.findUserByUserId(userId)
 		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + userId))
 		.getMensagemPrefixo();
+    }
+
+    @Override
+    public UserDTO user(String userId) {
+
+	User user = userRepository.findUserByUserId(userId)
+		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + userId));
+
+	return new UserDTO(user.getNome(), user.getCelular(), user.getCpf(), user.getEmail(),
+		new EstablishmentDTO(user.getEstablishment().getNome(), user.getEstablishment().getEndereco(),
+			user.getEstablishment().getCnpj()),
+		user.getMensagemPrefixo());
+    }
+
+    @Override
+    public void userEdit(String userId, UserDTO userDTO) {
+
+	User user = userRepository.findUserByUserId(userId)
+		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + userId));
+
+	user.setNome(userDTO.getNome());
+	user.setCelular(userDTO.getCelular());
+	user.setMensagemPrefixo(userDTO.getMensagemPrefixo());
+
+	userRepository.save(user);
     }
 
 }

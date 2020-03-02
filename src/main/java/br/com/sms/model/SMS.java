@@ -105,13 +105,13 @@ public class SMS implements Serializable {
 	this.localDateTime = localDateTime;
     }
 
-    public Establishment getEstablishment() {
-	return establishment;
-    }
-
-    public void setEstablishment(Establishment establishment) {
-	this.establishment = establishment;
-    }
+//    public Establishment getEstablishment() {
+//	return establishment;
+//    }
+//
+//    public void setEstablishment(Establishment establishment) {
+//	this.establishment = establishment;
+//    }
 
     public String getAwsMessageId() {
 	return awsMessageId;

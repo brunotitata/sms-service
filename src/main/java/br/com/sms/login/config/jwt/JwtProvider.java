@@ -37,8 +37,7 @@ public class JwtProvider {
 		.claim("email", userDTO.getEmail())
 		.claim("establishment", userDTO.getEstablishment())
 		.claim("messagePrefix", userDTO.getMessagePrefix())
-		.claim("credit", userDTO.getCredit())
-		.claim("smsCounter", userDTO.getSmsCounter())
+		.claim("role", userDTO.getAuthorities().stream().map(p -> p.getAuthority()).findFirst().orElseThrow(() -> new RuntimeException("Error ao capturar o papel do Usuario.")))
 		.setExpiration(new Date((new Date()).getTime() + jwtExpiration))
 		.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }

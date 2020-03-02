@@ -11,6 +11,7 @@ import com.amazonaws.services.sns.model.PublishResult;
 
 import br.com.sms.dto.SmsDTO;
 import br.com.sms.dto.SmsSpecificationDTO;
+import br.com.sms.login.exception.BusinessLogicException;
 import br.com.sms.login.exception.InsufficientCreditsException;
 import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.login.util.Utils;
@@ -88,6 +89,10 @@ public class SmsServiceImpl implements SmsService {
 	
 	User user = userRepository.findUserByUserId(smsDTO.getUserId())
 		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID : " + smsDTO.getUserId()));
+	
+	if (smsDTO.getMessageBody().length() <= 20) {
+	    throw new BusinessLogicException("O corpo da mensagem não pode ter menos que 20 caracteres!");
+	}
 	
 	user.getEstablishment().getCustomer().stream()
 		.map(customer -> customer.getCellPhone()).forEach(number -> {
