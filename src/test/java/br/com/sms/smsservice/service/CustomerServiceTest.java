@@ -2,7 +2,7 @@ package br.com.sms.smsservice.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +21,7 @@ import br.com.sms.repository.user.UserRepository;
 import br.com.sms.service.CustomerService;
 import br.com.sms.smsservice.AbstractTests;
 
-@SpringBootTest
+//@SpringBootTest
 public class CustomerServiceTest extends AbstractTests {
 
     @Autowired
