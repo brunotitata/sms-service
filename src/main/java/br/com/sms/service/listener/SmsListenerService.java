@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.model.SMS;
@@ -36,7 +35,6 @@ public class SmsListenerService {
 
     @Async
     @EventListener
-    @TransactionalEventListener
     public void processSMS(SmsCommand command) {
 
 	User user = userRepository.findUserByUserId(command.getUserId())
