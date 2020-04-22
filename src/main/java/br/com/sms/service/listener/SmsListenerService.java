@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.model.SMS;
@@ -32,7 +34,9 @@ public class SmsListenerService {
 	this.employeeRepository = employeeRepository;
     }
 
+    @Async
     @EventListener
+    @TransactionalEventListener
     public void processSMS(SmsCommand command) {
 
 	User user = userRepository.findUserByUserId(command.getUserId())
@@ -44,19 +48,23 @@ public class SmsListenerService {
 	    smsRepository.save(new SMS(new SmsId(UUID.randomUUID()), command.getNameEmployee(), command.getBody(),
 		    command.getNumberPhone(), LocalDateTime.now(), command.getAwsMessageId(), command.getStatus(),
 		    command.getMessageError(), user.getEstablishment()));
+	
 	} else {
+	    
 	    user.setQuantidadeTotalDeSmsEnviado(user.smsCounter());
 	    user.setCreditoDisponivel(user.creditAvailable());
 
 	    user.getEstablishment().getEmployee().stream()
-		    .filter(employee -> employee.getNome().equals(command.getNameEmployee())).findFirst()
+		    .filter(employee -> employee.getNome().equals(command.getNameEmployee()))
+		    .findFirst()
 		    .ifPresent(employee -> {
 			employee.setQuantidadeDeSmsEnviado(employee.smsCounter());
 			employeeRepository.save(employee);
 		    });
 
 	    user.getEstablishment().getCustomer().stream()
-		    .filter(customer -> customer.getCellPhone().equals(command.getNumberPhone())).findFirst()
+		    .filter(customer -> customer.getCellPhone().equals(command.getNumberPhone()))
+		    .findFirst()
 		    .ifPresent(customer -> {
 			customer.setQuantityOfSmsSent(customer.counterSms());
 			customerRepository.save(customer);

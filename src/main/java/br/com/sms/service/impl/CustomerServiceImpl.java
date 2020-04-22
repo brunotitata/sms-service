@@ -22,8 +22,8 @@ import br.com.sms.service.CustomerService;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private CustomerRepository customerRepository;
-    private UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
 
     public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository) {
 	this.customerRepository = customerRepository;
@@ -37,7 +37,8 @@ public class CustomerServiceImpl implements CustomerService {
 		() -> new RuntimeException("Usuario não encontrado com ID: " + newCustomerDTO.getUserId()));
 
 	user.getEstablishment().getCustomer().stream()
-		.filter(customer -> customer.getCellPhone().equals(newCustomerDTO.getCellPhone())).findFirst()
+		.filter(customer -> customer.getCellPhone().equals(newCustomerDTO.getCellPhone()))
+		.findFirst()
 		.ifPresent(customer -> {
 		    throw new CustomerException(
 			    "Cliente já cadastrado na plataforma: " + newCustomerDTO.getCellPhone());

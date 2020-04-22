@@ -16,8 +16,8 @@ import br.com.sms.service.EmployeeService;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeRepository employeeRepository;
-    private UserRepository userRepository;
+    private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, UserRepository userRepository) {
 	this.employeeRepository = employeeRepository;
@@ -31,7 +31,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		.orElseThrow(() -> new RuntimeException("Usuario não encontrado com ID: " + employeeDTO.getUserId()));
 
 	user.getEstablishment().getEmployee().stream()
-		.filter(employee -> employee.getEmail().equals(employeeDTO.getEmail())).findFirst()
+		.filter(employee -> employee.getEmail().equals(employeeDTO.getEmail()))
+		.findFirst()
 		.ifPresent(employee -> {
 		    throw new EmployeeExistingException(
 			    "Funcionário(a) já cadastrado na plataforma com email: " + employeeDTO.getEmail());

@@ -52,11 +52,13 @@ public class SmsServiceImpl implements SmsService {
 	}
 
 	user.getEstablishment().getCustomer().stream()
-		.filter(customer -> customer.getCellPhone().equals(smsDTO.getNumber())).findFirst()
+		.filter(customer -> customer.getCellPhone().equals(smsDTO.getNumber()))
+		.findFirst()
 		.ifPresent(customer -> {
 
 		    user.getEstablishment().getEmployee().stream()
-			    .filter(employee -> employee.getNome().equals(smsDTO.getNameEmployee())).findFirst()
+			    .filter(employee -> employee.getNome().equals(smsDTO.getNameEmployee()))
+			    .findFirst()
 			    .ifPresent(employee -> {
 
 				try {
@@ -69,6 +71,7 @@ public class SmsServiceImpl implements SmsService {
 							    publishResult.getSdkHttpMetadata().getHttpStatusCode()),
 						    publishResult.getMessageId(), smsDTO.getUserId(),
 						    smsDTO.getNameEmployee(), null));
+				    
 				} catch (AmazonServiceException e) {
 
 				    applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(),
@@ -104,6 +107,7 @@ public class SmsServiceImpl implements SmsService {
 		applicationEventPublisher.publishEvent(new SmsCommand(number, smsDTO.getMessageBody(),
 			Utils.convertHttpStatus(publishResult.getSdkHttpMetadata().getHttpStatusCode()),
 			publishResult.getMessageId(), smsDTO.getUserId(), smsDTO.getNameEmployee(), null));
+		
 	    } catch (AmazonServiceException e) {
 
 		applicationEventPublisher.publishEvent(

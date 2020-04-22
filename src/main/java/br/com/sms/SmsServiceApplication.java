@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.sms.login.exception.ArgumentInvalidException;
@@ -30,6 +31,7 @@ import br.com.sms.repository.establishment.EstablishmentRepository;
 import br.com.sms.repository.user.UserRepository;
 
 @SpringBootApplication
+@EnableAsync
 public class SmsServiceApplication {
 
     private final UserRepository userRepository;
@@ -67,8 +69,8 @@ public class SmsServiceApplication {
 				customers));
 
 		userRepository.save(new User(new UserId(UUID.fromString("ad416334-e578-4181-8c2f-75e1859a4f1e")),
-			"Bruno Costa", "16991034148", "38441868832", "brunotitata@gmail.com", password.encode("degauss123"),
-			estabelecimento));
+			"Bruno Costa", "16991034148", "38441868832", "brunotitata@gmail.com",
+			password.encode("degauss123"), estabelecimento));
 
 		User user = userRepository.findUserByUserId("ad416334-e578-4181-8c2f-75e1859a4f1e")
 			.orElseThrow(() -> new ArgumentInvalidException(

@@ -18,8 +18,8 @@ import br.com.sms.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private SmsRepository smsRepository;
+    private final UserRepository userRepository;
+    private final SmsRepository smsRepository;
 
     public UserServiceImpl(UserRepository userRepository, SmsRepository smsRepository) {
 	this.userRepository = userRepository;
