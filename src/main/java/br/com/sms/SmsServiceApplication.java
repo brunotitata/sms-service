@@ -32,10 +32,10 @@ import br.com.sms.repository.user.UserRepository;
 @SpringBootApplication
 public class SmsServiceApplication {
 
-    private UserRepository userRepository;
-    private EstablishmentRepository establishmentRepository;
-    private CustomerRepository customerRepository;
-    private PasswordEncoder password;
+    private final UserRepository userRepository;
+    private final EstablishmentRepository establishmentRepository;
+    private final CustomerRepository customerRepository;
+    private final PasswordEncoder password;
 
     public SmsServiceApplication(UserRepository userRepository, EstablishmentRepository establishmentRepository,
 	    CustomerRepository customerRepository, PasswordEncoder password) {

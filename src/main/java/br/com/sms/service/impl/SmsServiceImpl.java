@@ -47,8 +47,9 @@ public class SmsServiceImpl implements SmsService {
 	User user = userRepository.findUserByUserId(smsDTO.getUserId())
 		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + smsDTO.getUserId()));
 
-	if (user.getCreditoDisponivel() <= 0)
+	if (user.isCreditoDisponivel()) {
 	    throw new InsufficientCreditsException("Saldo de creditos insuficiente.");
+	}
 
 	user.getEstablishment().getCustomer().stream()
 		.filter(customer -> customer.getCellPhone().equals(smsDTO.getNumber())).findFirst()
@@ -59,7 +60,8 @@ public class SmsServiceImpl implements SmsService {
 			    .ifPresent(employee -> {
 
 				try {
-				    PublishResult publishResult = awsService.sendSms(smsDTO.getNumber(), smsDTO.getMessageBody());
+				    PublishResult publishResult = awsService.sendSms(smsDTO.getNumber(),
+					    smsDTO.getMessageBody());
 
 				    applicationEventPublisher
 					    .publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getMessageBody(),
@@ -86,35 +88,31 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     public void sendAll(SmsDTO smsDTO) {
-	
+
 	User user = userRepository.findUserByUserId(smsDTO.getUserId())
 		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID : " + smsDTO.getUserId()));
-	
+
 	if (smsDTO.getMessageBody().length() <= 20) {
 	    throw new BusinessLogicException("O corpo da mensagem não pode ter menos que 20 caracteres!");
 	}
-	
-	user.getEstablishment().getCustomer().stream()
-		.map(customer -> customer.getCellPhone()).forEach(number -> {
-		    
-			try {
-			    PublishResult publishResult = awsService.sendSms(number, smsDTO.getMessageBody());
 
-			    applicationEventPublisher
-				    .publishEvent(new SmsCommand(number, smsDTO.getMessageBody(),
-					    Utils.convertHttpStatus(
-						    publishResult.getSdkHttpMetadata().getHttpStatusCode()),
-					    publishResult.getMessageId(), smsDTO.getUserId(),
-					    smsDTO.getNameEmployee(), null));
-			} catch (AmazonServiceException e) {
+	user.getEstablishment().getCustomer().stream().map(customer -> customer.getCellPhone()).forEach(number -> {
 
-			    applicationEventPublisher.publishEvent(new SmsCommand(number,
-				    smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()), null,
-				    smsDTO.getUserId(), smsDTO.getNameEmployee(), e.getMessage()));
-			}
-		    
-		});
-	
+	    try {
+		PublishResult publishResult = awsService.sendSms(number, smsDTO.getMessageBody());
+
+		applicationEventPublisher.publishEvent(new SmsCommand(number, smsDTO.getMessageBody(),
+			Utils.convertHttpStatus(publishResult.getSdkHttpMetadata().getHttpStatusCode()),
+			publishResult.getMessageId(), smsDTO.getUserId(), smsDTO.getNameEmployee(), null));
+	    } catch (AmazonServiceException e) {
+
+		applicationEventPublisher.publishEvent(
+			new SmsCommand(number, smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()),
+				null, smsDTO.getUserId(), smsDTO.getNameEmployee(), e.getMessage()));
+	    }
+
+	});
+
     }
 
 }

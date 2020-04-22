@@ -26,6 +26,7 @@ import br.com.sms.login.util.Utils;
 @Entity
 @Table(name = "Users")
 public class User implements Serializable {
+
     private static final long serialVersionUID = -1901541417432947200L;
 
     public static final String ERROR_ESTABELECIMENTO = "Estabelecimento não pode ser nulo.";
@@ -190,6 +191,10 @@ public class User implements Serializable {
 
     public String getMensagemPrefixo() {
 	return Optional.ofNullable(mensagemPrefixo).orElse("");
+    }
+
+    public Boolean isCreditoDisponivel() {
+	return this.creditoDisponivel <= 0 ? true : false;
     }
 
     public void setMensagemPrefixo(String mensagemPrefixo) {
