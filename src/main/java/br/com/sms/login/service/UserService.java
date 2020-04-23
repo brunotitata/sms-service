@@ -30,56 +30,56 @@ import br.com.sms.repository.user.UserRepository;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private EstablishmentRepository establishmentRepository;
-    private PasswordEncoder encoder;
-    private JwtProvider jwtProvider;
-    private AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final EstablishmentRepository establishmentRepository;
+    private final PasswordEncoder encoder;
+    private final JwtProvider jwtProvider;
+    private final AuthenticationManager authenticationManager;
 
     public UserService(UserRepository clientRepository, EstablishmentRepository establishmentRepository,
-	    PasswordEncoder encoder, JwtProvider jwtProvider, AuthenticationManager authenticationManager) {
-	this.userRepository = clientRepository;
-	this.establishmentRepository = establishmentRepository;
-	this.encoder = encoder;
-	this.jwtProvider = jwtProvider;
-	this.authenticationManager = authenticationManager;
+                       PasswordEncoder encoder, JwtProvider jwtProvider, AuthenticationManager authenticationManager) {
+        this.userRepository = clientRepository;
+        this.establishmentRepository = establishmentRepository;
+        this.encoder = encoder;
+        this.jwtProvider = jwtProvider;
+        this.authenticationManager = authenticationManager;
     }
 
     public User registerUser(RegisterDTO registerData) {
 
-	if (registerData == null)
-	    throw new RuntimeException("Objeto Usuario não pode ser nulo.");
+        if (registerData == null)
+            throw new RuntimeException("Objeto Usuario não pode ser nulo.");
 
-	if (userRepository.existClient(registerData.getCpf())) {
-	    throw new UserExistingException("Error -> Cliente já cadastrado com CPF: " + registerData.getCpf());
-	}
+        if (userRepository.existClient(registerData.getCpf())) {
+            throw new UserExistingException("Error -> Cliente já cadastrado com CPF: " + registerData.getCpf());
+        }
 
-	userRepository.findByEmail(registerData.getEmail()).ifPresent(user -> {
-	    throw new UserExistingException("Error -> Cliente já cadastrado com EMAIL: " + registerData.getEmail());
-	});
+        userRepository.findByEmail(registerData.getEmail()).ifPresent(user -> {
+            throw new UserExistingException("Error -> Cliente já cadastrado com EMAIL: " + registerData.getEmail());
+        });
 
-	List<SMS> sms = Collections.emptyList();
-	Set<Customer> customer = Collections.emptySet();
-	Set<Employee> employee = Collections.emptySet();
+        List<SMS> sms = Collections.emptyList();
+        Set<Customer> customer = Collections.emptySet();
+        Set<Employee> employee = Collections.emptySet();
 
-	return userRepository.save(new User(new UserId(UUID.randomUUID()), registerData.getNome(),
-		registerData.getCelular(), registerData.getCpf(), registerData.getEmail(),
-		encoder.encode(registerData.getPassword()),
+        return userRepository.save(new User(new UserId(UUID.randomUUID()), registerData.getNome(),
+                registerData.getCelular(), registerData.getCpf(), registerData.getEmail(),
+                encoder.encode(registerData.getPassword()),
 
-		establishmentRepository.save(new Establishment(new EstablishmentId(UUID.randomUUID()),
-			registerData.getEstablishment().getNome(), registerData.getEstablishment().getEndereco(),
-			registerData.getEstablishment().getCnpj(), employee, sms, customer))));
+                establishmentRepository.save(new Establishment(new EstablishmentId(UUID.randomUUID()),
+                        registerData.getEstablishment().getNome(), registerData.getEstablishment().getEndereco(),
+                        registerData.getEstablishment().getCnpj(), employee, sms, customer))));
 
     }
 
     public AccessToken authenticateUser(LoginDTO loginDto) {
 
-	Authentication authentication = authenticationManager
-		.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
-	SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-	return new AccessToken(jwtProvider.generateJwtToken(authentication));
+        return new AccessToken(jwtProvider.generateJwtToken(authentication));
 
     }
 }

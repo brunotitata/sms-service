@@ -14,20 +14,20 @@ import br.com.sms.repository.user.UserRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserRepository clientRepository;
+    private final UserRepository clientRepository;
 
     public UserDetailsServiceImpl(UserRepository clientRepository) {
-	this.clientRepository = clientRepository;
+        this.clientRepository = clientRepository;
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) {
 
-	User user = clientRepository.findByEmail(email)
-		.orElseThrow(() -> new ArgumentInvalidException("Cliente não encontrado com email: " + email));
+        User user = clientRepository.findByEmail(email)
+                .orElseThrow(() -> new ArgumentInvalidException("Cliente não encontrado com email: " + email));
 
-	return UserDTO.build(user);
+        return UserDTO.build(user);
     }
 
 }

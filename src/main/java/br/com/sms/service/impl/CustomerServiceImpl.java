@@ -26,62 +26,60 @@ public class CustomerServiceImpl implements CustomerService {
     private final UserRepository userRepository;
 
     public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository) {
-	this.customerRepository = customerRepository;
-	this.userRepository = userRepository;
+        this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public Customer newCustomer(NewCustomerDTO newCustomerDTO) {
 
-	User user = userRepository.findUserByUserId(newCustomerDTO.getUserId()).orElseThrow(
-		() -> new RuntimeException("Usuario não encontrado com ID: " + newCustomerDTO.getUserId()));
+        User user = userRepository.findUserByUserId(newCustomerDTO.getUserId()).orElseThrow(
+                () -> new RuntimeException("Usuario não encontrado com ID: " + newCustomerDTO.getUserId()));
 
-	user.getEstablishment().getCustomer().stream()
-		.filter(customer -> customer.getCellPhone().equals(newCustomerDTO.getCellPhone()))
-		.findFirst()
-		.ifPresent(customer -> {
-		    throw new CustomerException(
-			    "Cliente já cadastrado na plataforma: " + newCustomerDTO.getCellPhone());
-		});
+        user.getEstablishment().getCustomer().stream()
+                .filter(customer -> customer.getCellPhone().equals(newCustomerDTO.getCellPhone()))
+                .findFirst()
+                .ifPresent(customer -> {
+                    throw new CustomerException(
+                            "Cliente já cadastrado na plataforma: " + newCustomerDTO.getCellPhone());
+                });
 
-	return customerRepository.save(new Customer(new CustomerId(UUID.randomUUID()), newCustomerDTO.getName(),
-		Utils.checkCharactersCellPhone(newCustomerDTO.getCellPhone()), newCustomerDTO.getEmail(),
-		user.getEstablishment()));
+        return customerRepository.save(new Customer(new CustomerId(UUID.randomUUID()), newCustomerDTO.getName(),
+                Utils.checkCharactersCellPhone(newCustomerDTO.getCellPhone()), newCustomerDTO.getEmail(),
+                user.getEstablishment()));
 
     }
 
     @Override
     public void editCustomer(String userId, String cellphone, EditCustomerDTO customerDTO) {
 
-	customerRepository.find(CustomerSpecification.findCustomerByCellphone(userId, cellphone))
-		.stream()
-		.filter(customer -> customer.getCellPhone().equals(cellphone))
-		.findFirst()
-		.ifPresent(customer -> {
-		    customer.setCellPhone(customerDTO.getCellPhone());
-		    customer.setEmail(customerDTO.getEmail());
-		    customer.setName(customerDTO.getName());
+        customerRepository.find(CustomerSpecification.findCustomerByCellphone(userId, cellphone))
+                .stream()
+                .filter(customer -> customer.getCellPhone().equals(cellphone))
+                .findFirst()
+                .ifPresent(customer -> {
+                    customer.setCellPhone(customerDTO.getCellPhone());
+                    customer.setEmail(customerDTO.getEmail());
+                    customer.setName(customerDTO.getName());
 
-		    customerRepository.save(customer);
-		});
+                    customerRepository.save(customer);
+                });
 
     }
 
     @Override
     public Page<CustomerDTO> findAllCustomerByUserId(String userId, Pageable pageable) {
-	return customerRepository.findAllCustomerByUserId(CustomerSpecification.findCustomerByUserId(userId), pageable);
+        return customerRepository.findAllCustomerByUserId(CustomerSpecification.findCustomerByUserId(userId), pageable);
     }
 
     @Override
     public void removeCustomer(String userId, String cellphone) {
 
-	customerRepository.find(CustomerSpecification.findCustomerByCellphone(userId, cellphone))
-		.stream()
-		.filter(customer -> customer.getCellPhone().equals(cellphone))
-		.findFirst()
-		.ifPresent(customer -> {
-		    customerRepository.deleteCustomer(customer);
-		});
+        customerRepository.find(CustomerSpecification.findCustomerByCellphone(userId, cellphone))
+                .stream()
+                .filter(customer -> customer.getCellPhone().equals(cellphone))
+                .findFirst()
+                .ifPresent(customerRepository::deleteCustomer);
 
     }
 

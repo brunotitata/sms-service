@@ -3,6 +3,7 @@ package br.com.sms.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.sms.model.Customer;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -28,94 +29,94 @@ import br.com.sms.service.SmsService;
 @Service
 public class SmsServiceImpl implements SmsService {
 
-    private ApplicationEventPublisher applicationEventPublisher;
-    private AwsService awsService;
-    private UserRepository userRepository;
-    private SmsRepository smsRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final AwsService awsService;
+    private final UserRepository userRepository;
+    private final SmsRepository smsRepository;
 
     public SmsServiceImpl(ApplicationEventPublisher applicationEventPublisher, AwsService awsService,
-	    UserRepository userRepository, SmsRepository smsRepository) {
-	this.applicationEventPublisher = applicationEventPublisher;
-	this.awsService = awsService;
-	this.userRepository = userRepository;
-	this.smsRepository = smsRepository;
+                          UserRepository userRepository, SmsRepository smsRepository) {
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.awsService = awsService;
+        this.userRepository = userRepository;
+        this.smsRepository = smsRepository;
     }
 
     @Override
     public void send(SmsDTO smsDTO) {
 
-	User user = userRepository.findUserByUserId(smsDTO.getUserId())
-		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + smsDTO.getUserId()));
+        User user = userRepository.findUserByUserId(smsDTO.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID: " + smsDTO.getUserId()));
 
-	if (user.isCreditoDisponivel()) {
-	    throw new InsufficientCreditsException("Saldo de creditos insuficiente.");
-	}
+        if (user.isCreditoDisponivel()) {
+            throw new InsufficientCreditsException("Saldo de creditos insuficiente.");
+        }
 
-	user.getEstablishment().getCustomer().stream()
-		.filter(customer -> customer.getCellPhone().equals(smsDTO.getNumber()))
-		.findFirst()
-		.ifPresent(customer -> {
+        user.getEstablishment().getCustomer().stream()
+                .filter(customer -> customer.getCellPhone().equals(smsDTO.getNumber()))
+                .findFirst()
+                .ifPresent(customer -> {
 
-		    user.getEstablishment().getEmployee().stream()
-			    .filter(employee -> employee.getNome().equals(smsDTO.getNameEmployee()))
-			    .findFirst()
-			    .ifPresent(employee -> {
+                    user.getEstablishment().getEmployee().stream()
+                            .filter(employee -> employee.getNome().equals(smsDTO.getNameEmployee()))
+                            .findFirst()
+                            .ifPresent(employee -> {
 
-				try {
-				    PublishResult publishResult = awsService.sendSms(smsDTO.getNumber(),
-					    smsDTO.getMessageBody());
+                                try {
+                                    PublishResult publishResult = awsService.sendSms(smsDTO.getNumber(),
+                                            smsDTO.getMessageBody());
 
-				    applicationEventPublisher
-					    .publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getMessageBody(),
-						    Utils.convertHttpStatus(
-							    publishResult.getSdkHttpMetadata().getHttpStatusCode()),
-						    publishResult.getMessageId(), smsDTO.getUserId(),
-						    smsDTO.getNameEmployee(), null));
-				    
-				} catch (AmazonServiceException e) {
+                                    applicationEventPublisher
+                                            .publishEvent(new SmsCommand(smsDTO.getNumber(), smsDTO.getMessageBody(),
+                                                    Utils.convertHttpStatus(
+                                                            publishResult.getSdkHttpMetadata().getHttpStatusCode()),
+                                                    publishResult.getMessageId(), smsDTO.getUserId(),
+                                                    smsDTO.getNameEmployee(), null));
 
-				    applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(),
-					    smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()), null,
-					    smsDTO.getUserId(), smsDTO.getNameEmployee(), e.getMessage()));
-				}
-			    });
-		});
+                                } catch (AmazonServiceException e) {
+
+                                    applicationEventPublisher.publishEvent(new SmsCommand(smsDTO.getNumber(),
+                                            smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()), null,
+                                            smsDTO.getUserId(), smsDTO.getNameEmployee(), e.getMessage()));
+                                }
+                            });
+                });
 
     }
 
     @Override
     public List<SmsSpecificationDTO> smsReport(SmsFilter smsFilter) {
-	return smsRepository.findAll(SmsSpecification.filter(smsFilter)).stream().map(SMS::convertToDTO)
-		.collect(Collectors.toList());
+        return smsRepository.findAll(SmsSpecification.filter(smsFilter)).stream().map(SMS::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void sendAll(SmsDTO smsDTO) {
 
-	User user = userRepository.findUserByUserId(smsDTO.getUserId())
-		.orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID : " + smsDTO.getUserId()));
+        User user = userRepository.findUserByUserId(smsDTO.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("Usuario não encontrado com ID : " + smsDTO.getUserId()));
 
-	if (smsDTO.getMessageBody().length() <= 20) {
-	    throw new BusinessLogicException("O corpo da mensagem não pode ter menos que 20 caracteres!");
-	}
+        if (smsDTO.getMessageBody().length() <= 20) {
+            throw new BusinessLogicException("O corpo da mensagem não pode ter menos que 20 caracteres!");
+        }
 
-	user.getEstablishment().getCustomer().stream().map(customer -> customer.getCellPhone()).forEach(number -> {
+        user.getEstablishment().getCustomer().stream().map(Customer::getCellPhone).forEach(number -> {
 
-	    try {
-		PublishResult publishResult = awsService.sendSms(number, smsDTO.getMessageBody());
+            try {
+                PublishResult publishResult = awsService.sendSms(number, smsDTO.getMessageBody());
 
-		applicationEventPublisher.publishEvent(new SmsCommand(number, smsDTO.getMessageBody(),
-			Utils.convertHttpStatus(publishResult.getSdkHttpMetadata().getHttpStatusCode()),
-			publishResult.getMessageId(), smsDTO.getUserId(), smsDTO.getNameEmployee(), null));
-		
-	    } catch (AmazonServiceException e) {
+                applicationEventPublisher.publishEvent(new SmsCommand(number, smsDTO.getMessageBody(),
+                        Utils.convertHttpStatus(publishResult.getSdkHttpMetadata().getHttpStatusCode()),
+                        publishResult.getMessageId(), smsDTO.getUserId(), smsDTO.getNameEmployee(), null));
 
-		applicationEventPublisher.publishEvent(
-			new SmsCommand(number, smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()),
-				null, smsDTO.getUserId(), smsDTO.getNameEmployee(), e.getMessage()));
-	    }
+            } catch (AmazonServiceException e) {
 
-	});
+                applicationEventPublisher.publishEvent(
+                        new SmsCommand(number, smsDTO.getMessageBody(), Utils.convertHttpStatus(e.getStatusCode()),
+                                null, smsDTO.getUserId(), smsDTO.getNameEmployee(), e.getMessage()));
+            }
+
+        });
 
     }
 

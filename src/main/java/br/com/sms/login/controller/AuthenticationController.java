@@ -25,33 +25,33 @@ import br.com.sms.repository.user.UserRepository;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthenticationController {
 
-    private UserService userService;
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
 
     public AuthenticationController(UserService userService, UserRepository clientRepository) {
-	this.userService = userService;
-	this.userRepository = clientRepository;
+        this.userService = userService;
+        this.userRepository = clientRepository;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AccessToken> authenticateUser(@RequestBody LoginDTO loginData) {
 
-	User user = userRepository.findByEmail(loginData.getEmail()).orElseThrow(
-		() -> new ArgumentInvalidException("Cliente não encontrado com email: " + loginData.getEmail()));
+        User user = userRepository.findByEmail(loginData.getEmail()).orElseThrow(
+                () -> new ArgumentInvalidException("Cliente não encontrado com email: " + loginData.getEmail()));
 
-	if (user.getActive().equals(Active.INATIVO))
-	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if (user.getActive().equals(Active.INATIVO))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-	return ResponseEntity.ok().body(userService.authenticateUser(loginData));
+        return ResponseEntity.ok().body(userService.authenticateUser(loginData));
     }
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@Valid @RequestBody RegisterDTO registerData) {
 
-	User user = userService.registerUser(registerData);
+        User user = userService.registerUser(registerData);
 
-	return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-		.buildAndExpand(user.getUserId().getId()).toUri()).build();
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(user.getUserId().getId()).toUri()).build();
 
     }
 

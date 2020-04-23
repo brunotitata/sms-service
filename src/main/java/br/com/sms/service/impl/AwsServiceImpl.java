@@ -15,23 +15,23 @@ import br.com.sms.service.AwsService;
 @Component
 public class AwsServiceImpl implements AwsService {
 
-    private AmazonSNS amazonSNS;
+    private final AmazonSNS amazonSNS;
 
     public AwsServiceImpl(AmazonSNS amazonSNS) {
-	this.amazonSNS = amazonSNS;
+        this.amazonSNS = amazonSNS;
     }
 
     @Override
     public PublishResult sendSms(String number, String messageBody) {
 
-	Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
-	smsAttributes.put("AWS.SNS.SMS.SMSType",
-		new MessageAttributeValue().withStringValue("Promotional").withDataType("String"));
+        Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
+        smsAttributes.put("AWS.SNS.SMS.SMSType",
+                new MessageAttributeValue().withStringValue("Promotional").withDataType("String"));
 
-	PublishRequest request = new PublishRequest();
-	request.withMessage(messageBody).withPhoneNumber("+55".concat(number)).withMessageAttributes(smsAttributes);
+        PublishRequest request = new PublishRequest();
+        request.withMessage(messageBody).withPhoneNumber("+55".concat(number)).withMessageAttributes(smsAttributes);
 
-	return amazonSNS.publish(request);
+        return amazonSNS.publish(request);
     }
 
 }

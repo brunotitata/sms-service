@@ -11,80 +11,84 @@ public class SmsCommand {
     private String messageError;
 
     public SmsCommand(String numberPhone, String body, String status, String awsMessageId, String userId,
-	    String nameEmployee, String messageError) {
-	setNumberPhone(numberPhone);
-	setBody(body);
-	setStatus(status);
-	setAwsMessageId(awsMessageId);
-	setUserId(userId);
-	setNameEmployee(nameEmployee);
-	setMessageError(messageError);
+                      String nameEmployee, String messageError) {
+        setNumberPhone(numberPhone);
+        setBody(body);
+        setStatus(status);
+        setAwsMessageId(awsMessageId);
+        setUserId(userId);
+        setNameEmployee(nameEmployee);
+        setMessageError(messageError);
     }
 
     public SmsCommand() {
     }
 
     public String getNumberPhone() {
-	return numberPhone;
+        return numberPhone;
     }
 
     public void setNumberPhone(String numberPhone) {
-	this.numberPhone = numberPhone;
+        this.numberPhone = numberPhone;
     }
 
     public String getBody() {
-	return body;
+        return body;
     }
 
     public void setBody(String body) {
-	this.body = body;
+        this.body = body;
     }
 
     public String getStatus() {
-	return status;
+        return status;
     }
 
     public void setStatus(String status) {
-	this.status = status;
+        this.status = status;
     }
 
     public String getAwsMessageId() {
-	return awsMessageId;
+        return awsMessageId;
     }
 
     public void setAwsMessageId(String awsMessageId) {
-	this.awsMessageId = awsMessageId;
+        this.awsMessageId = awsMessageId;
     }
 
     public String getUserId() {
-	return userId;
+        return userId;
     }
 
     public void setUserId(String userId) {
-	this.userId = userId;
+        this.userId = userId;
     }
 
     public String getNameEmployee() {
-	return nameEmployee;
+        return nameEmployee;
     }
 
     public void setNameEmployee(String nameEmployee) {
-	this.nameEmployee = nameEmployee;
+        this.nameEmployee = nameEmployee;
     }
 
     public String getMessageError() {
-	return messageError;
+        return messageError;
     }
 
     public void setMessageError(String messageError) {
-	this.messageError = messageError;
+        this.messageError = messageError;
+    }
+
+    public boolean isNotSuccess() {
+        return this.status.equals("AWS ERROR") || this.status.equals("ERROR") || this.status.equals("NÃO AUTORIZADO");
     }
 
     @Override
     public String toString() {
-	return "SmsCommand [numberPhone=" + numberPhone + ", body=" + body + ", status=" + status + ", awsMessageId="
-		+ awsMessageId + ", userId=" + userId + ", nameEmployee=" + nameEmployee + ", messageError="
-		+ messageError + "]";
+        return "SmsCommand [numberPhone=" + numberPhone + ", body=" + body + ", status=" + status + ", awsMessageId="
+                + awsMessageId + ", userId=" + userId + ", nameEmployee=" + nameEmployee + ", messageError="
+                + messageError + "]";
     }
 
 }
