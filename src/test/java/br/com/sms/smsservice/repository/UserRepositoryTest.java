@@ -22,8 +22,10 @@ import br.com.sms.model.User;
 import br.com.sms.model.UserId;
 import br.com.sms.repository.establishment.EstablishmentRepository;
 import br.com.sms.repository.user.UserRepository;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class UserRepositoryTest {
 
     @Autowired
@@ -34,7 +36,7 @@ public class UserRepositoryTest {
 
     protected User user;
 
-    @BeforeEach
+	@BeforeEach
     public void setUp() {
 
 	List<SMS> sms = Collections.emptyList();
@@ -60,12 +62,12 @@ public class UserRepositoryTest {
 
 	assertEquals("Arley", user.getNome());
 	assertEquals("16991034148", user.getCelular());
-	assertEquals("384.418.688-32", user.getCpf());
+	assertEquals("38441868832", user.getCpf());
 	assertEquals("arley@arley.com", user.getEmail());
 
 	assertEquals("Arley Chopão", user.getEstablishment().getNome());
 	assertEquals("Leopoldo Carlos de Oliveira 350", user.getEstablishment().getEndereco());
-	assertEquals("06.100.428/0001-92", user.getEstablishment().getCnpj());
+	assertEquals("06100428000192", user.getEstablishment().getCnpj());
 
 	assertEquals(0, user.getEstablishment().getEmployee().size());
 	assertEquals(0, user.getEstablishment().getCustomer().size());
