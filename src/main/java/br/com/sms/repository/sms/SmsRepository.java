@@ -1,7 +1,10 @@
 package br.com.sms.repository.sms;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+import br.com.sms.model.SmsId;
 import org.springframework.data.jpa.domain.Specification;
 
 import br.com.sms.model.SMS;
@@ -18,5 +21,7 @@ public interface SmsRepository {
     List<SMS> findSmsByFilter(SmsFilter smsFilter);
 
     List<SMS> findAll(Specification<SMS> spec);
+
+    Optional<SMS> findSmsWithSmsId(SmsId smsId);
 
 }

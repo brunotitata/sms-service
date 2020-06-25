@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sms.dto.SmsDTO;
+import br.com.sms.dto.SmsIdDTO;
 import br.com.sms.dto.SmsSpecificationDTO;
 import br.com.sms.model.SMS;
 import br.com.sms.repository.SmsFilter;
@@ -55,6 +56,12 @@ public class SmsController {
 
 	return ResponseEntity.ok(smsService.smsReport(
 		new SmsFilter(startDate, endDate, userId, cellphone, message, nameCustomer, nameEmployee, status)));
+    }
+
+    @PostMapping("/sms/re-send/")
+    public ResponseEntity<Void> reSend(@RequestBody SmsIdDTO smsId) {
+	smsService.reSend(smsId);
+	return ResponseEntity.noContent().build();
     }
 
 }

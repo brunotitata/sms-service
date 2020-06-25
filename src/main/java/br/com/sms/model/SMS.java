@@ -45,16 +45,16 @@ public class SMS implements Serializable {
     private Establishment establishment;
 
     public SMS(SmsId smsId, String nomeFuncionario, String messagem, String numero, LocalDateTime localDateTime,
-	    String awsMessageId, String status, String messageError, Establishment establishment) {
-	setSmsId(smsId);
-	setNomeFuncionario(nomeFuncionario);
-	setMessagem(messagem);
-	setNumero(numero);
-	setLocalDateTime(localDateTime);
-	setAwsMessageId(awsMessageId);
-	setStatus(status);
-	setMessageError(messageError);
-	this.establishment = establishment;
+               String awsMessageId, String status, String messageError, Establishment establishment) {
+        setSmsId(smsId);
+        setNomeFuncionario(nomeFuncionario);
+        setMessagem(messagem);
+        setNumero(numero);
+        setLocalDateTime(localDateTime);
+        setAwsMessageId(awsMessageId);
+        setStatus(status);
+        setMessageError(messageError);
+        this.establishment = establishment;
     }
 
     @SuppressWarnings("unused")
@@ -62,47 +62,47 @@ public class SMS implements Serializable {
     }
 
     public UUID getId() {
-	return id;
+        return id;
     }
 
     public SmsId getSmsId() {
-	return smsId;
+        return smsId;
     }
 
     public void setSmsId(SmsId smsId) {
-	this.smsId = smsId;
+        this.smsId = smsId;
     }
 
     public String getNomeFuncionario() {
-	return nomeFuncionario;
+        return nomeFuncionario;
     }
 
     public void setNomeFuncionario(String nomeFuncionario) {
-	this.nomeFuncionario = nomeFuncionario;
+        this.nomeFuncionario = nomeFuncionario;
     }
 
     public String getMessagem() {
-	return messagem;
+        return messagem;
     }
 
     public void setMessagem(String messagem) {
-	this.messagem = messagem;
+        this.messagem = messagem;
     }
 
     public String getNumero() {
-	return numero;
+        return numero;
     }
 
     public void setNumero(String numero) {
-	this.numero = numero;
+        this.numero = numero;
     }
 
     public LocalDateTime getLocalDateTime() {
-	return localDateTime;
+        return localDateTime;
     }
 
     public void setLocalDateTime(LocalDateTime localDateTime) {
-	this.localDateTime = localDateTime;
+        this.localDateTime = localDateTime;
     }
 
 //    public Establishment getEstablishment() {
@@ -114,39 +114,39 @@ public class SMS implements Serializable {
 //    }
 
     public String getAwsMessageId() {
-	return awsMessageId;
+        return awsMessageId;
     }
 
     public void setAwsMessageId(String awsMessageId) {
-	this.awsMessageId = awsMessageId;
+        this.awsMessageId = awsMessageId;
     }
 
     public String getStatus() {
-	return status;
+        return status;
     }
 
     public void setStatus(String status) {
-	this.status = status;
+        this.status = status;
     }
 
     public String getMessageError() {
-	return messageError;
+        return messageError;
     }
 
     public void setMessageError(String messageError) {
-	this.messageError = messageError;
+        this.messageError = messageError;
     }
 
     public static SmsSpecificationDTO convertToDTO(SMS sms) {
-	return new SmsSpecificationDTO(sms.getNomeFuncionario(), sms.getMessagem(), sms.getNumero(), sms.getLocalDateTime(),
-		sms.getStatus(), sms.getMessageError());
+        return new SmsSpecificationDTO(sms.getNomeFuncionario(), sms.getMessagem(), sms.getNumero(), sms.getLocalDateTime(),
+                sms.getStatus(), sms.getMessageError());
     }
 
     @Override
     public String toString() {
-	return "SMS [id=" + id + ", smsId=" + smsId + ", nomeFuncionario=" + nomeFuncionario + ", messagem=" + messagem
-		+ ", numero=" + numero + ", localDateTime=" + localDateTime + ", awsMessageId=" + awsMessageId
-		+ ", status=" + status + ", messageError=" + messageError + "]";
+        return "SMS [id=" + id + ", smsId=" + smsId + ", nomeFuncionario=" + nomeFuncionario + ", messagem=" + messagem
+                + ", numero=" + numero + ", localDateTime=" + localDateTime + ", awsMessageId=" + awsMessageId
+                + ", status=" + status + ", messageError=" + messageError + "]";
     }
 
 }
