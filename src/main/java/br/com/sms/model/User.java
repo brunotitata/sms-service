@@ -82,7 +82,7 @@ public class User implements Serializable {
     @PrePersist
     public void prePersist() {
 	this.active = Active.ATIVO;
-	this.creditoDisponivel = 0;
+	this.creditoDisponivel = 1;
 	this.role = Role.USER;
 	this.quantidadeTotalDeSmsEnviado = 0;
     }
