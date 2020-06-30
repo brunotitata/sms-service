@@ -6,12 +6,14 @@ public class NewCustomerDTO {
     private String cellPhone;
     private String email;
     private String userId;
+    private Boolean active;
 
-    public NewCustomerDTO(String name, String cellPhone, String email, String userId) {
+    public NewCustomerDTO(String name, String cellPhone, String email, String userId, Boolean active) {
 	this.name = name;
 	this.cellPhone = cellPhone;
 	this.email = email;
 	this.userId = userId;
+	this.active = active;
     }
 
     public NewCustomerDTO() {
@@ -49,10 +51,18 @@ public class NewCustomerDTO {
 	this.userId = userId;
     }
 
+    public Boolean getActive() {
+	return active;
+    }
+
+    public void setActive(Boolean active) {
+	this.active = active;
+    }
+
     @Override
     public String toString() {
 	return "NewCustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + ", userId=" + userId
-		+ "]";
+		+ ", active=" + active + "]";
     }
 
 }

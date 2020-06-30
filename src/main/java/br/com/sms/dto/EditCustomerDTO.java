@@ -5,11 +5,13 @@ public class EditCustomerDTO {
     private String name;
     private String cellPhone;
     private String email;
+    private Boolean active;
 
-    public EditCustomerDTO(String name, String cellPhone, String email) {
+    public EditCustomerDTO(String name, String cellPhone, String email, Boolean active) {
 	this.name = name;
 	this.cellPhone = cellPhone;
 	this.email = email;
+	this.active = active;
     }
 
     public EditCustomerDTO() {
@@ -39,9 +41,18 @@ public class EditCustomerDTO {
 	this.email = email;
     }
 
+    public Boolean getActive() {
+	return active;
+    }
+
+    public void setActive(Boolean active) {
+	this.active = active;
+    }
+
     @Override
     public String toString() {
-	return "EditCustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + "]";
+	return "EditCustomerDTO [name=" + name + ", cellPhone=" + cellPhone + ", email=" + email + ", active=" + active
+		+ "]";
     }
 
 }

@@ -71,11 +71,11 @@ public class CustomerSpecificationTest {
 			establishment))
 		.collect(Collectors.toSet()));
 
-	customerRepository.saveAll(Stream
-		.of(new Customer(new CustomerId(UUID.fromString("1d776c06-dfec-49cf-acf8-a48012ceaf15")),
-			"Farmacia do Seizi", "12121212121", "seizi@farmacia.com", establishment),
-			new Customer(new CustomerId(UUID.fromString("cd754feb-aa23-489e-bfc2-20d1c4d82978")),
-				"Borracheiro do João", "2222222222", "borracheiro@loja.com", establishment))
+	customerRepository.saveAll(Stream.of(
+		new Customer(new CustomerId(UUID.fromString("1d776c06-dfec-49cf-acf8-a48012ceaf15")),
+			"Farmacia do Seizi", "12121212121", "seizi@farmacia.com", establishment, Active.ATIVO),
+		new Customer(new CustomerId(UUID.fromString("cd754feb-aa23-489e-bfc2-20d1c4d82978")),
+			"Borracheiro do João", "2222222222", "borracheiro@loja.com", establishment, Active.ATIVO))
 		.collect(Collectors.toSet()));
 
 	establishmentRepository.save(establishment);

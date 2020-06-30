@@ -87,7 +87,7 @@ public class SmsServiceApplication {
 
 		customerRepository
 			.save(new Customer(new CustomerId(UUID.fromString("bfbaeba5-0e0c-4150-b239-fd457c6937a3")),
-				"Tiago TI LTDA", "16991034148", "tiago@gmail.com", establishment));
+				"Tiago TI LTDA", "16991034148", "tiago@gmail.com", establishment, Active.ATIVO));
 
 		establishmentRepository.save(establishment);
 		userRepository.save(user);
