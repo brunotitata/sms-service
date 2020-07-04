@@ -137,6 +137,10 @@ public class User implements Serializable {
 	this.establishment = establishment;
     }
 
+    public boolean isNotAuthorized() {
+	return this.active.equals(Active.INATIVO);
+    }
+
     public Active getActive() {
 	return active;
     }

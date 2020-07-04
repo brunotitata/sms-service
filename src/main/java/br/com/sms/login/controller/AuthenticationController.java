@@ -13,10 +13,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.sms.login.dto.LoginDTO;
 import br.com.sms.login.dto.RegisterDTO;
-import br.com.sms.login.exception.ArgumentInvalidException;
+import br.com.sms.login.exception.UserNotFoundException;
 import br.com.sms.login.model.AccessToken;
 import br.com.sms.login.service.UserService;
-import br.com.sms.model.Active;
 import br.com.sms.model.User;
 import br.com.sms.repository.user.UserRepository;
 
@@ -29,29 +28,29 @@ public class AuthenticationController {
     private final UserRepository userRepository;
 
     public AuthenticationController(UserService userService, UserRepository clientRepository) {
-        this.userService = userService;
-        this.userRepository = clientRepository;
+	this.userService = userService;
+	this.userRepository = clientRepository;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AccessToken> authenticateUser(@RequestBody LoginDTO loginData) {
 
-        User user = userRepository.findByEmail(loginData.getEmail()).orElseThrow(
-                () -> new ArgumentInvalidException("Cliente não encontrado com email: " + loginData.getEmail()));
+	User user = userRepository.findByEmail(loginData.getEmail()).orElseThrow(
+		() -> new UserNotFoundException("Cliente não encontrado com email: " + loginData.getEmail()));
 
-        if (user.getActive().equals(Active.INATIVO))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	if (user.isNotAuthorized())
+	    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
 
-        return ResponseEntity.ok().body(userService.authenticateUser(loginData));
+	return ResponseEntity.ok().body(userService.authenticateUser(loginData));
     }
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@Valid @RequestBody RegisterDTO registerData) {
 
-        User user = userService.registerUser(registerData);
+	User user = userService.registerUser(registerData);
 
-        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(user.getUserId().getId()).toUri()).build();
+	return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+		.buildAndExpand(user.getUserId().getId()).toUri()).build();
 
     }
 
